@@ -97,7 +97,6 @@ int main(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-
 void usage(char * binname)
 {
   fprintf(stderr, "Usage: %s [-f filename] [-i device] [-p port]\n", binname);

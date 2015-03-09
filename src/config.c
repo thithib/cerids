@@ -3,7 +3,7 @@
  * \brief Load configuration and whitelist
  */
 
-#include <config.h>
+#include "config.h"
 
 /**
  * \param argc
@@ -45,22 +45,24 @@ int getConf(int argc, char *argv[], Options *options)
  */
 int getConfByArgs(int argc, char *argv[], Options *options)
 {
-      while ((opt = getopt(argc, argv, "f:i:p:")) != -1){
-        switch (opt) {
-        case 'f':
-         options->filename = strdup(optarg);
-         break;
-        case 'i':
-         options->dev = strdup(optarg);
-         break;
-         case 'p':
-         options->port = atoi(optarg);
-         break;
-         default:
-         usage(argv[0]);
-        }
+    int opt;
 
-    } 
+        while ((opt = getopt(argc, argv, "f:i:p:")) != -1){
+            switch (opt) {
+                case 'f':
+                options->filename = strdup(optarg);
+                break;
+                case 'i':
+                options->dev = strdup(optarg);
+                break;
+                case 'p':
+                options->port = atoi(optarg);
+                break;
+                default:
+                usage(argv[0]);
+            }
+
+        } 
 
     return 0;
 }
@@ -74,7 +76,7 @@ int getConfByFile(Options *options)
     FILE *ceridsConf = NULL;
     char optName[OPT_NAME_LENGTH], optValue[OPT_VALUE_LENGTH];
     char buffer[BUFFER_LENGTH];
-    char position;
+    char *position, delim[] = "=";
 
     if ((ceridsConf = fopen(CONF_FILE, "r")) == NULL) {
         fprintf(stderr, "Can't open conf file\n");
@@ -84,29 +86,24 @@ int getConfByFile(Options *options)
     while (fgets(buffer, BUFFER_LENGTH, ceridsConf) != NULL) {
 
         position = strchr(buffer, '#'); // commentaires
-        *(buffer+position) = '\0';
+        *position = '\0';
 
         if (strlen(buffer) != 0) { // la  ligne n'est pas "uniquement" un commentaire
 
-            strncpy(optName, strtok(buffer, '='), OPT_NAME_LENGTH);
-            strncpy(optValue, strtok(buffer, '='), OPT_VALUE_LENGTH);
+            strncpy(optName, strtok(buffer, delim), OPT_NAME_LENGTH);
+            strncpy(optValue, strtok(buffer, delim), OPT_VALUE_LENGTH);
 
-            switch (optName) {
-                case "dev":
-                    options->dev = optValue;
-                    break;
-                case "filename":
-                    options->filename = optValue;
-                    break;
-                case "port":
-                    options->port = atoi(optValue);
-                    break;
-                case "live":
-                    options->live = (optValue == "true") ? true : false;
-                    break;
-                default:
-                    fprintf(stderr, "Error in conf file: bad option name\n");
-                    return -1;
+            if (optName == "dev")
+                options->dev = optValue;
+            else if (optName == "filename")
+                options->filename = optValue;
+            else if (optName == "port")
+                options->port = atoi(optValue);
+            else if (optName == "live")
+                options->live = (optValue == "true") ? true : false;
+            else {
+                fprintf(stderr, "Error in conf file: bad option name\n");
+                return -1;
             }
 
         }
@@ -121,7 +118,7 @@ int getConfByFile(Options *options)
 /**
  * \return An array of strings containing all regex from the whitelist, or NULL if some errors
  */
-char** getWhitelist()
+char** getWhitelist(void)
 {
     FILE *whitelist = NULL;
     char buffer[BUFFER_LENGTH];
@@ -176,5 +173,11 @@ int rulesCount(void)
     fclose(f);
 
     return lines;
+}
+
+void usage(char *binname)
+{
+    fprintf(stderr, "Usage: %s [-f filename] [-i device] [-p port]\n", binname);
+    exit(EXIT_FAILURE);
 }
 

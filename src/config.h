@@ -55,12 +55,13 @@ typedef struct Options {
     char *filename;
     int port;
     bool live;
-};
+} Options;
 
+void usage(char *binname);
 int getConf(int argc, char *argv[], Options *options);
-int getConfByArgs(int argc, char *argc[], Options *options);
+int getConfByArgs(int argc, char *argv[], Options *options);
 int getConfByFile(Options *options);
-char** getWhitelist();
+char** getWhitelist(void);
 int rulesCount(void);
 
 #endif

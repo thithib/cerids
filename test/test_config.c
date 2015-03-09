@@ -1,27 +1,33 @@
-#include <tests.h>
+#include "tests.h"
 #include "../src/config.h"
 
-int init_suite1(void); // operations to be done before all tests
+int init_suite1(void) // operations to be done before all tests
+{
+    return 0;
+}
 
-int clean_suite1(void); // operations to be done after all tests
+int clean_suite1(void) // operations to be done after all tests
+{
+    return 0;
+}
 
 void test_getConf(void)
 {
-    int argc;
-    char argv = ["cerids"];
+    int argc = 3;
+    char *argv[3] = {"cerids", "-i", "eth0"};
     Options *options;
     CU_ASSERT(getConf(argc, argv, options) == 0);
 }
 
 void test_getConfByArgs(void)
 {
-    int argc = 1;
-    char argv = ["cerids"];
+    int argc = 3;
+    char *argv[3] = {"cerids", "-i", "eth0"};
     Options *options;
     CU_ASSERT(getConfByArgs(argc, argv, options) == 0);
 }
 
-void getConfByFile(void)
+void test_getConfByFile(void)
 {
     Options *options;
     CU_ASSERT(getConfByFile(options) == 0);
@@ -54,7 +60,7 @@ int main(void)
         (NULL == CU_add_test(pSuite, "test of getConfByArgs", test_getConfByArgs)) ||
         (NULL == CU_add_test(pSuite, "test of getConfByFile", test_getConfByFile)) ||
         (NULL == CU_add_test(pSuite, "test of getWhitelist", test_getWhitelist)) ||
-        (NULL == CU_add_test(pSuite, "test of rulesCount", test_rulesCount)))
+        (NULL == CU_add_test(pSuite, "test of rulesCount", test_rulesCount))) {
         CU_cleanup_registry();
         return CU_get_error();
     }
