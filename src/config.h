@@ -61,7 +61,7 @@ int getConf(int argc, char *argv[], Options *options);
 int getConfByArgs(int argc, char *argc[], Options *options);
 int getConfByFile(Options *options);
 char** getWhitelist();
-int rulesCount();
+int rulesCount(void);
 
 #endif
 

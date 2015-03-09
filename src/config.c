@@ -119,9 +119,9 @@ int getConfByFile(Options *options)
 }
 
 /**
- * \return An array of strings containing all regex from the whitelist
+ * \return An array of strings containing all regex from the whitelist, or NULL if some errors
  */
-char** getWhiteList()
+char** getWhitelist()
 {
     FILE *whitelist = NULL;
     char buffer[BUFFER_LENGTH];
@@ -161,7 +161,7 @@ char** getWhiteList()
 /**
  * \return Number of lines in the whitelist
  */
-int rulesCount()
+int rulesCount(void)
 {
     FILE *f = fopen(WHITELIST_FILE, "r");
     int c, lines = 0;
