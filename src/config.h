@@ -1,20 +1,12 @@
+/**
+ * \file config.h
+ * \brief Header file for configuration module
+ * \version 0.1
+ */
+
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
-/*
- * =====================================================================================
- *
- *       Filename:  config.h
- *
- *    Description:  header file of the config module
- *
- *        Version:  1.0
- *        Created:  06/03/2015 23:26:04
- *       Revision:  none
- *       Compiler:  gcc
- *
- * =====================================================================================
- */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,13 +14,42 @@
 #include <unistd.h>
 #include <string.h>
 
+/**
+ * \def CONF_FILE
+ * \brief Configuration file path
+ */
 #define CONF_FILE "../conf/cerids.conf"
+
+/**
+ * \def WHITELIST_FILE
+ * \brief Whitelist file path
+ */
 #define WHITELIST_FILE "../conf/whitelist.txt"
 
+/**
+ * \def BUFFER_LENGTH
+ * \brief Buffer max length
+ */
 #define BUFFER_LENGTH 1000
+
+/**
+ * \def OPT_NAME_LENGTH
+ * \brief optName max length
+ */
 #define OPT_NAME_LENGTH 20
+
+/**
+ * \def OPT_VALUE_LENGTH
+ * \brief optValue max length
+ */
 #define OPT_VALUE_LENGTH 100
 
+/**
+ * \struct Options
+ * \brief Configuration options
+ * 
+ * This structure holds the CerIDS configuration options
+ */
 typedef struct Options {
     char *dev;
     char *filename;
@@ -36,10 +57,11 @@ typedef struct Options {
     bool live;
 };
 
-Options getConf(int argc, char *argv[]);
-Options getConfByArgs(int argc, char *argc[]);
-Options getConfByFile();
+int getConf(int argc, char *argv[], Options *options);
+int getConfByArgs(int argc, char *argc[], Options *options);
+int getConfByFile(Options *options);
 char** getWhitelist();
 int rulesCount();
 
 #endif
+

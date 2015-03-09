@@ -1,55 +1,60 @@
-/*
- * =====================================================================================
- *
- *       Filename:  config.c
- *
- *    Description:  load config and whitelist
- *
- *        Version:  1.0
- *        Created:  06/03/2015 23:26:54
- *       Revision:  none
- *       Compiler:  gcc
- *
- * =====================================================================================
+/**
+ * \file config.c
+ * \brief Load configuration and whitelist
  */
 
 #include <config.h>
 
-Options getConf(int argc, char *argv[])
+/**
+ * \param argc
+ * \param argv
+ * \param options { Pointer to an options structure }
+ * \return 0 if ok, other integer if not
+ */
+int getConf(int argc, char *argv[], Options *options)
 {
     int opt;
-    Options options;
 
     // set defaults
-    options.port = 80;
-    options.dev = NULL;
-    options.filename = NULL;
+    options->port = 80;
+    options->dev = NULL;
+    options->filename = NULL;
 
-    options = getConfByFile();
-    options = getConfByArgs();
+    getConfByFile(options);
+    getConfByArgs(argc, argv, options);
 
-    if ( (options.filename == NULL && options.dev == NULL)
-          || (options.filename != NULL && options.dev != NULL) )
+    if ( (options->filename == NULL && options->dev == NULL)
+          || (options->filename != NULL && options->dev != NULL) ) {
         fprintf(stderr, "Only one of filename and interface can be used at the same time\n");
+        return 2;
+    }
 
-    if ( options.port < 1 || options.port > 65535)
+    if ( options->port < 1 || options->port > 65535) {
         fprintf(stderr, "Invalid port number\n");
+        return 3;
+    }
  
-    return options;
+    return 0;
 }
 
-Options getConfByArgs(int argc, char *argv[])
+/**
+ * \param argc
+ * \param argv
+ * \options { Pointer to an options structure }
+ * \return O if ok, other integer if not
+ */
+int getConfByArgs(int argc, char *argv[], Options *options)
 {
       while ((opt = getopt(argc, argv, "f:i:p:")) != -1){
         switch (opt) {
         case 'f':
-         options.filename = strdup(optarg);
+         options->filename = strdup(optarg);
          break;
         case 'i':
-         options.dev = strdup(optarg);
+         options->dev = strdup(optarg);
          break;
          case 'p':
-         options.port = atoi(optarg);
+         options->port = atoi(optarg);
          break;
          default:
          usage(argv[0]);
@@ -57,19 +62,24 @@ Options getConfByArgs(int argc, char *argv[])
 
     } 
 
-    return options;
+    return 0;
 }
 
-Options getConfByFile()
+/**
+ * \param options { Pointer to an options structure }
+ * \return 0 if ok, other integer if not
+ */
+int getConfByFile(Options *options)
 {
     FILE *ceridsConf = NULL;
-    Options options;
     char optName[OPT_NAME_LENGTH], optValue[OPT_VALUE_LENGTH];
     char buffer[BUFFER_LENGTH];
     char position;
 
-    if ((ceridsConf = fopen(CONF_FILE, "r")) == NULL)
+    if ((ceridsConf = fopen(CONF_FILE, "r")) == NULL) {
         fprintf(stderr, "Can't open conf file\n");
+        return -1;
+    }
 
     while (fgets(buffer, BUFFER_LENGTH, ceridsConf) != NULL) {
 
@@ -83,19 +93,20 @@ Options getConfByFile()
 
             switch (optName) {
                 case "dev":
-                    options.dev = optValue;
+                    options->dev = optValue;
                     break;
                 case "filename":
-                    options.filename = optValue;
+                    options->filename = optValue;
                     break;
                 case "port":
-                    options.port = atoi(optValue);
+                    options->port = atoi(optValue);
                     break;
                 case "live":
-                    options.live = (optValue == "true") ? true : false;
+                    options->live = (optValue == "true") ? true : false;
                     break;
                 default:
                     fprintf(stderr, "Error in conf file: bad option name\n");
+                    return -1;
             }
 
         }
@@ -104,9 +115,12 @@ Options getConfByFile()
 
     fclose(ceridsConf);
 
-    return options;
+    return 0;
 }
 
+/**
+ * \return An array of strings containing all regex from the whitelist
+ */
 char** getWhiteList()
 {
     FILE *whitelist = NULL;
@@ -114,13 +128,15 @@ char** getWhiteList()
     char **rules = NULL;
     int i = 0;
 
-    if ((whitelist = fopen(WHITELIST_FILE, "r")) == NULL)
+    if ((whitelist = fopen(WHITELIST_FILE, "r")) == NULL) {
         fprintf(stderr, "Can't open whitelist file\n");
+        return NULL;
+    }
 
     if ((rules = malloc((1+rulesCount())*sizeof(char*))) == NULL) {
         fprintf(stderr, "Memory allocation error\n");
         return NULL;
-    };
+    }
 
     while (fgets(buffer, BUFFER_LENGTH, whitelist) != NULL) {
 
@@ -139,8 +155,12 @@ char** getWhiteList()
     
     fclose(whitelist);
 
+    return rules;
 }
 
+/**
+ * \return Number of lines in the whitelist
+ */
 int rulesCount()
 {
     FILE *f = fopen(WHITELIST_FILE, "r");
@@ -157,3 +177,4 @@ int rulesCount()
 
     return lines;
 }
+

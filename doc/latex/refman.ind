@@ -1,0 +1,44 @@
+\begin{theindex}
+
+  \item {config.\+c}
+    \subitem {get\+Conf}, \hyperpage{7}
+    \subitem {get\+Conf\+By\+Args}, \hyperpage{7}
+    \subitem {get\+Conf\+By\+File}, \hyperpage{8}
+    \subitem {get\+White\+List}, \hyperpage{8}
+    \subitem {rules\+Count}, \hyperpage{8}
+  \item {config.\+h}
+    \subitem {get\+Conf}, \hyperpage{9}
+    \subitem {get\+Conf\+By\+Args}, \hyperpage{9}
+    \subitem {get\+Conf\+By\+File}, \hyperpage{9}
+    \subitem {rules\+Count}, \hyperpage{10}
+
+  \indexspace
+
+  \item {get\+Conf}
+    \subitem {config.\+c}, \hyperpage{7}
+    \subitem {config.\+h}, \hyperpage{9}
+  \item {get\+Conf\+By\+Args}
+    \subitem {config.\+c}, \hyperpage{7}
+    \subitem {config.\+h}, \hyperpage{9}
+  \item {get\+Conf\+By\+File}
+    \subitem {config.\+c}, \hyperpage{8}
+    \subitem {config.\+h}, \hyperpage{9}
+  \item {get\+White\+List}
+    \subitem {config.\+c}, \hyperpage{8}
+
+  \indexspace
+
+  \item {Options}, \hyperpage{5}
+
+  \indexspace
+
+  \item {rules\+Count}
+    \subitem {config.\+c}, \hyperpage{8}
+    \subitem {config.\+h}, \hyperpage{10}
+
+  \indexspace
+
+  \item {src/config.\+c}, \hyperpage{7}
+  \item {src/config.\+h}, \hyperpage{8}
+
+\end{theindex}

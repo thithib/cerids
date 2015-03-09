@@ -1,0 +1,125 @@
+\hypertarget{config_8h}{}\section{src/config.h File Reference}
+\label{config_8h}\index{src/config.\+h@{src/config.\+h}}
+
+
+Header file for configuration module.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$stdbool.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structOptions}{Options}
+\begin{DoxyCompactList}\small\item\em Configuration options. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{config_8h_a2b53ff59ad6fe7d737de442d3dfe0634}{}\#define \hyperlink{config_8h_a2b53ff59ad6fe7d737de442d3dfe0634}{C\+O\+N\+F\+\_\+\+F\+I\+L\+E}~\char`\"{}../conf/cerids.\+conf\char`\"{}\label{config_8h_a2b53ff59ad6fe7d737de442d3dfe0634}
+
+\begin{DoxyCompactList}\small\item\em Configuration file path. \end{DoxyCompactList}\item 
+\hypertarget{config_8h_a20385395776edd2bd2c492160105bae8}{}\#define \hyperlink{config_8h_a20385395776edd2bd2c492160105bae8}{W\+H\+I\+T\+E\+L\+I\+S\+T\+\_\+\+F\+I\+L\+E}~\char`\"{}../conf/whitelist.\+txt\char`\"{}\label{config_8h_a20385395776edd2bd2c492160105bae8}
+
+\begin{DoxyCompactList}\small\item\em Whitelist file path. \end{DoxyCompactList}\item 
+\hypertarget{config_8h_af7b7dc9a200cb1404c280bd500fd1551}{}\#define \hyperlink{config_8h_af7b7dc9a200cb1404c280bd500fd1551}{B\+U\+F\+F\+E\+R\+\_\+\+L\+E\+N\+G\+T\+H}~1000\label{config_8h_af7b7dc9a200cb1404c280bd500fd1551}
+
+\begin{DoxyCompactList}\small\item\em Buffer max length. \end{DoxyCompactList}\item 
+\hypertarget{config_8h_ad7bb86d2e41fb580002c59ff867f027d}{}\#define \hyperlink{config_8h_ad7bb86d2e41fb580002c59ff867f027d}{O\+P\+T\+\_\+\+N\+A\+M\+E\+\_\+\+L\+E\+N\+G\+T\+H}~20\label{config_8h_ad7bb86d2e41fb580002c59ff867f027d}
+
+\begin{DoxyCompactList}\small\item\em opt\+Name max length \end{DoxyCompactList}\item 
+\hypertarget{config_8h_ac86aabee0a3633860ad30f1043a09d34}{}\#define \hyperlink{config_8h_ac86aabee0a3633860ad30f1043a09d34}{O\+P\+T\+\_\+\+V\+A\+L\+U\+E\+\_\+\+L\+E\+N\+G\+T\+H}~100\label{config_8h_ac86aabee0a3633860ad30f1043a09d34}
+
+\begin{DoxyCompactList}\small\item\em opt\+Value max length \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{config_8h_a5e793e400545e35329f45f16dc673610}{get\+Conf} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]}, \hyperlink{structOptions}{Options} $\ast$options)
+\item 
+int \hyperlink{config_8h_a162ef38a425cfe6ef2879e6ca5fd0824}{get\+Conf\+By\+Args} (int argc, char $\ast$argc\mbox{[}$\,$\mbox{]}, \hyperlink{structOptions}{Options} $\ast$options)
+\item 
+int \hyperlink{config_8h_a9235134bf5001d1a7123be817db63d98}{get\+Conf\+By\+File} (\hyperlink{structOptions}{Options} $\ast$options)
+\item 
+\hypertarget{config_8h_abd7d008619ec0eb0a0b81e728a70330e}{}char $\ast$$\ast$ {\bfseries get\+Whitelist} ()\label{config_8h_abd7d008619ec0eb0a0b81e728a70330e}
+
+\item 
+int \hyperlink{config_8h_a2c951ba23aaed25b71c02e488d8fbdc8}{rules\+Count} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Header file for configuration module. 
+
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+
+
+\subsection{Function Documentation}
+\hypertarget{config_8h_a5e793e400545e35329f45f16dc673610}{}\index{config.\+h@{config.\+h}!get\+Conf@{get\+Conf}}
+\index{get\+Conf@{get\+Conf}!config.\+h@{config.\+h}}
+\subsubsection[{get\+Conf}]{\setlength{\rightskip}{0pt plus 5cm}int get\+Conf (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf Options} $\ast$}]{options}
+\end{DoxyParamCaption}
+)}\label{config_8h_a5e793e400545e35329f45f16dc673610}
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & \\
+\hline
+{\em argv} & \\
+\hline
+{\em options} & \{ Pointer to an options structure \} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if ok, other integer if not 
+\end{DoxyReturn}
+\hypertarget{config_8h_a162ef38a425cfe6ef2879e6ca5fd0824}{}\index{config.\+h@{config.\+h}!get\+Conf\+By\+Args@{get\+Conf\+By\+Args}}
+\index{get\+Conf\+By\+Args@{get\+Conf\+By\+Args}!config.\+h@{config.\+h}}
+\subsubsection[{get\+Conf\+By\+Args}]{\setlength{\rightskip}{0pt plus 5cm}int get\+Conf\+By\+Args (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf Options} $\ast$}]{options}
+\end{DoxyParamCaption}
+)}\label{config_8h_a162ef38a425cfe6ef2879e6ca5fd0824}
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & \\
+\hline
+{\em argv} & \{ Pointer to an options structure \} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+O if ok, other integer if not 
+\end{DoxyReturn}
+\hypertarget{config_8h_a9235134bf5001d1a7123be817db63d98}{}\index{config.\+h@{config.\+h}!get\+Conf\+By\+File@{get\+Conf\+By\+File}}
+\index{get\+Conf\+By\+File@{get\+Conf\+By\+File}!config.\+h@{config.\+h}}
+\subsubsection[{get\+Conf\+By\+File}]{\setlength{\rightskip}{0pt plus 5cm}int get\+Conf\+By\+File (
+\begin{DoxyParamCaption}
+\item[{{\bf Options} $\ast$}]{options}
+\end{DoxyParamCaption}
+)}\label{config_8h_a9235134bf5001d1a7123be817db63d98}
+
+\begin{DoxyParams}{Parameters}
+{\em options} & \{ Pointer to an options structure \} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if ok, other integer if not 
+\end{DoxyReturn}
+\hypertarget{config_8h_a2c951ba23aaed25b71c02e488d8fbdc8}{}\index{config.\+h@{config.\+h}!rules\+Count@{rules\+Count}}
+\index{rules\+Count@{rules\+Count}!config.\+h@{config.\+h}}
+\subsubsection[{rules\+Count}]{\setlength{\rightskip}{0pt plus 5cm}int rules\+Count (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{config_8h_a2c951ba23aaed25b71c02e488d8fbdc8}
+\begin{DoxyReturn}{Returns}
+Number of lines in the whitelist 
+\end{DoxyReturn}
