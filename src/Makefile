@@ -25,15 +25,13 @@
 
 CC=gcc
 LDFLAG=-lpcap
-CFLAG=
+CFLAG=-std=gnu99
 EXEC=cerids
 
 all: $(EXEC) 
 
 $(EXEC): main.o 
 				@$(CC) -o $@ $^ $(LDFLAG)
-
-main.o: 
 
 %.o: %.c
 				@$(CC) -o $@ -c $< $(CFLAG)
