@@ -20,7 +20,7 @@
 #include <stdbool.h>
 
 void usage(char * binname);
-
+void pktcallback(u_char *user,const struct pcap_pkthdr* header,const u_char* packet);
 
 int main(int argc, char * argv[])
 {
@@ -33,6 +33,8 @@ int main(int argc, char * argv[])
   char filter_exp[] = "port 80"; /*  The filter expression */
   bpf_u_int32 mask;    /*  The netmask of our sniffing device */
   bpf_u_int32 net;   /*  The IP of our sniffing device */
+  struct pcap_pkthdr header;  /*  The header that pcap gives us */
+  const u_char *packet;   /*  The actual packet */
 
   struct {
     char * dev;
@@ -103,20 +105,26 @@ int main(int argc, char * argv[])
   }
 
   if (pcap_lookupnet(options.dev, &net, &mask, errbuf) == -1) {
-   fprintf(stderr, "Can't get netmask for device %s\n", options.dev);
-     net = 0;
-     mask = 0;
+    fprintf(stderr, "Can't get netmask for device %s\n", options.dev);
+    net = 0;
+    mask = 0;
   }
 
   if (pcap_compile(handle, &fp, filter_exp, 0, net) == -1) {
-    fprintf(stderr, "Couldn't parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
+    fprintf(stderr, "Could not parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
     return(5);
   }
 
   if (pcap_setfilter(handle, &fp) == -1) {
-    fprintf(stderr, "Couldn't install filter %s: %s\n", filter_exp, pcap_geterr(handle));
+    fprintf(stderr, "Could not install filter %s: %s\n", filter_exp, pcap_geterr(handle));
     return(6);
   }
+
+  /* pcap loop */
+  pcap_loop(handle, -1, pktcallback, "live");
+
+
+  pcap_close(handle);
 
   return EXIT_SUCCESS;
 }
@@ -127,5 +135,21 @@ void usage(char * binname)
 {
   fprintf(stderr, "Usage: %s [-f filename] [-i device] [-p port]\n", binname);
   exit(EXIT_FAILURE);
+}
+
+
+void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* packet)
+{
+  unsigned char *array = NULL;
+  printf("Sniffed a packet from %s with length %d\n", user, header->len);
+  array = malloc(header->len * sizeof(unsigned char));
+  memcpy(array, packet, header->len);
+
+  for (int i = 0; i < header->len; i++){
+    printf("%x", array[i]);
+  }
+
+  puts("");
+
 }
 
