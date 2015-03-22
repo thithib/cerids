@@ -29,6 +29,11 @@ int main(int argc, char * argv[])
   pcap_t *handle;
   int opt;
 
+  struct bpf_program fp;   /*  The compiled filter expression */
+  char filter_exp[] = "port 80"; /*  The filter expression */
+  bpf_u_int32 mask;    /*  The netmask of our sniffing device */
+  bpf_u_int32 net;   /*  The IP of our sniffing device */
+
   struct {
     char * dev;
     char * filename;
@@ -85,6 +90,9 @@ int main(int argc, char * argv[])
 
   } else {
     options.live = false;
+    fprintf(stderr, "Not implemented for now\n");
+
+    return -1;
 
     handle = pcap_open_offline(options.filename, errbuf);
     if (handle == NULL){
@@ -94,8 +102,26 @@ int main(int argc, char * argv[])
 
   }
 
+  if (pcap_lookupnet(options.dev, &net, &mask, errbuf) == -1) {
+   fprintf(stderr, "Can't get netmask for device %s\n", options.dev);
+     net = 0;
+     mask = 0;
+  }
+
+  if (pcap_compile(handle, &fp, filter_exp, 0, net) == -1) {
+    fprintf(stderr, "Couldn't parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
+    return(5);
+  }
+
+  if (pcap_setfilter(handle, &fp) == -1) {
+    fprintf(stderr, "Couldn't install filter %s: %s\n", filter_exp, pcap_geterr(handle));
+    return(6);
+  }
+
   return EXIT_SUCCESS;
 }
+
+
 
 void usage(char * binname)
 {
