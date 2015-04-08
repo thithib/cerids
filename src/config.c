@@ -41,7 +41,7 @@ int getConf(int argc, char *argv[], Options *options)
  * \param argc
  * \param argv
  * \options { Pointer to an options structure }
- * \return O if ok, other integer if not
+ * \return 0 if ok, other integer if not
  */
 int getConfByArgs(int argc, char *argv[], Options *options)
 {
