@@ -55,6 +55,7 @@ typedef struct Options {
     char *filename;
     int port;
     bool live;
+    bool debug;
 } Options;
 
 void usage(char *binname);

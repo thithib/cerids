@@ -19,6 +19,7 @@ int getConf(int argc, char *argv[], Options *options)
     options->port = 80;
     options->dev = NULL;
     options->filename = NULL;
+    options->debug = false;
 
     getConfByFile(options);
     getConfByArgs(argc, argv, options);
@@ -47,18 +48,21 @@ int getConfByArgs(int argc, char *argv[], Options *options)
 {
     int opt;
 
-        while ((opt = getopt(argc, argv, "f:i:p:")) != -1){
+        while ((opt = getopt(argc, argv, "df:i:p:")) != -1){
             switch (opt) {
-                case 'f':
+              case 'd':
+                options->debug = true;
+                break;
+              case 'f':
                 options->filename = strdup(optarg);
                 break;
-                case 'i':
+              case 'i':
                 options->dev = strdup(optarg);
                 break;
-                case 'p':
+              case 'p':
                 options->port = atoi(optarg);
                 break;
-                default:
+              default:
                 usage(argv[0]);
             }
 
@@ -101,6 +105,8 @@ int getConfByFile(Options *options)
                 options->port = atoi(optValue);
             else if (optName == "live")
                 options->live = (optValue == "true") ? true : false;
+            else if (optName == "debug")
+                options->debug = (optValue == "true") ? true : false;
             else {
                 fprintf(stderr, "Error in conf file: bad option name\n");
                 return -1;
@@ -177,7 +183,7 @@ int rulesCount(void)
 
 void usage(char *binname)
 {
-    fprintf(stderr, "Usage: %s [-f filename] [-i device] [-p port]\n", binname);
+    fprintf(stderr, "Usage: %s [-d][-f filename] [-i device] [-p port]\n", binname);
     exit(EXIT_FAILURE);
 }
 
