@@ -4,6 +4,7 @@
  */
 
 #include "config.h"
+#include <syslog.h>
 
 /**
  * \param argc
@@ -26,12 +27,12 @@ int getConf(int argc, char *argv[], Options *options)
 
     if ( (options->filename == NULL && options->dev == NULL)
           || (options->filename != NULL && options->dev != NULL) ) {
-        fprintf(stderr, "Only one of filename and interface can be used at the same time\n");
+        syslog(LOG_ERR, "Only one of filename and interface can be used at the same time\n");
         return 2;
     }
 
     if ( options->port < 1 || options->port > 65535) {
-        fprintf(stderr, "Invalid port number\n");
+        syslog(LOG_ERR, "Invalid port number\n");
         return 3;
     }
  
@@ -83,7 +84,7 @@ int getConfByFile(Options *options)
     char *position, delim[] = "=";
 
     if ((ceridsConf = fopen(CONF_FILE, "r")) == NULL) {
-        fprintf(stderr, "Can't open conf file\n");
+        syslog(LOG_ERR, "Can't open conf file\n");
         return -1;
     }
 
@@ -108,7 +109,7 @@ int getConfByFile(Options *options)
             else if (optName == "debug")
                 options->debug = (optValue == "true") ? true : false;
             else {
-                fprintf(stderr, "Error in conf file: bad option name\n");
+                syslog(LOG_ERR, "Error in conf file: bad option name\n");
                 return -1;
             }
 
@@ -132,19 +133,19 @@ char** getWhitelist(void)
     int i = 0;
 
     if ((whitelist = fopen(WHITELIST_FILE, "r")) == NULL) {
-        fprintf(stderr, "Can't open whitelist file\n");
+        syslog(LOG_ERR, "Can't open whitelist file\n");
         return NULL;
     }
 
     if ((rules = malloc((1+rulesCount())*sizeof(char*))) == NULL) {
-        fprintf(stderr, "Memory allocation error\n");
+        syslog(LOG_ERR, "Memory allocation error\n");
         return NULL;
     }
 
     while (fgets(buffer, BUFFER_LENGTH, whitelist) != NULL) {
 
         if ((*(rules+i) = malloc(strlen(buffer)*sizeof(char))) == NULL) {
-            fprintf(stderr, "Memory allocation error\n");
+            syslog(LOG_ERR, "Memory allocation error\n");
             return NULL;
         }
         

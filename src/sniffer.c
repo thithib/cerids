@@ -3,6 +3,9 @@
  * \brief Sniffer components
  */
 
+#include <syslog.h>
+#include <pcap/pcap.h>
+
 #include "sniffer.h"
 
 /**
@@ -27,7 +30,7 @@ int snifferRun (Options *options, pcap_handler callback)
   
         handle = pcap_open_live(options->dev, BUFSIZ, 1, 1000, errbuf);
         if (handle == NULL){
-            fprintf(stderr, "Could not open device %s: %s\n", options->dev, errbuf);
+            syslog(LOG_ERR, "Could not open device %s: %s\n", options->dev, errbuf);
             return 1;
         }
 
@@ -36,24 +39,25 @@ int snifferRun (Options *options, pcap_handler callback)
 
         handle = pcap_open_offline(options->filename, errbuf);
         if (handle == NULL){
-            fprintf(stderr, "Could not open pcap file %s: %s\n", options->filename, errbuf);
+            syslog(LOG_ERR, "Could not open pcap file %s: %s\n", options->filename, errbuf);
             return 1;
         }
     }
 
+
     if (pcap_lookupnet(options->dev, &net, &mask, errbuf) == -1) {
-        fprintf(stderr, "Can't get netmask for device %s\n", options->dev);
+        syslog(LOG_WARNING, "Can't get netmask for device %s\n", options->dev);
         net = 0;
         mask = 0;
     }
 
     if (pcap_compile(handle, &fp, filter_exp, 0, net) == -1) {
-        fprintf(stderr, "Could not parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
+        syslog(LOG_ERR, "Could not parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
         return 2 ;
     }
 
     if (pcap_setfilter(handle, &fp) == -1) {
-        fprintf(stderr, "Could not install filter %s: %s\n", filter_exp, pcap_geterr(handle));
+        syslog(LOG_ERR, "Could not install filter %s: %s\n", filter_exp, pcap_geterr(handle));
         return 3 ;
     }
 
