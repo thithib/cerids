@@ -19,6 +19,8 @@
 #include <string.h>
 #include <stdbool.h>
 #include <syslog.h>
+#include <sys/types.h>
+
 
 #include "sniffer.h"
 #include "config.h"
@@ -36,8 +38,25 @@ int main(int argc, char * argv[])
   openlog("cerids", LOG_PID, LOG_DAEMON);
 
   syslog(LOG_INFO, "Starting up");
-  syslog(LOG_INFO, "Reading configuration");
 
+  if (!options.debug)
+    pid_t pid = fork();
+  else
+    pid_t pid = 0;
+
+
+  if (pid == -1) {
+    syslog(LOG_ERR, "Could not fork to background");
+    return EXIT_FAILURE;
+  }
+  else if (pid > 0) {
+    // parent process and not debug
+    return EXIT_SUCCESS;
+  }
+
+  // debug or child process
+ 
+  syslog(LOG_INFO, "Reading configuration");
   // Getting conf from both file and arguments
   getConf(argc, argv, &options);
 
