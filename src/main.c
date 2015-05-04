@@ -18,6 +18,8 @@
 #include <pcap.h>
 #include <string.h>
 #include <stdbool.h>
+#include <syslog.h>
+
 #include "sniffer.h"
 #include "config.h"
 
@@ -31,10 +33,20 @@ int main(int argc, char * argv[])
   int opt;
   Options options;
 
+  openlog("cerids", LOG_PID, LOG_DAEMON);
+
+  syslog(LOG_INFO, "Starting up");
+  syslog(LOG_INFO, "Reading configuration");
+
   // Getting conf from both file and arguments
   getConf(argc, argv, &options);
 
+  syslog(LOG_INFO, "Sniffer initialisation");
   snifferRun (&options, &pktcallback);
+
+  syslog(LOG_INFO, "Exiting");
+
+  closelog();
 
   return EXIT_SUCCESS;
 }
