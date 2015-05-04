@@ -30,7 +30,7 @@ EXEC=cerids
 
 all: $(EXEC) 
 
-$(EXEC): main.o 
+$(EXEC): main.o sniffer.o config.o parser.o
 				@$(CC) -o $@ $^ $(LDFLAG)
 
 %.o: %.c
