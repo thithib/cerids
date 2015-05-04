@@ -34,16 +34,14 @@ int main(int argc, char * argv[])
 
   int opt;
   Options options;
+  pid_t pid = 0;
 
   openlog("cerids", LOG_PID, LOG_DAEMON);
 
   syslog(LOG_INFO, "Starting up");
 
   if (!options.debug)
-    pid_t pid = fork();
-  else
-    pid_t pid = 0;
-
+    pid = fork();
 
   if (pid == -1) {
     syslog(LOG_ERR, "Could not fork to background");
