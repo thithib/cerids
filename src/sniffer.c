@@ -16,7 +16,7 @@
  */
 int snifferRun (Options *options, pcap_handler callback)
 {
-    char *errbuf;
+    char errbuf[PCAP_ERRBUF_SIZE];
     pcap_t *handle;
     struct bpf_program fp;   /*  The compiled filter expression */
     char filter_exp[] = "port 80"; /*  The filter expression */

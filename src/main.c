@@ -26,7 +26,6 @@
 #include "config.h"
 
 
-void usage(char * binname);
 void pktcallback(u_char *user,const struct pcap_pkthdr* header,const u_char* packet);
 
 int main(int argc, char * argv[])
@@ -35,11 +34,17 @@ int main(int argc, char * argv[])
   int opt;
   Options options;
   pid_t pid = 0;
+  
+  openlog("cerids", LOG_PID | LOG_PERROR, LOG_DAEMON);
 
-  openlog("cerids", LOG_PID, LOG_DAEMON);
+  getConf(argc, argv, &options);
+
+  if (!options.debug){
+    closelog();
+    openlog("cerids", LOG_PID, LOG_DAEMON);
+  }
 
   syslog(LOG_INFO, "Starting up");
-
   if (!options.debug)
     pid = fork();
 
@@ -54,10 +59,6 @@ int main(int argc, char * argv[])
 
   // debug or child process
  
-  syslog(LOG_INFO, "Reading configuration");
-  // Getting conf from both file and arguments
-  getConf(argc, argv, &options);
-
   syslog(LOG_INFO, "Sniffer initialisation");
   snifferRun (&options, &pktcallback);
 
