@@ -79,7 +79,7 @@ void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* p
   memcpy(array, packet, header->len);
 
   for (int i = 0; i < header->len; i++){
-    printf("%x", array[i]);
+    printf("%02x", array[i]);
   }
 
   puts("");
