@@ -40,6 +40,7 @@ int main(int argc, char * argv[])
 
   if ((code = getConf(argc, argv, &options)) != 0){
     syslog(LOG_ERR, "Problem in config");
+    help(argv[0]);
     return code;
   }
 
