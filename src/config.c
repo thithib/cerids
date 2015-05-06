@@ -50,8 +50,11 @@ int getConfByArgs(int argc, char *argv[], Options *options)
 {
     int opt;
 
-        while ((opt = getopt(argc, argv, "df:i:p:")) != -1){
+        while ((opt = getopt(argc, argv, "hdf:i:p:")) != -1){
             switch (opt) {
+              case 'h':
+                help(argv[0]);
+		break;
               case 'd':
                 options->debug = true;
 		options->foreground = true;
@@ -187,7 +190,16 @@ int rulesCount(void)
 
 void usage(char *binname)
 {
-    fprintf(stderr, "Usage: %s [-d] [-f filename] [-i device] [-p port]\n", binname);
+    fprintf(stderr, "Usage: %s [-h] [-d] [-f filename] [-i device] [-p port]\n", binname);
     exit(EXIT_FAILURE);
 }
 
+void help(char *binname)
+{
+    printf("Usage: %s [-h] [-d] [-f filename] [-i device] [-p port]\n", binname);
+    puts("-d\t\t\tActivate debug mode");
+    puts("-f <filename>\t\tRead data from a pcap file (Cannot be used with -i)");
+    puts("-i <device>\t\tRead packet from an interface (Cannot be used with -f)");
+    puts("-p <port>\t\tModify the port to filter on");
+    exit(EXIT_SUCCESS);
+}

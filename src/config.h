@@ -60,6 +60,7 @@ typedef struct Options {
 } Options;
 
 void usage(char *binname);
+void help(char *binname);
 int getConf(int argc, char *argv[], Options *options);
 int getConfByArgs(int argc, char *argv[], Options *options);
 int getConfByFile(Options *options);
