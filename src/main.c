@@ -32,12 +32,16 @@ int main(int argc, char * argv[])
 {
 
   int opt;
+  int code;
   Options options;
   pid_t pid = 0;
   
   openlog("cerids", LOG_PID, LOG_DAEMON);
 
-  getConf(argc, argv, &options);
+  if ((code = getConf(argc, argv, &options)) != 0){
+    syslog(LOG_ERR, "Problem in config");
+    return code;
+  }
 
   if (options.debug){
     closelog();
