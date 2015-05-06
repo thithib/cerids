@@ -1,5 +1,7 @@
-#include "tests.h"
-#include "../src/config.h"
+#include "test_config.h"
+#include <CUnit/CUnit.h>
+#include <CUnit/Basic.h>
+
 
 int init_suite1(void) // operations to be done before all tests
 {
@@ -13,23 +15,42 @@ int clean_suite1(void) // operations to be done after all tests
 
 void test_getConf(void)
 {
-    int argc = 3;
-    char *argv[3] = {"cerids", "-i", "eth0"};
-    Options *options;
-    CU_ASSERT(getConf(argc, argv, options) == 0);
+    int argc;
+    char *argv1[3] = {"cerids", "-i", "eth0"};
+    char *argv2[2] = {"cerids", "-d"};
+    char *argv3[5] = {"cerids", "-i", "eth0", "-p", "0"};
+
+    Options *options = malloc(sizeof(Options));
+    argc = 3;
+    CU_ASSERT(getConf(argc, argv1, options) == 0);
+    free(options);
+   
+    options = malloc(sizeof(Options));
+    argc = 2;
+    optind = 0;
+    CU_ASSERT(getConf(argc, argv2, options) == 2);
+    free(options);
+
+    options = malloc(sizeof(Options));
+    argc = 5;
+    optind = 0;
+    CU_ASSERT(getConf(argc, argv3, options) == 3);
+    free(options);
 }
 
 void test_getConfByArgs(void)
 {
-    int argc = 3;
-    char *argv[3] = {"cerids", "-i", "eth0"};
-    Options *options;
+    int argc = 8;
+    char *argv[8] = {"cerids", "-d", "-i", "eth0", "-f" , "test", "-p", "80"};
+    Options *options = malloc(sizeof(Options));
+
     CU_ASSERT(getConfByArgs(argc, argv, options) == 0);
 }
 
 void test_getConfByFile(void)
 {
-    Options *options;
+    Options *options = malloc(sizeof(Options));
+
     CU_ASSERT(getConfByFile(options) == 0);
 }
 
@@ -41,33 +62,5 @@ void test_getWhitelist(void)
 void test_rulesCount(void)
 {
     CU_ASSERT(0 <= rulesCount());
-}
-
-int main(void)
-{
-    CU_pSuite pSuite = NULL;
-
-    if (CUE_SUCCESS != CU_initialize_registry())
-        return CU_get_error();
-
-    pSuite = CU_add_suite("Suite_1", init_suite1, clean_suite1);
-    if (NULL == pSuite) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }
-
-    if ((NULL == CU_add_test(pSuite, "test of getConf", test_getConf)) ||
-        (NULL == CU_add_test(pSuite, "test of getConfByArgs", test_getConfByArgs)) ||
-        (NULL == CU_add_test(pSuite, "test of getConfByFile", test_getConfByFile)) ||
-        (NULL == CU_add_test(pSuite, "test of getWhitelist", test_getWhitelist)) ||
-        (NULL == CU_add_test(pSuite, "test of rulesCount", test_rulesCount))) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }
-
-    CU_basic_set_mode(CU_BRM_VERBOSE);
-    CU_basic_run_tests();
-    CU_cleanup_registry();
-    return CU_get_error();
 }
 
