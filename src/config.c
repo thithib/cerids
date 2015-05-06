@@ -187,7 +187,7 @@ int rulesCount(void)
 
 void usage(char *binname)
 {
-    fprintf(stderr, "Usage: %s [-d][-f filename] [-i device] [-p port]\n", binname);
+    fprintf(stderr, "Usage: %s [-d] [-f filename] [-i device] [-p port]\n", binname);
     exit(EXIT_FAILURE);
 }
 
