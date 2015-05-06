@@ -35,17 +35,17 @@ int main(int argc, char * argv[])
   Options options;
   pid_t pid = 0;
   
-  openlog("cerids", LOG_PID | LOG_PERROR, LOG_DAEMON);
+  openlog("cerids", LOG_PID, LOG_DAEMON);
 
   getConf(argc, argv, &options);
 
-  if (!options.debug){
+  if (options.debug){
     closelog();
-    openlog("cerids", LOG_PID, LOG_DAEMON);
+    openlog("cerids", LOG_PID | LOG_PERROR, LOG_DAEMON);
   }
 
   syslog(LOG_INFO, "Starting up");
-  if (!options.debug)
+  if (!options.foreground)
     pid = fork();
 
   if (pid == -1) {

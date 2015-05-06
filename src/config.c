@@ -21,6 +21,7 @@ int getConf(int argc, char *argv[], Options *options)
     options->dev = NULL;
     options->filename = NULL;
     options->debug = false;
+    options->foreground = false;
 
     getConfByFile(options);
     getConfByArgs(argc, argv, options);
@@ -53,9 +54,11 @@ int getConfByArgs(int argc, char *argv[], Options *options)
             switch (opt) {
               case 'd':
                 options->debug = true;
+		options->foreground = true;
                 break;
               case 'f':
                 options->filename = strdup(optarg);
+		options->foreground = true;
                 break;
               case 'i':
                 options->dev = strdup(optarg);
