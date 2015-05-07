@@ -10,14 +10,13 @@
 
 /**
  * \param options { Pointer to an options structure }
- * \param callback { pcap_handler callback for pcap_loop }
+ * \param handle {pcap_t ** pointer}
  * \return 0 if ok, -1 if not implemented, 1 if pcap file or device could not be opened,
  *          2 if filter could not be parsed, 3 if filter could not be instanciated
  */
-int snifferRun (Options *options, pcap_handler callback)
+int snifferInit (Options *options, pcap_t ** handle)
 {
     char errbuf[PCAP_ERRBUF_SIZE];
-    pcap_t *handle;
     struct bpf_program fp;   /*  The compiled filter expression */
     char filter_exp[] = "port 80"; /*  The filter expression */
     bpf_u_int32 mask;    /*  The netmask of our sniffing device */
@@ -28,8 +27,8 @@ int snifferRun (Options *options, pcap_handler callback)
     if (options->dev != NULL){
         options->live = true;
   
-        handle = pcap_open_live(options->dev, BUFSIZ, 1, 1000, errbuf);
-        if (handle == NULL){
+        *handle = pcap_open_live(options->dev, BUFSIZ, 1, 1000, errbuf);
+        if (*handle == NULL){
             syslog(LOG_ERR, "Could not open device %s: %s\n", options->dev, errbuf);
             return 1;
         }
@@ -37,8 +36,8 @@ int snifferRun (Options *options, pcap_handler callback)
     } else {
         options->live = false;
 
-        handle = pcap_open_offline(options->filename, errbuf);
-        if (handle == NULL){
+        *handle = pcap_open_offline(options->filename, errbuf);
+        if (*handle == NULL){
             syslog(LOG_ERR, "Could not open pcap file %s: %s\n", options->filename, errbuf);
             return 1;
         }
@@ -51,21 +50,37 @@ int snifferRun (Options *options, pcap_handler callback)
         mask = 0;
     }
 
-    if (pcap_compile(handle, &fp, filter_exp, 0, net) == -1) {
-        syslog(LOG_ERR, "Could not parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
+    if (pcap_compile(*handle, &fp, filter_exp, 0, net) == -1) {
+        syslog(LOG_ERR, "Could not parse filter %s: %s\n", filter_exp, pcap_geterr(*handle));
         return 2 ;
     }
 
-    if (pcap_setfilter(handle, &fp) == -1) {
-        syslog(LOG_ERR, "Could not install filter %s: %s\n", filter_exp, pcap_geterr(handle));
+    if (pcap_setfilter(*handle, &fp) == -1) {
+        syslog(LOG_ERR, "Could not install filter %s: %s\n", filter_exp, pcap_geterr(*handle));
         return 3 ;
     }
 
+    return 0;
+}
+
+
+/**
+ * \param handle { pcap_t ** pointer handler }
+ * \param callback { pcap_handler callback for pcap_loop }
+ * \return 0 if ok, -1 or -2 in case of error,
+ */
+int snifferRun (pcap_t ** handle, pcap_handler callback)
+{
     /* pcap loop */
-    pcap_loop(handle, -1, *callback, "live");
+    return pcap_loop(*handle, -1, *callback, "live");
+}
 
 
-    pcap_close(handle);
-
-    return EXIT_SUCCESS;
+/**
+ * \param handle { pcap_t ** pointer handler }
+ * \return 0 if ok, -1 or -2 in case of error,
+ */
+void snifferCleanUp(pcap_t ** handle)
+{
+    pcap_close(*handle);
 }

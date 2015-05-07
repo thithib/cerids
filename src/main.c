@@ -34,6 +34,7 @@ int main(int argc, char * argv[])
   int opt;
   int code;
   Options options;
+  pcap_t * handle;
   pid_t pid = 0;
   
   openlog("cerids", LOG_PID, LOG_DAEMON);
@@ -65,9 +66,13 @@ int main(int argc, char * argv[])
   // debug or child process
  
   syslog(LOG_INFO, "Sniffer initialisation");
-  snifferRun (&options, &pktcallback);
+  snifferInit (&options, &handle);
+
+  snifferRun (&handle, &pktcallback);
 
   syslog(LOG_INFO, "Exiting");
+
+  snifferCleanUp(&handle);
 
   closelog();
 

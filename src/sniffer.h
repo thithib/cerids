@@ -14,7 +14,9 @@
 #include <stdbool.h>
 #include "config.h"
 
-int snifferRun (Options *options, pcap_handler callback);
 
+int snifferInit (Options *options, pcap_t ** handle);
+int snifferRun (pcap_t ** handle, pcap_handler callback);
+void snifferCleanUp(pcap_t ** handle);
 
 #endif
