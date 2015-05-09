@@ -9,14 +9,15 @@
 
 #include <stdlib.h>
 #include <unistd.h>
-#include <pcap.h>
+#include <pcap/pcap.h>
+#include <syslog.h>
 #include <string.h>
 #include <stdbool.h>
 #include "config.h"
 
 
 int snifferInit (Options *options, pcap_t ** handle);
-int snifferRun (pcap_t ** handle, pcap_handler callback);
+int snifferRun (pcap_t ** handle, int cnt, pcap_handler callback);
 void snifferCleanUp(pcap_t ** handle);
 
 #endif

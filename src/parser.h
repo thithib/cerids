@@ -12,7 +12,7 @@
 #include <string.h>
 
 //Structure of ip frame
-int parser(int frame_length, char* f);
+int parser(int frame_length, unsigned char* f);
 
  struct frame
  {

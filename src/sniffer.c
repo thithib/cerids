@@ -3,9 +3,6 @@
  * \brief Sniffer components
  */
 
-#include <syslog.h>
-#include <pcap/pcap.h>
-
 #include "sniffer.h"
 
 /**
@@ -66,13 +63,14 @@ int snifferInit (Options *options, pcap_t ** handle)
 
 /**
  * \param handle { pcap_t ** pointer handler }
+ * \param cnt { number of packets to process }
  * \param callback { pcap_handler callback for pcap_loop }
  * \return 0 if ok, -1 or -2 in case of error,
  */
-int snifferRun (pcap_t ** handle, pcap_handler callback)
+int snifferRun (pcap_t ** handle, int cnt, pcap_handler callback)
 {
     /* pcap loop */
-    return pcap_loop(*handle, -1, *callback, "live");
+    return pcap_loop(*handle, cnt, *callback, "live");
 }
 
 

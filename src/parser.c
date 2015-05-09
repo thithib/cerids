@@ -7,7 +7,7 @@
 
 //Doesn't work with frames with options
 
-int parser(int frame_length, char* f){
+int parser(int frame_length, unsigned char *f){
 	struct frame frame;
 	int i;
 

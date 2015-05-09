@@ -69,7 +69,7 @@ int main(int argc, char * argv[])
   syslog(LOG_INFO, "Sniffer initialisation");
   snifferInit (&options, &handle);
 
-  snifferRun (&handle, &pktcallback);
+  snifferRun (&handle, -1, &pktcallback);
 
   syslog(LOG_INFO, "Exiting");
 

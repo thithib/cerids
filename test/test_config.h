@@ -3,8 +3,8 @@
 
 extern int optind;
 
-int init_suite1(void);
-int clean_suite1(void);
+int init_suite_config(void);
+int clean_suite_config(void);
 
 void test_getConf(void);
 void test_getConfByArgs(void);

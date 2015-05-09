@@ -3,12 +3,12 @@
 #include <CUnit/Basic.h>
 
 
-int init_suite1(void) // operations to be done before all tests
+int init_suite_config(void) // operations to be done before all tests
 {
     return 0;
 }
 
-int clean_suite1(void) // operations to be done after all tests
+int clean_suite_config(void) // operations to be done after all tests
 {
     return 0;
 }
