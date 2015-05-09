@@ -14,8 +14,15 @@
  */
 int getConf(int argc, char *argv[], Options *options)
 {
-    getConfByFile(options);
-    getConfByArgs(argc, argv, options);
+    // set defaults
+    options->port = 80;
+    options->dev = NULL;
+    options->filename = NULL;
+    options->debug = false;
+    options->foreground = false;
+
+    if (!(getConfByFile(options) == 0 && getConfByArgs(argc, argv, options) == 0))
+        return 1;
 
     if ( (options->filename == NULL && options->dev == NULL)
             || (options->filename != NULL && options->dev != NULL) ) {
@@ -88,9 +95,10 @@ int getConfByFile(Options *options)
     while (fgets(buffer, BUFFER_LENGTH, ceridsConf) != NULL) {
 
         position = strchr(buffer, '#'); // commentaires
-        *position = '\0';
+        if (position != NULL)
+            *position = '\0';
 
-        if (strlen(buffer) != 0) { // la  ligne n'est pas "uniquement" un commentaire
+        if (strlen(buffer) > 1) { // current line is not empty nor only a commentary
 
             strncpy(optName, strtok(buffer, delim), OPT_NAME_LENGTH);
             strncpy(optValue, strtok(buffer, delim), OPT_VALUE_LENGTH);

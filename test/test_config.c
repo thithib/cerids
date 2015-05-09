@@ -43,6 +43,7 @@ void test_getConfByArgs(void)
     int argc = 8;
     char *argv[8] = {"cerids", "-d", "-i", "eth0", "-f" , "test", "-p", "80"};
     Options *options = malloc(sizeof(Options));
+    optind = 0;
 
     CU_ASSERT(getConfByArgs(argc, argv, options) == 0);
     CU_ASSERT(options->debug && options->foreground && strcmp(options->dev, "eth0") == 0 
@@ -56,6 +57,9 @@ void test_getConfByFile(void)
     Options *options = malloc(sizeof(Options));
 
     CU_ASSERT(getConfByFile(options) == 0);
+    CU_ASSERT(!options->debug);
+
+    free(options);
 }
 
 void test_getWhitelist(void)
