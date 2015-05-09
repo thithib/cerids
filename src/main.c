@@ -24,6 +24,7 @@
 
 #include "sniffer.h"
 #include "config.h"
+#include "parser.h"
 
 
 void pktcallback(u_char *user,const struct pcap_pkthdr* header,const u_char* packet);
@@ -84,15 +85,11 @@ int main(int argc, char * argv[])
 void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* packet)
 {
   unsigned char *array = NULL;
-  printf("Sniffed a packet from %s with length %d\n", user, header->len);
+  //printf("Sniffed a packet from %s with length %d\n", user, header->len);
   array = malloc(header->len * sizeof(unsigned char));
   memcpy(array, packet, header->len);
-
-  for (int i = 0; i < header->len; i++){
-    printf("%02x", array[i]);
-  }
-
-  puts("");
-
+ 
+  parser(header->len, array);
+  free(array);  
 }
 

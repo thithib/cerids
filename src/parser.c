@@ -8,199 +8,133 @@
 //Doesn't work with frames with options
 
 int parser(int frame_length, char* f){
-	//input frame  test
 	struct frame frame;
-//"structuring the frame"
 	int i;
+
 	//mac addresses
-	for(i = 0; i < 12; i++){
+	for(i = 0; i < 6; i++){
 		frame.mac_dst[i] = f[i];
-		frame.mac_src[i] = f[12+i];
+		frame.mac_src[i] = f[6+i];
 	}
 	//1st test : is the frame a ip frame ?
 	bool type4Bool = true;
-	bool type6Bool = true;
-	u_char eth_type4[] = {'0','8','0','0'}; // if ipv4 frame, type is 0800
-	u_char eth_type6[] = {'8','6','d','d'}; // if ipv6 frame, type is 86dd
-	for(i = 0; i < 4; i++){
-		frame.eth_type[i] = f[24+i];
+	u_char eth_type4[] = {0x08, 0x00}; // if ipv4 frame, type is 0800
+	for(i = 0; i < 2; i++){
+		frame.eth_type[i] = f[12+i];
 		if (frame.eth_type[i] != eth_type4[i])
 			type4Bool = false;
-		if (frame.eth_type[i] != eth_type6[i])
-			type6Bool = false;
 	}
-	if(!type4Bool & !type6Bool){
+	if(!type4Bool){
 		printf("\nIt is not an ip frame\n");
 		return EXIT_FAILURE;
 	}
 
-	//2nd test : is the version of ip 4 or 6 ?
-	frame.ip_vers = f[28];
-	if(frame.ip_vers != '4' && frame.ip_vers !='6')
+	//2nd test : is the version of ip 4  ?
+	frame.ip_vers_ihl = f[14];
+	if(frame.ip_vers_ihl != 0x45 )
 	{
-		printf("Unvalid ip version\n");
+		printf("ip version isn't 4\n");
 		return EXIT_FAILURE;
 	}
-	// We distinguish two cases : ipv4 & ipv6
-	if(frame.ip_vers == '4'){
-		//ihl4
-		frame.ihl4 = f[29];
+
 		//type of service
-		frame.ip_tos[0]=f[30];
-		frame.ip_tos[1]=f[31];
+		frame.ip_tos=f[15];
 		//length of ip packet 
-		for(i = 0; i < 4; i++)
-			frame.ip_len[i] = f[32+i];
-		//id
-		for(i = 0; i < 4; i++)
-			frame.ip_id[i] = f[36+i];
-		//flags : 3bits et fragments offset : 13 bits
-		for(i = 0; i < 4; i++)
-			frame.ip_flags_frag_offset[i] = f[40+i];
-		//ttl
 		for(i = 0; i < 2; i++)
-			frame.ip_ttl[i] = f[44+i];
+			frame.ip_len[i] = f[16+i];
+
+		//id
+		for(i = 0; i < 2; i++)
+			frame.ip_id[i] = f[18+i];
+
+		//flags : 3bits et fragments offset : 13 bits
+		for(i = 0; i < 2; i++)
+			frame.ip_flags_frag_offset[i] = f[20+i];
+		//ttl
+		frame.ip_ttl = f[22];
+
 		//protocol, 3rd test : if protocol is tcp, ip_proto is 06
-		bool protoBool = true;
-		u_char ipproto[] = {'0','6'};
-		for(i = 0; i  < 2; i++){
-			frame.ip_proto[i] = f[46+i];
-			if(frame.ip_proto[i] != ipproto[i])
-				protoBool = false;
+		frame.ip_proto = f[23];
+		if(frame.ip_proto != 0x06){
+		printf("\nThe protocol isn't tcp\n");
+		return EXIT_FAILURE;
 		}
-		if(!protoBool){
-			printf("\nThe protocol isn't tcp\n");
-			return EXIT_FAILURE;
-		}
+
 		//checksum
-		for(i = 0; i < 4; i++)
-			frame.ip_checksum[i] = f[48+i];
+		for(i = 0; i < 2; i++)
+			frame.ip_checksum[i] = f[24+i];
 		
-		// ip source & destinataire
-		for(i=0; i < 8; i++){
-			frame.ip_src[i] = f[52+i];
-			frame.ip_dst[i] = f[60+i]; 
+		// Source and destination ip
+		for(i = 0; i < 4; i++){
+			frame.ip_src[i] = f[26+i];
+			frame.ip_dst[i] = f[30+i]; 
 		}
+		
 		//Options
 		//There is an option field if ihl != 5 (!= 20 bytes)
 		//
 		// TO DO
 		//
-	}
-	else{ //frame.ip_vers == '6'
-		for(i = 0; i < 8; i++)
-			frame.ipv6_class_flow[i] = f[28+i];
-		for(i = 0; i < 4; i++)
-			frame.ipv6_plen[i] = f[36+i];
-		//protocol, 3rd test : if protocol is tcp, ip_proto is 06
-		bool protoBool = true;
-		u_char ipproto[] = {'0','6'};
-		for(i = 0; i < 2; i++){
-			frame.ipv6_nxt[i] = f[40+i];
-			if(frame.ip_proto[i] != ipproto[i])
-				protoBool = false;
-		}
-		if(!protoBool){
-			printf("\nThe protocol isn't tcp\n");
-			return EXIT_FAILURE;
-		}
-
-		for(i = 0; i < 2 ; i++)
-			frame.ipv6_hlim[i] = f[42+i];
-		for(i = 0; i < 32 ; i++){
-			frame.ipv6_src[i] = f[44+i];
-			frame.ipv6_dst[i] = f[76+i];
-		}
-	}
 	
 	// TCP
 
-	
+
+
 
 
 
 //Test 
-	printf("\nLa mac du destinataire est : ");
-	for(i = 0; i < 12 ;i++)
-		printf("%c", frame.mac_dst[i]);
+	printf("\nThe destination mac address is : ");
+	for(i = 0; i < 5 ;i++)
+		printf("%02x:", frame.mac_dst[i]);
+	printf("%02x\n",frame.mac_dst[5]);
+
+
+	printf("The source mac address is : ");
+	for(i = 0; i < 5 ;i++)
+		printf("%02x:", frame.mac_src[i]);
+	printf("%02x\n",frame.mac_dst[5]);
+
+
+	printf("The frame type is : 0x");
+	for(i = 0; i < 2 ;i++)
+		printf("%02x", frame.eth_type[i]);
 	printf("\n");
 
-	printf("La mac source est : ");
-	for(i = 0; i < 12 ;i++)
-		printf("%c", frame.mac_src[i]);
-	printf("\n");
 
-	printf("Le type de la frame est : ");
-	for(i = 0; i < 4 ;i++)
-		printf("%c", frame.eth_type[i]);
-	printf("\n");
-
-	printf("La version de l'ip est : %c\n", frame.ip_vers);
-
-	//si ivp4
-	if(frame.ip_vers == '4'){
-		printf("L'id est: ");
-		for(i = 0; i < 4; i++){
-			printf("%c",frame.ip_id[i]);
-		}printf("\n");
+	if(frame.ip_vers_ihl == 0x45)
+	printf("IP version is : 4 \n");
 
 
-		printf("Le champ flags et position fragment vaut : ");
-		for(i = 0; i < 4; i++){
-			printf("%c",frame.ip_flags_frag_offset[i]);
-		}printf("\n");
+	printf("ID is: 0x");
+	for(i = 0; i < 2; i++){
+		printf("%02x",frame.ip_id[i]);
+	}printf("\n");
 
-		printf("La ttl est de : ");
-		for(i = 0; i < 2; i++){
-			printf("%c",frame.ip_ttl[i]);
-		}printf("\n");
 
-		printf("Le checksum est : ");
-		for(i = 0; i < 4; i++){
-			printf("%c",frame.ip_checksum[i]);
-		}printf("\n");
+	printf("Fragment offset is : 0x");
+	for(i = 0; i < 2; i++){
+		printf("%02x",frame.ip_flags_frag_offset[i]);
+	}printf("\n");
 
-		printf("L'ip source est : ");
-		for(i = 0; i < 8; i++ ){
-			printf("%c",frame.ip_src[i]);
-		}printf("\n");
 
-		printf("L'ip destinataire est : ");
-		for(i = 0; i < 8; i++ ){
-			printf("%c",frame.ip_dst[i]);
-		}printf("\n");
-	}
-	//si ipv6
-	else{ 
-		printf("Le champ class et flow est : ");
-		for(i = 0; i < 8; i++)
-			printf("%c", frame.ipv6_class_flow[i]);
-		printf("\n");
+	printf("Time to live is : %d \n",frame.ip_ttl);
+	
 
-		printf("La longueur (Payload Length) est : ");
-		for(i = 0; i < 4; i++)
-			printf("%c", frame.ipv6_plen[i]);
-		printf("\n");
+	printf("Checksum is : 0x");
+	for(i = 0; i < 2; i++){
+		printf("%02x",frame.ip_checksum[i]);
+	}printf("\n");
 
-		printf("L'entete suivante est : ");
-		for(i = 0; i < 2; i++)
-			printf("%c", frame.ipv6_nxt[i]);
-		printf("\n");
+	printf("Source ip is : ");
+	for(i = 0; i < 3; i++ ){
+		printf("%d.",frame.ip_src[i]);
+	}printf("%d\n",frame.ip_src[3]);
 
-		printf("Le saut maximum est : ");
-		for(i = 0; i < 2; i++)
-			printf("%c", frame.ipv6_hlim[i]);
-		printf("\n");
-
-		printf("L'adresse source est : ");
-		for(i = 0; i < 32; i++)
-			printf("%c", frame.ipv6_src[i]);
-		printf("\n");
-
-		printf("L'adresse du destinataire est :");
-		for(i = 0; i < 32; i++)
-			printf("%c", frame.ipv6_dst[i]);
-		printf("\n");
-	}
+	printf("Destination ip is : ");
+	for(i = 0; i < 3; i++ ){
+		printf("%d.",frame.ip_dst[i]);
+	}printf("%d\n",frame.ip_dst[3]);
+	
 	return EXIT_SUCCESS;
 }
