@@ -32,7 +32,6 @@ void pktcallback(u_char *user,const struct pcap_pkthdr* header,const u_char* pac
 int main(int argc, char * argv[])
 {
 
-  int opt;
   int code;
   Options options;
   pcap_t * handle;

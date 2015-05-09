@@ -45,6 +45,10 @@ void test_getConfByArgs(void)
     Options *options = malloc(sizeof(Options));
 
     CU_ASSERT(getConfByArgs(argc, argv, options) == 0);
+    CU_ASSERT(options->debug && options->foreground && strcmp(options->dev, "eth0") == 0 
+            && options->filename != NULL && options->port == 80);
+
+    free(options);
 }
 
 void test_getConfByFile(void)

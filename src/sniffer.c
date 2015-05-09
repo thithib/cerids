@@ -18,8 +18,6 @@ int snifferInit (Options *options, pcap_t ** handle)
     char filter_exp[] = "port 80"; /*  The filter expression */
     bpf_u_int32 mask;    /*  The netmask of our sniffing device */
     bpf_u_int32 net;   /*  The IP of our sniffing device */
-    struct pcap_pkthdr header;  /*  The header that pcap gives us */
-    const u_char *packet;   /*  The actual packet */
 
     if (options->dev != NULL){
         options->live = true;
@@ -70,7 +68,7 @@ int snifferInit (Options *options, pcap_t ** handle)
 int snifferRun (pcap_t ** handle, int cnt, pcap_handler callback)
 {
     /* pcap loop */
-    return pcap_loop(*handle, cnt, *callback, "live");
+    return pcap_loop(*handle, cnt, *callback, (unsigned char*) "live");
 }
 
 

@@ -25,7 +25,7 @@
 
 CC=gcc
 LDFLAG=-lpcap
-CFLAG=-std=gnu99
+CFLAG=-Wall -std=gnu99
 EXEC=cerids
 
 all: $(EXEC) 

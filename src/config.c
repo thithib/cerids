@@ -14,20 +14,11 @@
  */
 int getConf(int argc, char *argv[], Options *options)
 {
-    int opt;
-
-    // set defaults
-    options->port = 80;
-    options->dev = NULL;
-    options->filename = NULL;
-    options->debug = false;
-    options->foreground = false;
-
     getConfByFile(options);
     getConfByArgs(argc, argv, options);
 
     if ( (options->filename == NULL && options->dev == NULL)
-          || (options->filename != NULL && options->dev != NULL) ) {
+            || (options->filename != NULL && options->dev != NULL) ) {
         syslog(LOG_ERR, "Only one of filename and interface can be used at the same time\n");
         return 2;
     }
@@ -36,7 +27,7 @@ int getConf(int argc, char *argv[], Options *options)
         syslog(LOG_ERR, "Invalid port number\n");
         return 3;
     }
- 
+
     return 0;
 }
 
@@ -50,30 +41,30 @@ int getConfByArgs(int argc, char *argv[], Options *options)
 {
     int opt;
 
-        while ((opt = getopt(argc, argv, "hdf:i:p:")) != -1){
-            switch (opt) {
-              case 'h':
+    while ((opt = getopt(argc, argv, "hdf:i:p:")) != -1){
+        switch (opt) {
+            case 'h':
                 help(argv[0]);
-		break;
-              case 'd':
+                break;
+            case 'd':
                 options->debug = true;
-		options->foreground = true;
+                options->foreground = true;
                 break;
-              case 'f':
+            case 'f':
                 options->filename = strdup(optarg);
-		options->foreground = true;
+                options->foreground = true;
                 break;
-              case 'i':
+            case 'i':
                 options->dev = strdup(optarg);
                 break;
-              case 'p':
+            case 'p':
                 options->port = atoi(optarg);
                 break;
-              default:
+            default:
                 usage(argv[0]);
-            }
+        }
 
-        } 
+    } 
 
     return 0;
 }
@@ -104,16 +95,16 @@ int getConfByFile(Options *options)
             strncpy(optName, strtok(buffer, delim), OPT_NAME_LENGTH);
             strncpy(optValue, strtok(buffer, delim), OPT_VALUE_LENGTH);
 
-            if (optName == "dev")
-                options->dev = optValue;
-            else if (optName == "filename")
-                options->filename = optValue;
-            else if (optName == "port")
-                options->port = atoi(optValue);
-            else if (optName == "live")
-                options->live = (optValue == "true") ? true : false;
-            else if (optName == "debug")
-                options->debug = (optValue == "true") ? true : false;
+            if (strcmp(optName, "dev") == 0)
+                options->dev = (strcmp(optValue, "NULL") == 0) ? NULL : optValue;
+            else if (strcmp(optName, "filename") == 0)
+                options->filename = (strcmp(optValue, "NULL") == 0) ? NULL : optValue;
+            else if (strcmp(optName, "port") == 0)
+                options->port = (strcmp(optValue, "NULL") == 0) ? 0 : atoi(optValue);
+            else if (strcmp(optName, "live") == 0)
+                options->live = (strcmp(optValue, "true") == 0) ? true : false;
+            else if (strcmp(optName, "debug") == 0)
+                options->debug = (strcmp(optValue, "true") == 0) ? true : false;
             else {
                 syslog(LOG_ERR, "Error in conf file: bad option name\n");
                 return -1;
@@ -154,7 +145,7 @@ char** getWhitelist(void)
             syslog(LOG_ERR, "Memory allocation error\n");
             return NULL;
         }
-        
+
         strcpy(*(rules+i), buffer);
 
         ++i;
@@ -162,7 +153,7 @@ char** getWhitelist(void)
     }
 
     *(rules+i) = NULL;
-    
+
     fclose(whitelist);
 
     return rules;
