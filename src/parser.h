@@ -34,10 +34,18 @@ int parser(int frame_length, unsigned char* f);
  	u_char ip_dst[4];
  	
  		//OPTIONS
+ 			//TO DO
  //tcp
- 	u_char tcp_srcport[4];
- 	u_char tcp_dstport[4];
- 	
+ 	int tcp_srcport;
+ 	int tcp_dstport;
+ 	u_char tcp_seq[4];
+ 	u_char tcp_ack[4];
+ 	int tcp_offset;
+ 	u_char tcp_flags[2];
+ 	int tcp_window_size_value;
+ 	u_char tcp_checksum[2];
+ 	u_char tcp_urg_pointer[2];
+ 	u_char* tcp_options;
  };
 
 
