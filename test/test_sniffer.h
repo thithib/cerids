@@ -1,3 +1,6 @@
+#ifndef _TEST_SNIFFER_H
+#define _TEST_SNIFFER_H
+
 #include "sniffer.h"
 #include "parser.h"
 
@@ -9,4 +12,6 @@ void test_snifferRun(void);
 void test_snifferCleanUp(void);
 
 void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* packet);
+
+#endif
 

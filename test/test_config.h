@@ -1,3 +1,6 @@
+#ifndef _TEST_CONFIG_H
+#define _TEST_CONFIG_H
+
 #include "config.h"
 #include <unistd.h>
 
@@ -11,3 +14,6 @@ void test_getConfByArgs(void);
 void test_getConfByFile(void);
 void test_getWhitelist(void);
 void test_rulesCount(void);
+
+#endif
+

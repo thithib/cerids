@@ -15,8 +15,8 @@
 
 
 int detectorInit (pcre * , char ** , pcre_extra *);
-bool detectorMatch (pcre * , char * , pcre_extra * );
-int detectorCleanUp (pcre * );
+bool detectorMatch (pcre * , pcre_extra * , char *);
+int detectorCleanUp (pcre * , pcre_extra * );
 
 #endif
 

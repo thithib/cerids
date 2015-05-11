@@ -1,6 +1,6 @@
 CC=gcc
 LDFLAG=-lcunit -lpcap
-CFLAG=-Wall -g -std=gnu99 -I../src
+CFLAG=-Wall -g -std=gnu99 -I../src/include
 EXEC=unitTests
 
 all: cerids $(EXEC)
