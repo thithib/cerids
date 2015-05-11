@@ -24,13 +24,13 @@
 #########################################################################################
 
 CC=gcc
-LDFLAG=-lpcap
+LDFLAG=-lpcap -lpcre
 CFLAG=-Wall -std=gnu99
 EXEC=cerids
 
 all: $(EXEC) 
 
-$(EXEC): main.o sniffer.o config.o parser.o
+$(EXEC): main.o sniffer.o config.o parser.o detector.o
 				@$(CC) -o $@ $^ $(LDFLAG)
 
 %.o: %.c
