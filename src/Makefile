@@ -31,16 +31,16 @@ EXEC=cerids
 all: $(EXEC) 
 
 $(EXEC): main.o sniffer.o config.o parser.o detector.o
-				@$(CC) -o $@ $^ $(LDFLAG)
+				$(CC) -o $@ $^ $(LDFLAG)
 
 %.o: %.c
-				@$(CC) -o $@ -c $< $(CFLAG)
+				$(CC) -o $@ -c $< $(CFLAG)
 
 
 .PHONY: clean mrproper 
 
 clean:
-				@rm -f *.o
+				rm -f *.o
 
 mrproper: clean
-				@rm -f $(EXEC)
+				rm -f $(EXEC)
