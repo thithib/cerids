@@ -1,11 +1,11 @@
 CC=gcc
-LDFLAG=-lcunit -lpcap
+LDFLAG=-lcunit -lpcap -lpcre
 CFLAG=-Wall -g -std=gnu99 -I../src/include
 EXEC=unitTests
 
 all: cerids $(EXEC)
 
-$(EXEC): main.o test_config.o test_sniffer.o ../src/config.o ../src/sniffer.o ../src/parser.o
+$(EXEC): main.o test_config.o test_sniffer.o test_detector.o ../src/config.o ../src/sniffer.o ../src/parser.o ../src/detector.o
 	@$(CC) -o $@ $^ $(LDFLAG)
 
 %.o: %.c

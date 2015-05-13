@@ -2,19 +2,22 @@
 #include <CUnit/Basic.h>
 #include "test_config.h"
 #include "test_sniffer.h"
+#include "test_detector.h"
 
 int main(void)
 {
     CU_pSuite pSuite_config = NULL;
     CU_pSuite pSuite_sniffer = NULL;
+    CU_pSuite pSuite_detector = NULL;
 
     if (CUE_SUCCESS != CU_initialize_registry())
         return CU_get_error();
 
     pSuite_config = CU_add_suite("Configuration module", init_suite_config, clean_suite_config);
     pSuite_sniffer = CU_add_suite("Sniffer module", init_suite_sniffer, clean_suite_sniffer);
+    pSuite_detector = CU_add_suite("Detector module", init_suite_detector, clean_suite_detector);
 
-    if (NULL == pSuite_config || NULL == pSuite_sniffer) {
+    if (NULL == pSuite_config || NULL == pSuite_sniffer || NULL == pSuite_detector) {
         CU_cleanup_registry();
         return CU_get_error();
     }
@@ -26,7 +29,10 @@ int main(void)
         (NULL == CU_add_test(pSuite_config, "test of rulesCount", test_rulesCount)) ||
         (NULL == CU_add_test(pSuite_sniffer, "test of snifferInit", test_snifferInit)) ||
         (NULL == CU_add_test(pSuite_sniffer, "test of snifferRun", test_snifferRun)) ||
-        (NULL == CU_add_test(pSuite_sniffer, "test of snifferCleanUp", test_snifferCleanUp))) {
+        (NULL == CU_add_test(pSuite_sniffer, "test of snifferCleanUp", test_snifferCleanUp)) ||
+        (NULL == CU_add_test(pSuite_detector, "test of detectorInit", test_detectorInit)) ||
+        (NULL == CU_add_test(pSuite_detector, "test of detectorMatch", test_detectorMatch)) ||
+        (NULL == CU_add_test(pSuite_detector, "test of detectorCleanUp", test_detectorCleanUp))) {
         CU_cleanup_registry();
         return CU_get_error();
     }
