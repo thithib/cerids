@@ -53,6 +53,9 @@ int detectorInit (pcre * reCompiled, char ** whitelist, pcre_extra * reGoodies)
         return EXIT_FAILURE;
     }
 
+    // free buffer
+    free(buffer);
+
     return EXIT_SUCCESS;
 }
 
