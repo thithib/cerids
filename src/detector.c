@@ -17,9 +17,9 @@ int detectorInit (pcre * reCompiled, char ** whitelist, pcre_extra * reGoodies)
 {
     int pcreErrorOffset;
     const char * pcreErrorStr;
-    int len = 0, bufLen = 2;
+    int len = 0, bufLen = 3;
     int i = 0;
-    char * buffer = malloc(2*sizeof(char));
+    char * buffer = malloc(bufLen*sizeof(char));
     buffer[0] = '(';
 
     // create a HUGE regexp with every wlisted page
@@ -36,7 +36,8 @@ int detectorInit (pcre * reCompiled, char ** whitelist, pcre_extra * reGoodies)
         strncat(buffer, whitelist[i], bufLen);
     }
 
-    buffer[bufLen-1] = ')';
+    buffer[bufLen-2] = ')';
+    buffer[bufLen-1] = (char)0x0;
 
     // regexp compilation
     reCompiled = pcre_compile(buffer, 0, &pcreErrorStr, &pcreErrorOffset, NULL);
