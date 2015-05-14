@@ -10,10 +10,10 @@
 /**
  * \param reCompiled 
  * \param whitelist {Whitelist object from config}
- * \param reGoodies
+ * \param pcreExtra
  * \return 0 if ok, other integer if not
  */
-int detectorInit (pcre * reCompiled, char ** whitelist, pcre_extra * reGoodies)
+int detectorInit (pcre * reCompiled, char ** whitelist, pcre_extra * pcreExtra)
 {
     int pcreErrorOffset;
     const char * pcreErrorStr;
@@ -58,7 +58,7 @@ int detectorInit (pcre * reCompiled, char ** whitelist, pcre_extra * reGoodies)
     }
 
     // optimize goodies
-    reGoodies = pcre_study(reCompiled, 0, &pcreErrorStr);
+    pcreExtra = pcre_study(reCompiled, 0, &pcreErrorStr);
 
     if (pcreErrorStr != NULL) {
         printf("ERROR: Could not study '%s': %s\n", buffer, pcreErrorStr);
@@ -74,17 +74,17 @@ int detectorInit (pcre * reCompiled, char ** whitelist, pcre_extra * reGoodies)
 /**
  *  * \param reCompiled { pointer to precompiled regex string }
  *   * \param pcreExtra { pointer to result of regex optimization }
- *    * \param rule { pointer to a string to match }
+ *    * \param string { pointer to a string to match }
  *     * \return true if matches found, false if not
  *      */
-bool detectorMatch (pcre* reCompiled, pcre_extra* pcreExtra, char* rule)
+bool detectorMatch (pcre* reCompiled, pcre_extra* pcreExtra, char* string)
 {
     int pcreExecRet;
 
     pcreExecRet = pcre_exec(reCompiled,
             pcreExtra,
-            rule,
-            strlen(rule),   // length of string
+            string,
+            strlen(string),   // length of string
             0,              // start looking at this point
             0,              // Options
             NULL,           // subStrVec, in case of substrings        handling
