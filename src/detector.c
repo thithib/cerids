@@ -21,23 +21,34 @@ int detectorInit (pcre * reCompiled, char ** whitelist, pcre_extra * reGoodies)
     int i = 0;
     char * buffer = malloc(bufLen*sizeof(char));
     buffer[0] = '(';
+    buffer[1] = (char)0x0;
 
-    // create a HUGE regexp with every wlisted page
-    // Q&D method to improve speed
-    while (whitelist[i] != NULL){
+    if (whitelist[0] == NULL){
+      buffer[1] = ')';
+      buffer[2] = (char)0x0;
+    }
+    else {
+      // create a HUGE regexp with every wlisted page
+      // Q&D method to improve speed
+      while (whitelist[i] != NULL){
         len = strlen(whitelist[i]);
         bufLen += len+1;
         buffer = realloc(buffer, bufLen*sizeof(char));
-        if (buffer == NULL){
-            printf("ERROR: failed to allocate memory\n");
-            return EXIT_FAILURE;
-        }
-        strncat(buffer,"|", bufLen);
-        strncat(buffer, whitelist[i], bufLen);
-    }
 
-    buffer[bufLen-2] = ')';
-    buffer[bufLen-1] = (char)0x0;
+        if (buffer == NULL){
+          printf("ERROR: failed to allocate memory\n");
+          return EXIT_FAILURE;
+        }
+
+        strncat(buffer, whitelist[i], bufLen);
+        strncat(buffer,"|", bufLen);
+
+        i++;
+      }
+
+      buffer[bufLen-3] = ')';
+      buffer[bufLen-2] = (char)0x0;
+    }
 
     // regexp compilation
     reCompiled = pcre_compile(buffer, 0, &pcreErrorStr, &pcreErrorOffset, NULL);
@@ -96,4 +107,3 @@ int detectorCleanUp (pcre* reCompiled, pcre_extra* pcreExtra)
 
     return 0;
 }
-
