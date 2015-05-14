@@ -13,7 +13,7 @@
  * \param pcreExtra
  * \return 0 if ok, other integer if not
  */
-int detectorInit (pcre * reCompiled, char ** whitelist, pcre_extra * pcreExtra)
+int detectorInit (pcre ** reCompiled, char ** whitelist, pcre_extra ** pcreExtra)
 {
     int pcreErrorOffset;
     const char * pcreErrorStr;
@@ -51,14 +51,14 @@ int detectorInit (pcre * reCompiled, char ** whitelist, pcre_extra * pcreExtra)
     }
 
     // regexp compilation
-    reCompiled = pcre_compile(buffer, 0, &pcreErrorStr, &pcreErrorOffset, NULL);
+    *reCompiled = pcre_compile(buffer, 0, &pcreErrorStr, &pcreErrorOffset, NULL);
     if (reCompiled == NULL) {
         printf("ERROR: Could not compile '%s': %s\n", buffer, pcreErrorStr);
         return EXIT_FAILURE;
     }
 
     // optimize goodies
-    pcreExtra = pcre_study(reCompiled, 0, &pcreErrorStr);
+    *pcreExtra = pcre_study(*reCompiled, 0, &pcreErrorStr);
 
     if (pcreErrorStr != NULL) {
         printf("ERROR: Could not study '%s': %s\n", buffer, pcreErrorStr);

@@ -14,7 +14,7 @@
 #include <string.h>
 
 
-int detectorInit (pcre * , char ** , pcre_extra *);
+int detectorInit (pcre **, char ** , pcre_extra **);
 bool detectorMatch (pcre * , pcre_extra * , char *);
 int detectorCleanUp (pcre * , pcre_extra * );
 
