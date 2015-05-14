@@ -19,7 +19,7 @@ void test_detectorInit(void)
     char* whitelist[] = {"test", "passed", NULL};
     pcre_extra* pcreExtra = NULL;
 
-    CU_ASSERT(detectorInit(reCompiled, whitelist, pcreExtra) == EXIT_SUCCESS);
+    CU_ASSERT(detectorInit(&reCompiled, whitelist, &pcreExtra) == EXIT_SUCCESS);
 
     pcre_free(reCompiled);
     if (pcreExtra != NULL)
@@ -33,7 +33,7 @@ void test_detectorMatch(void)
     pcre* reCompiled = NULL;
     pcre_extra* pcreExtra = NULL;
 
-    detectorInit(reCompiled, whitelist, pcreExtra);
+    detectorInit(&reCompiled, whitelist, &pcreExtra);
 
     CU_ASSERT_TRUE(detectorMatch(reCompiled, pcreExtra, string1));
     CU_ASSERT_FALSE(detectorMatch(reCompiled, pcreExtra, string2));
@@ -49,7 +49,7 @@ void test_detectorCleanUp(void)
     char* whitelist[] = {"test", "passed", NULL};
     pcre_extra* pcreExtra = NULL;
 
-    detectorInit(reCompiled, whitelist, pcreExtra);
+    detectorInit(&reCompiled, whitelist, &pcreExtra);
 
     CU_ASSERT(detectorCleanUp(reCompiled, pcreExtra) == 0);
 }
