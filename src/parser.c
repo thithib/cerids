@@ -15,8 +15,8 @@ int parser (int frame_length, unsigned char *pFrame)
     // Ethernet
     // mac addresses
     for (i = 0; i < 6; ++i) {
-        frame.mac_dst[i] = pFrame[i];
-        frame.mac_src[i] = pFrame[6+i];
+        frame.eth_mac_dst[i] = pFrame[i];
+        frame.eth_mac_src[i] = pFrame[6+i];
     }
     // 1st test : is the frame a ip frame ?
     bool type4Bool = true;
@@ -34,14 +34,14 @@ int parser (int frame_length, unsigned char *pFrame)
     // IP
     // 2nd test : is the version of ip 4  ?
     frame.ip_vers_ihl = pFrame[14];
-    if(frame.ip_vers_ihl != 0x45 )
+    if(frame.ip_vers_ihl != 0x45)
     {
         printf("ip version isn't 4\n");
         return -2;
     }
 
     // type of service
-    frame.ip_tos=pFrame[15];
+    frame.ip_tos = pFrame[15];
     // length of ip packet 
     frame.ip_len = 16 * 16 * (int)(u_char) pFrame[16] + (int)(u_char) pFrame[17];
     // id
@@ -140,93 +140,96 @@ int parser (int frame_length, unsigned char *pFrame)
         // syslog
         return -3;
     }
-    else 
-    {
-        *(frame.http_request_uri) = 0; // end the buffer at the end of the url
-        frame.http_request_uri = NULL; // set ptr at NULL (shows an invalid request) 
 
-        while (frame.http_request_uri == NULL && i < 27) 
-        {
-            if (strncmp((char*) frame.tcp_data, methods[i], strlen(methods[i])) == 0) { // method request
-                frame.http_method = (u_char*) methods[i];
-                frame.http_request_uri = frame.tcp_data + strlen(methods[i]) ;
-            }
-            else ++i;
+    *(frame.http_request_uri) = 0; // end the buffer at the end of the url
+    frame.http_request_uri = NULL; // set ptr at NULL (shows an invalid request) 
+
+    while (frame.http_request_uri == NULL && i < 27) {
+        if (strncmp((char*) frame.tcp_data, methods[i], strlen(methods[i])) == 0) { // method request
+            frame.http_method = (u_char*) methods[i];
+            frame.http_request_uri = frame.tcp_data + strlen(methods[i]) ;
         }
+        else 
+            ++i;
+    } 
+
+    frame.http_host = (u_char*) strstr((char*) frame.tcp_data,"Host: ") + 6;
+    u_char* temp = (u_char*) strstr((char*) frame.http_host,"\r\n");
+    *temp = '\0';
+
+
+// DEBUG 
+/*	printf("\nThe destination mac address is : ");
+    for (i = 0; i < 5 ; ++i)
+    printf("%02x:", frame.eth_mac_dst[i]);
+    printf("%02x\n",frame.eth_mac_dst[5]);
+
+
+    printf("The source mac address is : ");
+    for (i = 0; i < 5 ; ++i)
+    printf("%02x:", frame.eth_mac_src[i]);
+    printf("%02x\n",frame.eth_mac_dst[5]);
+*/
+
+    printf("The frame type is : 0x");
+    for (i = 0; i < 2 ; ++i)
+    printf("%02x", frame.eth_type[i]);
+    printf("\n");
+
+
+    if(frame.ip_vers_ihl == 0x45)
+    printf("IP version is : 4 \n");
+
+
+    printf("total length packet (without ethernet) is : %d\n", frame.ip_len);
+
+    printf("ID is: 0x");
+    for (i = 0; i < 2; ++i) {
+    printf("%02x",frame.ip_id[i]);
     }
-
-    // DEBUG 
-    /*	printf("\nThe destination mac address is : ");
-        for (i = 0; i < 5 ; ++i)
-        printf("%02x:", frame.mac_dst[i]);
-        printf("%02x\n",frame.mac_dst[5]);
+    printf("\n");
 
 
-        printf("The source mac address is : ");
-        for (i = 0; i < 5 ; ++i)
-        printf("%02x:", frame.mac_src[i]);
-        printf("%02x\n",frame.mac_dst[5]);
+    printf("Fragment offset is : 0x");
+    for (i = 0; i < 2; ++i) {
+    printf("%02x",frame.ip_flags_frag_offset[i]);
+    }
+    printf("\n");
 
 
-        printf("The frame type is : 0x");
-        for (i = 0; i < 2 ; ++i)
-        printf("%02x", frame.eth_type[i]);
-        printf("\n");
+    printf("Time to live is : %d \n",frame.ip_ttl);
 
 
-        if(frame.ip_vers_ihl == 0x45)
-        printf("IP version is : 4 \n");
+    printf("IP Checksum is : 0x");
+    for (i = 0; i < 2; ++i){
+    printf("%02x",frame.ip_checksum[i]);
+    }
+    printf("\n");
+
+    printf("Source ip is : ");
+    for (i = 0; i < 3; ++i) {
+    printf("%d.",frame.ip_src[i]);
+    }
+    printf("%d\n",frame.ip_src[3]);
+
+    printf("Destination ip is : ");
+    for (i = 0; i < 3; ++i) {
+    printf("%d.",frame.ip_dst[i]);
+    }
+    printf("%d\n",frame.ip_dst[3]);
+
+    printf("TCP Source Port is : %d\n", frame.tcp_srcport);
+    printf("TCP Destination Port is : %d\n", frame.tcp_dstport);
 
 
-        printf("total length packet (without ethernet) is : %d\n", frame.ip_len);
+    printf("TCP Sequence Number is : 0x");
+    for (i = 0; i < 4; ++i)
+    printf("%02x",frame.tcp_seq[i]); 
+    printf("\n");
 
-        printf("ID is: 0x");
-        for (i = 0; i < 2; ++i) {
-        printf("%02x",frame.ip_id[i]);
-        }
-        printf("\n");
-
-
-        printf("Fragment offset is : 0x");
-        for (i = 0; i < 2; ++i) {
-        printf("%02x",frame.ip_flags_frag_offset[i]);
-        }
-        printf("\n");
-
-
-        printf("Time to live is : %d \n",frame.ip_ttl);
-
-
-        printf("IP Checksum is : 0x");
-        for (i = 0; i < 2; ++i){
-        printf("%02x",frame.ip_checksum[i]);
-        }
-        printf("\n");
-
-        printf("Source ip is : ");
-        for (i = 0; i < 3; ++i) {
-        printf("%d.",frame.ip_src[i]);
-        }
-        printf("%d\n",frame.ip_src[3]);
-
-        printf("Destination ip is : ");
-        for (i = 0; i < 3; ++i) {
-        printf("%d.",frame.ip_dst[i]);
-        }
-        printf("%d\n",frame.ip_dst[3]);
-
-        printf("TCP Source Port is : %d\n", frame.tcp_srcport);
-        printf("TCP Destination Port is : %d\n", frame.tcp_dstport);
-
-
-        printf("TCP Sequence Number is : 0x");
-        for (i = 0; i < 4; ++i)
-        printf("%02x",frame.tcp_seq[i]); 
-        printf("\n");
-
-        printf("TCP acknowledgement Number is : 0x");
-        for (i = 0; i < 4; ++i)
-        printf("%02x",frame.tcp_ack[i]); 
+    printf("TCP acknowledgement Number is : 0x");
+    for (i = 0; i < 4; ++i)
+    printf("%02x",frame.tcp_ack[i]); 
     printf("\n");
 
     printf("TCP flag is : 0x");
@@ -246,18 +249,21 @@ int parser (int frame_length, unsigned char *pFrame)
     for (i = 0; i < frame.tcp_offset-20; ++i)
         printf("%02x",frame.tcp_options[i]);
     printf("\n");
-
+/*
     printf("TCP data is : ");
     for ( i = 0; i < tcp_data_length; ++i)
         printf("%c", frame.tcp_data[i]);
     printf("\n\n");
-    */
-
+*/
+    
     if (frame.http_request_uri != NULL) {
         printf("Method is %s\n", frame.http_method);
         printf("Request-URI is : %s\n\n", frame.http_request_uri);
     }
+
+    if (frame.http_host != NULL)
+       printf("Host :%s\n", frame.http_host);
     
-    return EXIT_SUCCESS;
+return EXIT_SUCCESS;
 }
 

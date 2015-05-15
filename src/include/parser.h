@@ -17,8 +17,8 @@ int parser(int , unsigned char* );
 typedef struct frame
 {
     //ethernet
-    u_char mac_dst[6];
-    u_char mac_src[6];
+    u_char eth_mac_dst[6];
+    u_char eth_mac_src[6];
     u_char eth_type[2]; 
 
     //ip
@@ -51,6 +51,7 @@ typedef struct frame
     //http
     u_char* http_method;
     u_char* http_request_uri;
+    u_char* http_host;
 } Frame;
 
 #endif
