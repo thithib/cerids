@@ -41,7 +41,7 @@ int parser (int frame_length, unsigned char *pFrame)
     }
 
     // type of service
-    frame.ip_tos=f[15];
+    frame.ip_tos=pFrame[15];
     // length of ip packet 
     frame.ip_len = 16 * 16 * (int)(u_char) pFrame[16] + (int)(u_char) pFrame[17];
     // id
