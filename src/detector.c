@@ -36,7 +36,7 @@ int detectorInit (pcre ** reCompiled, char ** whitelist, pcre_extra ** pcreExtra
         buffer = realloc(buffer, bufLen*sizeof(char));
 
         if (buffer == NULL){
-          printf("ERROR: failed to allocate memory\n");
+          syslog(LOG_ERR, "Failed to allocate memory");
           return EXIT_FAILURE;
         }
 
@@ -53,7 +53,7 @@ int detectorInit (pcre ** reCompiled, char ** whitelist, pcre_extra ** pcreExtra
     // regexp compilation
     *reCompiled = pcre_compile(buffer, 0, &pcreErrorStr, &pcreErrorOffset, NULL);
     if (reCompiled == NULL) {
-        printf("ERROR: Could not compile '%s': %s\n", buffer, pcreErrorStr);
+        syslog(LOG_ERR, "Could not compile '%s': %s", buffer, pcreErrorStr);
         return EXIT_FAILURE;
     }
 
@@ -61,7 +61,7 @@ int detectorInit (pcre ** reCompiled, char ** whitelist, pcre_extra ** pcreExtra
     *pcreExtra = pcre_study(*reCompiled, 0, &pcreErrorStr);
 
     if (pcreErrorStr != NULL) {
-        printf("ERROR: Could not study '%s': %s\n", buffer, pcreErrorStr);
+        syslog(LOG_ERR, "Could not study '%s': %s", buffer, pcreErrorStr);
         return EXIT_FAILURE;
     }
 
