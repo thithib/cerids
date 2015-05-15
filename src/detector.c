@@ -43,7 +43,7 @@ int detectorInit (pcre ** reCompiled, char ** whitelist, pcre_extra ** pcreExtra
         strncat(buffer, whitelist[i], bufLen);
         strncat(buffer,"|", bufLen);
 
-        i++;
+        ++i;
       }
 
       buffer[bufLen-3] = ')';
