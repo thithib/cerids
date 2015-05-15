@@ -10,16 +10,26 @@ The best documentation at this time is the code itself.
 INSTALL
 -------
 
-To install, install both libpcre and libpcap, cd into the src
-directory and run the make command.
+Clone the git repository:
+$ git clone <bitbuckCerids> cerids
+
+
+To install CerIDS on a Debian stable (jessie) host, you must install the 
+following packages :
+$ apt install build-essential libpcap-dev libpcre3-dev
+
+Then, cd to the source directory and run make
+$ cd src/ && make
 
 
 USAGE
 -----
 
-At this time, the software only supports live capture and
-prints back the hexadecimal value of the packets captured
-on port 80.
+To listen on the eth0 interface, launch cerids as root with this command:
+$ ./cerids -i eth0
 
-To run cerIDS you must execute, as root, ./cerids -i <ifname>
-where ifname is the name of the device to listen on.
+To enable the debug mode (no background, messages to stdout):
+$ ./cerids -i eth0 -d
+
+To run on a pcap file (for instance, example.pcap):
+$ ./cerids -f example.pcap
