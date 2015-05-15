@@ -28,6 +28,7 @@ int parser(int frame_length, unsigned char *f){
 		printf("\nIt is not an ip frame\n");
 		return EXIT_FAILURE;
 	}
+
 //IP
 	//2nd test : is the version of ip 4  ?
 	frame.ip_vers_ihl = f[14];
@@ -40,9 +41,7 @@ int parser(int frame_length, unsigned char *f){
 	//type of service
 	frame.ip_tos=f[15];
 	//length of ip packet 
-	for(i = 0; i < 2; i++)
-		frame.ip_len[i] = f[16+i];
-
+	frame.ip_len = 16*16*(int)(u_char)f[16] + (int)(u_char)f[17];
 	//id
 	for(i = 0; i < 2; i++)
 		frame.ip_id[i] = f[18+i];
@@ -76,7 +75,7 @@ int parser(int frame_length, unsigned char *f){
 	// TO DO
 	//
 
-// TCP
+//TCP
 	//ports
 		frame.tcp_srcport = 16*16*(int)(u_char)f[34] + (int)(u_char)f[35];
 		frame.tcp_dstport = 16*16*(int)(u_char)f[36] + (int)(u_char)f[37];
@@ -110,9 +109,37 @@ int parser(int frame_length, unsigned char *f){
 	for(i = 0; i < frame.tcp_offset - 20 ; i++)
 		frame.tcp_options[i] = f[54+i];
 
+	//TCP data
+	int tcp_data_length = 14 + frame.ip_len - 66;
+	frame.tcp_data = malloc(tcp_data_length * sizeof(u_char));
+	for(i = 0; i < tcp_data_length; i++)
+		frame.tcp_data[i] = f[66+i];
 
-//Test 
-	printf("\nThe destination mac address is : ");
+//HTTP
+	char* methods[] = {"DELETE","GET","HEAD","POST","PUT","CONNECT","OPTIONS", "TRACE", "COPY", "LOCK", "MKCOL", "MOVE", "PROPFIND",
+  "PROPPATCH", "SEARCH", "UNLOCK", "REPORT", "MKACTIVITY", "CHECKOUT", "MERGE", "MSEARCH", "NOTIFY", "SUBSCRIBE", "UNSUBSCRIBE", "PATCH", "PURGE", "MKCALENDAR"};
+
+	i = 0;
+	frame.http_request_uri = (u_char*)strstr((char*)frame.tcp_data," HTTP/");//look for a valid request
+	if(frame.http_request_uri == NULL){//This HTTP content is not valid
+		return(EXIT_FAILURE);
+	}
+	else{
+		*frame.http_request_uri = 0; // end the buffer at the end of the url
+		frame.http_request_uri = NULL; // set ptr at NULL (shows an invalid request) 
+		while(frame.http_request_uri == NULL && i < 27){
+			if(strncmp((char*)frame.tcp_data, methods[i], strlen(methods[i])) == 0){ // method request
+				frame.http_method = (u_char*)methods[i];
+				frame.http_request_uri = frame.tcp_data + strlen(methods[i]) ;
+			}
+			else i++;
+		}
+	}
+
+
+
+//Debug 
+/*	printf("\nThe destination mac address is : ");
 	for(i = 0; i < 5 ;i++)
 		printf("%02x:", frame.mac_dst[i]);
 	printf("%02x\n",frame.mac_dst[5]);
@@ -134,6 +161,8 @@ int parser(int frame_length, unsigned char *f){
 	printf("IP version is : 4 \n");
 
 
+	printf("total length packet (without ethernet) is : %d\n", frame.ip_len);
+
 	printf("ID is: 0x");
 	for(i = 0; i < 2; i++){
 		printf("%02x",frame.ip_id[i]);
@@ -153,7 +182,7 @@ int parser(int frame_length, unsigned char *f){
 	for(i = 0; i < 2; i++){
 		printf("%02x",frame.ip_checksum[i]);
 	}printf("\n");
-
+	*/
 	printf("Source ip is : ");
 	for(i = 0; i < 3; i++ ){
 		printf("%d.",frame.ip_src[i]);
@@ -163,8 +192,8 @@ int parser(int frame_length, unsigned char *f){
 	for(i = 0; i < 3; i++ ){
 		printf("%d.",frame.ip_dst[i]);
 	}printf("%d\n",frame.ip_dst[3]);
-	
 
+/*
 	printf("TCP Source Port is : %d\n",frame.tcp_srcport);
 	printf("TCP Destination Port is : %d\n",frame.tcp_dstport);
 	
@@ -185,7 +214,6 @@ int parser(int frame_length, unsigned char *f){
 	printf("\n");
 
 	printf("TCP offset is : %d bytes\n", frame.tcp_offset);
-
 	printf("Windows size value is : %d\n", frame.tcp_window_size_value);
 	
 	printf("TCP Checksum is : 0x");
@@ -197,7 +225,15 @@ int parser(int frame_length, unsigned char *f){
 	for(i = 0; i < frame.tcp_offset-20; i++)
 		printf("%02x",frame.tcp_options[i]);
 	printf("\n");
-
 	
+	printf("TCP data is : ");
+	for( i = 0; i < tcp_data_length; i++)
+		printf("%c", frame.tcp_data[i]);
+	printf("\n\n");
+*/
+	if(frame.http_request_uri != NULL){
+		printf("Method is %s\n", frame.http_method);
+		printf("Request-URI is : %s\n\n", frame.http_request_uri);
+	}
 	return EXIT_SUCCESS;
 }

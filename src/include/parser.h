@@ -14,6 +14,7 @@
 //Structure of ip frame
 int parser(int frame_length, unsigned char* f);
 
+ 
  struct frame
  {
  //ethernet
@@ -24,7 +25,7 @@ int parser(int frame_length, unsigned char* f);
  //ip
  	u_char ip_vers_ihl;         // 4 first bits are for ip version, 4 next ip are for nternet header length, header length = ihl*32bits
  	u_char ip_tos;
- 	u_char ip_len[2]; 			// Ip total length != frame total length
+ 	int ip_len; 			// Ip total length != frame total length
  	u_char ip_id[2];
  	u_char ip_flags_frag_offset[2];
  	u_char ip_ttl;
@@ -46,6 +47,11 @@ int parser(int frame_length, unsigned char* f);
  	u_char tcp_checksum[2];
  	u_char tcp_urg_pointer[2];
  	u_char* tcp_options;
+ 	u_char* tcp_data;
+
+ //http
+ 	u_char* http_method;
+ 	u_char* http_request_uri;
  };
 
 
