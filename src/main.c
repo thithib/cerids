@@ -37,6 +37,12 @@ int main(int argc, char * argv[])
   pcap_t * handle;
   pid_t pid = 0;
   
+  if (geteuid() != 0){
+    fprintf(stderr, "ERROR: You must be root\n");
+    return EXIT_FAILURE;
+  }
+
+
   openlog("cerids", LOG_PID, LOG_DAEMON);
 
   if ((code = getConf(argc, argv, &options)) != 0){
