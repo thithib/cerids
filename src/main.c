@@ -25,6 +25,7 @@
 #include "sniffer.h"
 #include "config.h"
 #include "parser.h"
+#include "detector.h"
 
 
 void pktcallback(u_char *user,const struct pcap_pkthdr* header,const u_char* packet);
