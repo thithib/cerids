@@ -1,10 +1,11 @@
 README 
 =====
 
+
 Documentation
 --------------
 
-You can find the documentation at doc/html/index.html or doc/latex/refman.pdf.
+You can find the documentation at **doc/html/index.html** or **doc/latex/refman.pdf**.
 
 
 Installation
@@ -13,7 +14,7 @@ Installation
 Clone the git repository:
 
 
-`$ git clone <bitbuckCerids> cerids`
+`$ git clone https://bitbucket.org/thithib/cerids cerids`
 
 
 To install CerIDS on a Debian stable (jessie) host, you must install the 
@@ -29,8 +30,8 @@ Then, cd to the source directory and run make
 `$ cd src/ && make`
 
 
-USAGE
------
+Utilisation
+-----------
 
 To listen on the eth0 interface, launch cerids as root with this command:
 
