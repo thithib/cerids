@@ -1,0 +1,79 @@
+\hypertarget{sniffer_8c}{}\section{src/sniffer.c File Reference}
+\label{sniffer_8c}\index{src/sniffer.\+c@{src/sniffer.\+c}}
+
+
+Sniffer components.  
+
+
+{\ttfamily \#include \char`\"{}sniffer.\+h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{sniffer_8c_ae1ccc7d47e49b1185c07e4e721787d37}{sniffer\+Init} (\hyperlink{structOptions}{Options} $\ast$options, pcap\+\_\+t $\ast$$\ast$handle)
+\item 
+int \hyperlink{sniffer_8c_a9fff7e7193e295ade078ce6ef6a3b79a}{sniffer\+Run} (pcap\+\_\+t $\ast$$\ast$handle, int cnt, pcap\+\_\+handler callback)
+\item 
+void \hyperlink{sniffer_8c_a50ecf233589050b379551ab3cb37d25a}{sniffer\+Clean\+Up} (pcap\+\_\+t $\ast$$\ast$handle)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Sniffer components. 
+
+
+
+\subsection{Function Documentation}
+\hypertarget{sniffer_8c_a50ecf233589050b379551ab3cb37d25a}{}\index{sniffer.\+c@{sniffer.\+c}!sniffer\+Clean\+Up@{sniffer\+Clean\+Up}}
+\index{sniffer\+Clean\+Up@{sniffer\+Clean\+Up}!sniffer.\+c@{sniffer.\+c}}
+\subsubsection[{sniffer\+Clean\+Up}]{\setlength{\rightskip}{0pt plus 5cm}void sniffer\+Clean\+Up (
+\begin{DoxyParamCaption}
+\item[{pcap\+\_\+t $\ast$$\ast$}]{handle}
+\end{DoxyParamCaption}
+)}\label{sniffer_8c_a50ecf233589050b379551ab3cb37d25a}
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & \{ pcap\+\_\+t $\ast$$\ast$ pointer handler \} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if ok, -\/1 or -\/2 in case of error, 
+\end{DoxyReturn}
+\hypertarget{sniffer_8c_ae1ccc7d47e49b1185c07e4e721787d37}{}\index{sniffer.\+c@{sniffer.\+c}!sniffer\+Init@{sniffer\+Init}}
+\index{sniffer\+Init@{sniffer\+Init}!sniffer.\+c@{sniffer.\+c}}
+\subsubsection[{sniffer\+Init}]{\setlength{\rightskip}{0pt plus 5cm}int sniffer\+Init (
+\begin{DoxyParamCaption}
+\item[{{\bf Options} $\ast$}]{options, }
+\item[{pcap\+\_\+t $\ast$$\ast$}]{handle}
+\end{DoxyParamCaption}
+)}\label{sniffer_8c_ae1ccc7d47e49b1185c07e4e721787d37}
+
+\begin{DoxyParams}{Parameters}
+{\em options} & \{ Pointer to an options structure \} \\
+\hline
+{\em handle} & \{pcap\+\_\+t $\ast$$\ast$ pointer\} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if ok, -\/1 if not implemented, 1 if pcap file or device could not be opened, 2 if filter could not be parsed, 3 if filter could not be instanciated 
+\end{DoxyReturn}
+\hypertarget{sniffer_8c_a9fff7e7193e295ade078ce6ef6a3b79a}{}\index{sniffer.\+c@{sniffer.\+c}!sniffer\+Run@{sniffer\+Run}}
+\index{sniffer\+Run@{sniffer\+Run}!sniffer.\+c@{sniffer.\+c}}
+\subsubsection[{sniffer\+Run}]{\setlength{\rightskip}{0pt plus 5cm}int sniffer\+Run (
+\begin{DoxyParamCaption}
+\item[{pcap\+\_\+t $\ast$$\ast$}]{handle, }
+\item[{int}]{cnt, }
+\item[{pcap\+\_\+handler}]{callback}
+\end{DoxyParamCaption}
+)}\label{sniffer_8c_a9fff7e7193e295ade078ce6ef6a3b79a}
+
+\begin{DoxyParams}{Parameters}
+{\em handle} & \{ pcap\+\_\+t $\ast$$\ast$ pointer handler \} \\
+\hline
+{\em cnt} & \{ number of packets to process \} \\
+\hline
+{\em callback} & \{ pcap\+\_\+handler callback for pcap\+\_\+loop \} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if ok, -\/1 or -\/2 in case of error, 
+\end{DoxyReturn}

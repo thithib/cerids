@@ -37,10 +37,13 @@ $(EXEC): main.o sniffer.o config.o parser.o detector.o
 				$(CC) -o $@ -c $< $(CFLAG)
 
 
-.PHONY: clean mrproper 
+.PHONY: clean mrproper doc
 
 clean:
 				rm -f *.o
 
 mrproper: clean
 				rm -f $(EXEC)
+
+doc:
+	@cd ../ ; doxygen Doxyfile ; cd src

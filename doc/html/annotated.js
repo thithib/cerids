@@ -1,4 +1,6 @@
 var annotated =
 [
-    [ "Options", "structOptions.html", "structOptions" ]
+    [ "frame", "structframe.html", "structframe" ],
+    [ "Options", "structOptions.html", "structOptions" ],
+    [ "result", "structresult.html", "structresult" ]
 ];

@@ -5,7 +5,8 @@
 Load configuration and whitelist.  
 
 
-{\ttfamily \#include $<$config.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}config.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$syslog.\+h$>$}\\*
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -15,9 +16,15 @@ int \hyperlink{config_8c_a45d679aa74ecc16cc8d2f91a70a465ae}{get\+Conf\+By\+Args}
 \item 
 int \hyperlink{config_8c_a9235134bf5001d1a7123be817db63d98}{get\+Conf\+By\+File} (\hyperlink{structOptions}{Options} $\ast$options)
 \item 
-char $\ast$$\ast$ \hyperlink{config_8c_afa50b6475db08676bcd4db9432e6b068}{get\+White\+List} ()
+char $\ast$$\ast$ \hyperlink{config_8c_a227507f13d8370d93b8db535f668e4c3}{get\+Whitelist} (void)
 \item 
-int \hyperlink{config_8c_a2c951ba23aaed25b71c02e488d8fbdc8}{rules\+Count} ()
+int \hyperlink{config_8c_aaec77834a8e5275e28b53110713ab339}{rules\+Count} (void)
+\item 
+\hypertarget{config_8c_a8d97d5f205535a9bd63f33ba31fd3282}{}void {\bfseries usage} (char $\ast$binname)\label{config_8c_a8d97d5f205535a9bd63f33ba31fd3282}
+
+\item 
+\hypertarget{config_8c_a49ef3330bf1ad1263710b693c96fe059}{}void {\bfseries help} (char $\ast$binname)\label{config_8c_a49ef3330bf1ad1263710b693c96fe059}
+
 \end{DoxyCompactItemize}
 
 
@@ -65,7 +72,7 @@ Load configuration and whitelist.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-O if ok, other integer if not 
+0 if ok, other integer if not 
 \end{DoxyReturn}
 \hypertarget{config_8c_a9235134bf5001d1a7123be817db63d98}{}\index{config.\+c@{config.\+c}!get\+Conf\+By\+File@{get\+Conf\+By\+File}}
 \index{get\+Conf\+By\+File@{get\+Conf\+By\+File}!config.\+c@{config.\+c}}
@@ -82,23 +89,23 @@ O if ok, other integer if not
 \begin{DoxyReturn}{Returns}
 0 if ok, other integer if not 
 \end{DoxyReturn}
-\hypertarget{config_8c_afa50b6475db08676bcd4db9432e6b068}{}\index{config.\+c@{config.\+c}!get\+White\+List@{get\+White\+List}}
-\index{get\+White\+List@{get\+White\+List}!config.\+c@{config.\+c}}
-\subsubsection[{get\+White\+List}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$$\ast$ get\+White\+List (
+\hypertarget{config_8c_a227507f13d8370d93b8db535f668e4c3}{}\index{config.\+c@{config.\+c}!get\+Whitelist@{get\+Whitelist}}
+\index{get\+Whitelist@{get\+Whitelist}!config.\+c@{config.\+c}}
+\subsubsection[{get\+Whitelist}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$$\ast$ get\+Whitelist (
 \begin{DoxyParamCaption}
-{}
+\item[{void}]{}
 \end{DoxyParamCaption}
-)}\label{config_8c_afa50b6475db08676bcd4db9432e6b068}
+)}\label{config_8c_a227507f13d8370d93b8db535f668e4c3}
 \begin{DoxyReturn}{Returns}
-An array of strings containing all regex from the whitelist 
+An array of strings containing all regex from the whitelist, or N\+U\+L\+L if some errors 
 \end{DoxyReturn}
-\hypertarget{config_8c_a2c951ba23aaed25b71c02e488d8fbdc8}{}\index{config.\+c@{config.\+c}!rules\+Count@{rules\+Count}}
+\hypertarget{config_8c_aaec77834a8e5275e28b53110713ab339}{}\index{config.\+c@{config.\+c}!rules\+Count@{rules\+Count}}
 \index{rules\+Count@{rules\+Count}!config.\+c@{config.\+c}}
 \subsubsection[{rules\+Count}]{\setlength{\rightskip}{0pt plus 5cm}int rules\+Count (
 \begin{DoxyParamCaption}
-{}
+\item[{void}]{}
 \end{DoxyParamCaption}
-)}\label{config_8c_a2c951ba23aaed25b71c02e488d8fbdc8}
+)}\label{config_8c_aaec77834a8e5275e28b53110713ab339}
 \begin{DoxyReturn}{Returns}
 Number of lines in the whitelist 
 \end{DoxyReturn}
