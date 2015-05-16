@@ -5,8 +5,12 @@
 
 #include "parser.h"
 
-//Doesn't work with frames with ip options
-
+/**
+ * \param frame_length {total frame length}
+ * \param pFrame {pointer to frame given for parsing}
+ * \param pResult {pointer to structure for giving parsed HTTP request to the detector}
+ * \return 0 if parsing went ok, other integer if not
+ */
 int parser (int frame_length, unsigned char *pFrame, Result* pResult) 
 {
     Frame frame;
@@ -33,7 +37,8 @@ int ether_parser(Frame *frame, unsigned char *pFrame)
         frame->eth_mac_dst[i] = pFrame[i];
         frame->eth_mac_src[i] = pFrame[MAC_LENGTH+i];
     }
-    // 1st test : is the frame a ip frame ?
+
+    // 1st test : is the frame an ip frame ?
     bool type4Bool = true;
     u_char eth_type4[] = {0x08, 0x00}; // if ipv4 frame, type is 0800
     for (i = 0; i < 2; ++i) {
@@ -61,12 +66,12 @@ int ip_parser(Frame *frame, unsigned char *pFrame)
     // type of service
     frame->ip_tos = pFrame[ETH_LENGTH + 1];
     // length of ip packet 
-    frame->ip_len = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + 2] + (int)(u_char) pFrame[ETH_LENGTH +3];
+    frame->ip_len = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + 2] + (int)(u_char) pFrame[ETH_LENGTH + 3];
     // id
     for (i = 0; i < 2; ++i)
-        frame->ip_id[i] = pFrame[ETH_LENGTH + 4 +i];
+        frame->ip_id[i] = pFrame[ETH_LENGTH + 4 + i];
 
-    // flags : 3bits et fragments offset : 13 bits
+    // flags : 3 bits and fragments offset : 13 bits
     for (i = 0; i < 2; ++i)
         frame->ip_flags_frag_offset[i] = pFrame[ETH_LENGTH + 6 +i];
     // ttl
@@ -81,18 +86,19 @@ int ip_parser(Frame *frame, unsigned char *pFrame)
 
     // checksum
     for (i = 0; i < 2; ++i)
-        frame->ip_checksum[i] = pFrame[ETH_LENGTH + 10 +i];
+        frame->ip_checksum[i] = pFrame[ETH_LENGTH + 10 + i];
 
     // Source and destination ip
     for (i = 0; i < 4; ++i) {
         frame->ip_src[i] = pFrame[ETH_LENGTH + 12 + i];
-        frame->ip_dst[i] = pFrame[ETH_LENGTH + 12 + IP_LENGTH +i]; 
+        frame->ip_dst[i] = pFrame[ETH_LENGTH + 12 + IP_LENGTH + i]; 
     }
     return EXIT_SUCCESS;
     /* Options
+     *
      *   There is an option field if ihl != 5 (!= 20 bytes)
      *   
-     *   TO DO
+     *   NOT SUPPORTED YET
      *
      */
 }
@@ -105,13 +111,13 @@ int tcp_parser(Frame *frame, unsigned char *pFrame)
 
     // sequence number and acknowledgement numbers
     for (i = 0; i < 4; ++i) {
-        frame->tcp_seq[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 4 +i];
-        frame->tcp_ack[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 8 +i];
+        frame->tcp_seq[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 4 + i];
+        frame->tcp_ack[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 8 + i];
     }
 
     // flags and offset
     for (i = 0; i < 2; ++i)
-        frame->tcp_flags[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 12 +i];
+        frame->tcp_flags[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 12 + i];
 
     // offset is the 4 first bits of flags
     frame->tcp_offset = 4 * (int)( (frame->tcp_flags[0] & 240) >> 4 );
@@ -123,11 +129,11 @@ int tcp_parser(Frame *frame, unsigned char *pFrame)
 
     // checksum
     for (i = 0; i < 2; ++i)
-        frame->tcp_checksum[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 16 +i]; 
+        frame->tcp_checksum[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 16 + i]; 
 
     // urg pointer
     for (i = 0; i < 2; ++i)
-        frame->tcp_urg_pointer[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 18 +i];
+        frame->tcp_urg_pointer[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 18 + i];
 
     // TCP options
     frame->tcp_options = malloc( (frame->tcp_offset - IP_HEADER_LENGTH) * sizeof(u_char) );
@@ -137,7 +143,7 @@ int tcp_parser(Frame *frame, unsigned char *pFrame)
     }
 
     for (i = 0; i < frame->tcp_offset - IP_HEADER_LENGTH ; ++i)
-        frame->tcp_options[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 20+i];
+        frame->tcp_options[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 20 + i];
 
     // TCP data
     int tcp_data_length = frame->ip_len - IP_HEADER_LENGTH + frame->tcp_offset;
@@ -148,7 +154,7 @@ int tcp_parser(Frame *frame, unsigned char *pFrame)
     }
 
     for (i = 0; i < tcp_data_length; ++i)
-        frame->tcp_data[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + frame->tcp_offset +i];
+        frame->tcp_data[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + frame->tcp_offset + i];
 
     return EXIT_SUCCESS;
 }
