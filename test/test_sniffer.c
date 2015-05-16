@@ -70,11 +70,18 @@ void test_snifferCleanUp(void)
 
 void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* packet)
 {
+    Result * pResult = NULL;
     unsigned char *array = NULL;
     array = malloc(header->len * sizeof(unsigned char));
     memcpy(array, packet, header->len);
 
-    parser(header->len, array);
+    pResult = malloc(sizeof(Result*));
+    if (pResult == NULL) {
+        syslog(LOG_ERR, "Could not allocate memory");
+        exit(EXIT_FAILURE);
+    }
+
+    parser(header->len, array, pResult);
     free(array);
 }
 

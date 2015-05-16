@@ -5,7 +5,7 @@ EXEC=unitTests
 
 all: cerids $(EXEC)
 
-$(EXEC): main.o test_config.o test_sniffer.o test_detector.o ../src/config.o ../src/sniffer.o ../src/parser.o ../src/detector.o
+$(EXEC): main.o test_config.o test_sniffer.o test_detector.o test_parser.o ../src/config.o ../src/sniffer.o ../src/parser.o ../src/detector.o
 	@$(CC) -o $@ $^ $(LDFLAG)
 
 %.o: %.c

@@ -15,21 +15,21 @@ int parser (int frame_length, unsigned char *pFrame, Result* pResult)
 {
     Frame frame;
     // Ethernet
-    ether_parser(&frame, pFrame);
+    ethernetParser(&frame, pFrame);
     
     // IP
-    ip_parser(&frame, pFrame);
+    ipParser(&frame, pFrame);
     
     // TCP
-    tcp_parser(&frame, pFrame);
+    tcpParser(&frame, pFrame);
 
     // HTTP
-    http_parser(&frame, pFrame, pResult);
+    httpParser(&frame, pFrame, pResult);
     
     return EXIT_SUCCESS;
 }
 
-int ether_parser(Frame *frame, unsigned char *pFrame)
+int ethernetParser (Frame *frame, unsigned char *pFrame)
 {
     int i;
     // mac addresses
@@ -53,7 +53,7 @@ int ether_parser(Frame *frame, unsigned char *pFrame)
     return EXIT_SUCCESS;
 }
 
-int ip_parser(Frame *frame, unsigned char *pFrame)
+int ipParser (Frame *frame, unsigned char *pFrame)
 {
     int i;
     // is the version of ip 4  ?
@@ -103,7 +103,7 @@ int ip_parser(Frame *frame, unsigned char *pFrame)
      */
 }
 
-int tcp_parser(Frame *frame, unsigned char *pFrame)
+int tcpParser (Frame *frame, unsigned char *pFrame)
 {
     int i = 0;
     frame->tcp_srcport = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + IP_HEADER_LENGTH] + (int)(u_char) pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 1];
@@ -159,7 +159,7 @@ int tcp_parser(Frame *frame, unsigned char *pFrame)
     return EXIT_SUCCESS;
 }
 
-int http_parser(Frame *frame, unsigned char *pFrame, Result* pResult)
+int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
 {
     char* HTTP_methods[] = {"GET","POST", "HEAD", "PUT","CONNECT", "DELETE", "OPTIONS", "TRACE", "COPY", "LOCK", "MKCOL", "MOVE", "PROPFIND",
         "PROPPATCH", "SEARCH", "UNLOCK", "REPORT", "MKACTIVITY", "CHECKOUT", "MERGE", "MSEARCH", "NOTIFY", "SUBSCRIBE", "UNSUBSCRIBE", "PATCH", "PURGE", "MKCALENDAR"};
@@ -221,3 +221,4 @@ int http_parser(Frame *frame, unsigned char *pFrame, Result* pResult)
     pResult->http_host = frame->http_host;
     return EXIT_SUCCESS;
 }
+
