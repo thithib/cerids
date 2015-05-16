@@ -19,67 +19,9 @@ int parser (int frame_length, unsigned char *pFrame, Result* pResult)
     // TCP
     tcp_parser(&frame, pFrame);
 
-
     // HTTP
-    char* HTTP_methods[] = {"GET","POST", "HEAD", "PUT","CONNECT", "DELETE", "OPTIONS", "TRACE", "COPY", "LOCK", "MKCOL", "MOVE", "PROPFIND",
-        "PROPPATCH", "SEARCH", "UNLOCK", "REPORT", "MKACTIVITY", "CHECKOUT", "MERGE", "MSEARCH", "NOTIFY", "SUBSCRIBE", "UNSUBSCRIBE", "PATCH", "PURGE", "MKCALENDAR"};
-
-    int i = 0; // for next while loop
-
-    frame.http_request_uri = (u_char*) strstr((char*) frame.tcp_data," HTTP/"); // looks for a valid request
-    if(frame.http_request_uri == NULL) {    // This HTTP content is not valid
-        // syslog
-        return -3;
-    }
-
-    frame.http_request_uri = NULL; // set ptr at NULL (shows an invalid request) 
-
-    while (frame.http_request_uri == NULL && i < NUMBER_METHODS) {
-        if (strncmp((char*) frame.tcp_data, HTTP_methods[i], strlen(HTTP_methods[i])) == 0) { // method request
-            frame.http_method = (u_char*) HTTP_methods[i];
-            frame.http_request_uri = frame.tcp_data + strlen(HTTP_methods[i]) ;
-        }
-        else 
-            ++i;
-    } 
-
-    frame.http_host = (u_char*) strstr((char *) frame.tcp_data, "Host:");
-    if (frame.http_host == NULL) {
-        // syslog no host
-        return -3;
-    }
-    frame.http_host += 6;
-
-    u_char* temp = (u_char*) strchr((char *) frame.http_host, '\r');
-    if (temp == NULL) {
-        // syslog problem
-        return -3;
-    }
-    *temp = '\0'; // we isolated the host
-
-    temp = (u_char*) strstr((char*) frame.tcp_data, " HTTP/");
-    *temp ='\0'; // we ended request first line
-
-    frame.http_request_uri = (u_char*) strchr((char*) frame.tcp_data, ' ');
-    if (frame.http_request_uri == NULL) {
-        // syslog weird request
-        return -3;
-    }
-    ++(frame.http_request_uri);
-
+    http_parser(&frame, pFrame, pResult);
     
-    if (frame.http_request_uri != NULL) {
-        printf("Method is %s\n", frame.http_method);
-        printf("Request-URI is : %s\n", frame.http_request_uri);
-    }
-
-    if (frame.http_host != NULL)
-       printf("Host: %s\n\n", frame.http_host);
-    
-    pResult->http_method = frame.http_method;
-    pResult->http_request_uri = frame.http_request_uri;
-    pResult->http_host = frame.http_host;
-
     return EXIT_SUCCESS;
 }
 
@@ -208,5 +150,68 @@ int tcp_parser(Frame *frame, unsigned char *pFrame)
     for (i = 0; i < tcp_data_length; ++i)
         frame->tcp_data[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + frame->tcp_offset +i];
 
+    return EXIT_SUCCESS;
+}
+
+int http_parser(Frame *frame, unsigned char *pFrame, Result* pResult)
+{
+    char* HTTP_methods[] = {"GET","POST", "HEAD", "PUT","CONNECT", "DELETE", "OPTIONS", "TRACE", "COPY", "LOCK", "MKCOL", "MOVE", "PROPFIND",
+        "PROPPATCH", "SEARCH", "UNLOCK", "REPORT", "MKACTIVITY", "CHECKOUT", "MERGE", "MSEARCH", "NOTIFY", "SUBSCRIBE", "UNSUBSCRIBE", "PATCH", "PURGE", "MKCALENDAR"};
+
+    int i = 0; // for next while loop
+
+    frame->http_request_uri = (u_char*) strstr((char*) frame->tcp_data," HTTP/"); // looks for a valid request
+    if(frame->http_request_uri == NULL) {    // This HTTP content is not valid
+        // syslog
+        return -3;
+    }
+
+    frame->http_request_uri = NULL; // set ptr at NULL (shows an invalid request) 
+
+    while (frame->http_request_uri == NULL && i < NUMBER_METHODS) {
+        if (strncmp((char*) frame->tcp_data, HTTP_methods[i], strlen(HTTP_methods[i])) == 0) { // method request
+            frame->http_method = (u_char*) HTTP_methods[i];
+            frame->http_request_uri = frame->tcp_data + strlen(HTTP_methods[i]) ;
+        }
+        else 
+            ++i;
+    } 
+
+    frame->http_host = (u_char*) strstr((char *) frame->tcp_data, "Host:");
+    if (frame->http_host == NULL) {
+        // syslog no host
+        return -3;
+    }
+    frame->http_host += 6;
+
+    u_char* temp = (u_char*) strchr((char *) frame->http_host, '\r');
+    if (temp == NULL) {
+        // syslog problem
+        return -3;
+    }
+    *temp = '\0'; // we isolated the host
+
+    temp = (u_char*) strstr((char*) frame->tcp_data, " HTTP/");
+    *temp ='\0'; // we ended request first line
+
+    frame->http_request_uri = (u_char*) strchr((char*) frame->tcp_data, ' ');
+    if (frame->http_request_uri == NULL) {
+        // syslog weird request
+        return -3;
+    }
+    ++(frame->http_request_uri);
+
+    
+    if (frame->http_request_uri != NULL) {
+        printf("Method is %s\n", frame->http_method);
+        printf("Request-URI is : %s\n", frame->http_request_uri);
+    }
+
+    if (frame->http_host != NULL)
+       printf("Host: %s\n\n", frame->http_host);
+    
+    pResult->http_method = frame->http_method;
+    pResult->http_request_uri = frame->http_request_uri;
+    pResult->http_host = frame->http_host;
     return EXIT_SUCCESS;
 }

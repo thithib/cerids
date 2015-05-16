@@ -102,6 +102,7 @@ int parser(int , unsigned char* , Result* );
 int ether_parser(Frame*, unsigned char *);
 int ip_parser(Frame*, unsigned char*);
 int tcp_parser(Frame*, unsigned char*);
+int http_parser(Frame*, unsigned char*, Result*);
 
 
 
