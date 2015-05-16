@@ -69,9 +69,9 @@ typedef struct frame
     u_char ip_checksum[2];
     u_char ip_src[4];
     u_char ip_dst[4];
-
     //OPTIONS
     //TO DO
+
     //tcp
     int tcp_srcport;
     int tcp_dstport;
@@ -99,6 +99,11 @@ typedef struct result
 } Result;
 
 int parser(int , unsigned char* , Result* );
+int ether_parser(Frame*, unsigned char *);
+int ip_parser(Frame*, unsigned char*);
+int tcp_parser(Frame*, unsigned char*);
+
+
 
 #endif
 
