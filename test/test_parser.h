@@ -12,5 +12,7 @@ void test_ipParser (void);
 void test_tcpParser (void);
 void test_httpParser (void);
 
+int generateFrames (u_char *, u_char *, u_char *);
+
 #endif
 

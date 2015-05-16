@@ -21,7 +21,7 @@ To install CerIDS on a Debian stable (jessie) host, you must install the
 following packages :
 
 
-`$ apt install build-essential libpcap-dev libpcre3-dev`
+`$ apt install build-essential libpcap-dev libpcre3-dev libcunit1-dev
 
 
 Then, cd to the source directory and run make

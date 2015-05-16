@@ -36,11 +36,11 @@ int main(void)
         (NULL == CU_add_test(pSuite_detector, "test of detectorInit", test_detectorInit)) ||
         (NULL == CU_add_test(pSuite_detector, "test of detectorMatch", test_detectorMatch)) ||
         (NULL == CU_add_test(pSuite_detector, "test of detectorCleanUp", test_detectorCleanUp)) ||
-        (NULL == CU_add_test(pSuite_parser, "test of parser", test_parser)) ||
         (NULL == CU_add_test(pSuite_parser, "test of ethernetParser", test_ethernetParser)) ||
         (NULL == CU_add_test(pSuite_parser, "test of ipParser", test_ipParser)) ||
         (NULL == CU_add_test(pSuite_parser, "test of tcpParser", test_tcpParser)) ||
-        (NULL == CU_add_test(pSuite_parser, "test of httpParser", test_httpParser))) {
+        (NULL == CU_add_test(pSuite_parser, "test of httpParser", test_httpParser)) ||
+        (NULL == CU_add_test(pSuite_parser, "test of parser", test_parser))) {
         CU_cleanup_registry();
         return CU_get_error();
     }
