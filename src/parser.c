@@ -153,10 +153,10 @@ int parser (int frame_length, unsigned char *pFrame)
             ++i;
     } 
 
-    frame.http_host = (u_char*) strstr((char*) frame.tcp_data,"Host: ") + 6;
-    u_char* temp = (u_char*) strstr((char*) frame.http_host,"\r\n");
-    *temp = '\0';
-
+    frame.http_host = frame.tcp_data + strlen((char*) frame.http_method) + strlen((char*) frame.http_request_uri) + 17;
+    u_char* temp = (u_char*) strchr((char*) frame.http_host, '\r');
+    *temp ='\0';
+    
 
 // DEBUG 
 /*	printf("\nThe destination mac address is : ");
@@ -258,11 +258,11 @@ int parser (int frame_length, unsigned char *pFrame)
     
     if (frame.http_request_uri != NULL) {
         printf("Method is %s\n", frame.http_method);
-        printf("Request-URI is : %s\n\n", frame.http_request_uri);
+        printf("Request-URI is : %s\n", frame.http_request_uri);
     }
 
     if (frame.http_host != NULL)
-       printf("Host :%s\n", frame.http_host);
+       printf("Host: %s\n\n", frame.http_host);
     
 return EXIT_SUCCESS;
 }
