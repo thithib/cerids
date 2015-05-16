@@ -16,16 +16,16 @@ int parser (int frame_length, unsigned char *pFrame, Result* pResult)
     Frame frame;
     // Ethernet
     ethernetParser(&frame, pFrame);
-    
+
     // IP
     ipParser(&frame, pFrame);
-    
+
     // TCP
     tcpParser(&frame, pFrame);
 
     // HTTP
     httpParser(&frame, pFrame, pResult);
-    
+
     return EXIT_SUCCESS;
 }
 
@@ -63,10 +63,15 @@ int ipParser (Frame *frame, unsigned char *pFrame)
         printf("ip version isn't 4\n");
         return -2;
     }
+    // ip header length
+    frame->ip_ihl = 4 * (int) (frame->ip_vers_ihl & 15);    
+
     // type of service
     frame->ip_tos = pFrame[ETH_LENGTH + 1];
+    
     // length of ip packet 
     frame->ip_len = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + 2] + (int)(u_char) pFrame[ETH_LENGTH + 3];
+
     // id
     for (i = 0; i < 2; ++i)
         frame->ip_id[i] = pFrame[ETH_LENGTH + 4 + i];
@@ -74,6 +79,7 @@ int ipParser (Frame *frame, unsigned char *pFrame)
     // flags : 3 bits and fragments offset : 13 bits
     for (i = 0; i < 2; ++i)
         frame->ip_flags_frag_offset[i] = pFrame[ETH_LENGTH + 6 +i];
+   
     // ttl
     frame->ip_ttl = pFrame[ETH_LENGTH + 8];
 
@@ -93,21 +99,26 @@ int ipParser (Frame *frame, unsigned char *pFrame)
         frame->ip_src[i] = pFrame[ETH_LENGTH + 12 + i];
         frame->ip_dst[i] = pFrame[ETH_LENGTH + 12 + IP_LENGTH + i]; 
     }
+
+    //Options
+    if((frame->ip_ihl - 12 - 2 * IP_LENGTH) != 0) { // if there is options
+        frame->ip_options = malloc( (frame->ip_ihl - 12 - 2 * IP_LENGTH) * sizeof(u_char) );
+        if(frame->ip_options == NULL){
+            // syslog
+            return EXIT_FAILURE;
+        }
+        for(i = 0; i < (frame->ip_ihl - 12 - 2 * IP_LENGTH); ++i)
+            frame->ip_options[i] = pFrame[ETH_LENGTH + 12 + 2 * IP_LENGTH +i];
+    }
+    
     return EXIT_SUCCESS;
-    /* Options
-     *
-     *   There is an option field if ihl != 5 (!= 20 bytes)
-     *   
-     *   NOT SUPPORTED YET
-     *
-     */
 }
 
 int tcpParser (Frame *frame, unsigned char *pFrame)
 {
     int i = 0;
-    frame->tcp_srcport = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + IP_HEADER_LENGTH] + (int)(u_char) pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 1];
-    frame->tcp_dstport = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 2] + (int)(u_char) pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 3];
+    frame->tcp_srcport = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl] + (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl + 1];
+    frame->tcp_dstport = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl + 2] + (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl + 3];
 
     // sequence number and acknowledgement numbers
     for (i = 0; i < 4; ++i) {
@@ -125,7 +136,7 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
     frame->tcp_flags[0] &= 15;
 
     // windows size value
-    frame->tcp_window_size_value = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 14] + (int)(u_char) pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 15];
+    frame->tcp_window_size_value = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl + 14] + (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl + 15];
 
     // checksum
     for (i = 0; i < 2; ++i)
@@ -136,7 +147,7 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
         frame->tcp_urg_pointer[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 18 + i];
 
     // TCP options
-    frame->tcp_options = malloc( (frame->tcp_offset - IP_HEADER_LENGTH) * sizeof(u_char) );
+    frame->tcp_options = malloc( (frame->tcp_offset - frame->ip_ihl) * sizeof(u_char) );
     if (frame->tcp_options == NULL) {
         // syslog
         return EXIT_FAILURE;
@@ -146,7 +157,7 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
         frame->tcp_options[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 20 + i];
 
     // TCP data
-    int tcp_data_length = frame->ip_len - IP_HEADER_LENGTH + frame->tcp_offset;
+    int tcp_data_length = frame->ip_len - frame->ip_ihl + frame->tcp_offset;
     frame->tcp_data = malloc(tcp_data_length * sizeof(u_char));
     if (frame->tcp_data == NULL) {
         // syslog
@@ -221,4 +232,3 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
     pResult->http_host = frame->http_host;
     return EXIT_SUCCESS;
 }
-

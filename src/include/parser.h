@@ -29,13 +29,6 @@
  */
 #define ETH_TYPE_LENGTH 2
 
-
-/**
- * \def IP_HEADER_LENGTH 
- * \brief Internet Header Length (without options)
- */
-#define IP_HEADER_LENGTH 20
-
 /**
  * \def IP_LENGTH 
  * \brief IPv4 Length
@@ -59,7 +52,8 @@ typedef struct frame
     u_char eth_type[2]; 
 
     //ip
-    u_char ip_vers_ihl;         // 4 first bits are for ip version, 4 next ip are for nternet header length, header length = ihl*32bits
+    u_char ip_vers_ihl;         // 4 first bits are for ip version, 4 next bits are for Internet header length, header length = ihl*32bits
+    int ip_ihl;
     u_char ip_tos;
     int ip_len; 			// Ip total length != frame total length
     u_char ip_id[2];
@@ -69,6 +63,7 @@ typedef struct frame
     u_char ip_checksum[2];
     u_char ip_src[4];
     u_char ip_dst[4];
+    u_char* ip_options;
     //OPTIONS
     //TO DO
 
