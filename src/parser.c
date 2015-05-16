@@ -14,17 +14,22 @@
 int parser (int frame_length, unsigned char *pFrame, Result* pResult) 
 {
     Frame frame;
+    
     // Ethernet
-    ethernetParser(&frame, pFrame);
+    if (ethernetParser(&frame, pFrame) != EXIT_SUCCESS)
+        return EXIT_SUCCESS;
 
     // IP
-    ipParser(&frame, pFrame);
+    if (ipParser(&frame, pFrame) != EXIT_SUCCESS)
+        return EXIT_SUCCESS;
 
     // TCP
-    tcpParser(&frame, pFrame);
+    if (tcpParser(&frame, pFrame) != EXIT_SUCCESS)
+        return EXIT_SUCCESS;
 
     // HTTP
-    httpParser(&frame, pFrame, pResult);
+    if (httpParser(&frame, pFrame, pResult) != EXIT_SUCCESS)
+        return EXIT_SUCCESS;
 
     return EXIT_SUCCESS;
 }
@@ -122,13 +127,13 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
 
     // sequence number and acknowledgement numbers
     for (i = 0; i < 4; ++i) {
-        frame->tcp_seq[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 4 + i];
-        frame->tcp_ack[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 8 + i];
+        frame->tcp_seq[i] = pFrame[ETH_LENGTH + frame->ip_ihl + 4 + i];
+        frame->tcp_ack[i] = pFrame[ETH_LENGTH + frame->ip_ihl + 8 + i];
     }
 
     // flags and offset
     for (i = 0; i < 2; ++i)
-        frame->tcp_flags[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 12 + i];
+        frame->tcp_flags[i] = pFrame[ETH_LENGTH + frame->ip_ihl + 12 + i];
 
     // offset is the 4 first bits of flags
     frame->tcp_offset = 4 * (int)( (frame->tcp_flags[0] & 240) >> 4 );
@@ -140,11 +145,11 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
 
     // checksum
     for (i = 0; i < 2; ++i)
-        frame->tcp_checksum[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 16 + i]; 
+        frame->tcp_checksum[i] = pFrame[ETH_LENGTH + frame->ip_ihl + 16 + i]; 
 
     // urg pointer
     for (i = 0; i < 2; ++i)
-        frame->tcp_urg_pointer[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 18 + i];
+        frame->tcp_urg_pointer[i] = pFrame[ETH_LENGTH + frame->ip_ihl + 18 + i];
 
     // TCP options
     frame->tcp_options = malloc( (frame->tcp_offset - frame->ip_ihl) * sizeof(u_char) );
@@ -153,8 +158,8 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
         return EXIT_FAILURE;
     }
 
-    for (i = 0; i < frame->tcp_offset - IP_HEADER_LENGTH ; ++i)
-        frame->tcp_options[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + 20 + i];
+    for (i = 0; i < frame->tcp_offset - frame->ip_ihl ; ++i)
+        frame->tcp_options[i] = pFrame[ETH_LENGTH + frame->ip_ihl + 20 + i];
 
     // TCP data
     int tcp_data_length = frame->ip_len - frame->ip_ihl + frame->tcp_offset;
@@ -165,7 +170,7 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
     }
 
     for (i = 0; i < tcp_data_length; ++i)
-        frame->tcp_data[i] = pFrame[ETH_LENGTH + IP_HEADER_LENGTH + frame->tcp_offset + i];
+        frame->tcp_data[i] = pFrame[ETH_LENGTH + frame->ip_ihl + frame->tcp_offset + i];
 
     return EXIT_SUCCESS;
 }
@@ -178,7 +183,7 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
     int i = 0; // for next while loop
 
     frame->http_request_uri = (u_char*) strstr((char*) frame->tcp_data," HTTP/"); // looks for a valid request
-    if(frame->http_request_uri == NULL) {    // This HTTP content is not valid
+    if(frame->http_request_uri == NULL) { // This HTTP content is not valid
         // syslog
         return -3;
     }
@@ -230,5 +235,6 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
     pResult->http_method = frame->http_method;
     pResult->http_request_uri = frame->http_request_uri;
     pResult->http_host = frame->http_host;
+
     return EXIT_SUCCESS;
 }
