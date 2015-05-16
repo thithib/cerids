@@ -153,7 +153,22 @@ int parser (int frame_length, unsigned char *pFrame)
             ++i;
     } 
 
-    frame.http_host = frame.tcp_data + strlen((char*) frame.http_method) + strlen((char*) frame.http_request_uri) + 17;
+    char * offset = (char *)frame.tcp_data+6;
+    void * endPkt = &(frame.ip_vers_ihl) + frame.ip_len ;
+      frame.http_host = NULL;
+    while ( (void *)offset < endPkt && (frame.http_host = (u_char *)strstr(offset, "Host")) == NULL) {
+      printf("Boucle: %p\n", offset);
+      offset = strchr(offset, '\n') + 1;
+      puts("pouet");
+    }
+
+    if (frame.http_host != NULL){
+      frame.http_host += 6;
+    }
+    else
+      return EXIT_FAILURE;
+
+
     u_char* temp = (u_char*) strchr((char*) frame.http_host, '\r');
     *temp ='\0';
 
