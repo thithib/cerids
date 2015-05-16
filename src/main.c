@@ -89,12 +89,19 @@ int main(int argc, char * argv[])
 
 void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* packet)
 {
+  Result * pResult = NULL;
   unsigned char *array = NULL;
   //printf("Sniffed a packet from %s with length %d\n", user, header->len);
   array = malloc(header->len * sizeof(unsigned char));
   memcpy(array, packet, header->len);
+
+  pResult = malloc(sizeof(Result*));
+  if (pResult == NULL) {
+      syslog(LOG_ERR, "Could not allocate memory");
+      exit(EXIT_FAILURE);
+  }
  
-  parser(header->len, array);
+  parser(header->len, array, pResult);
   free(array);  
 }
 

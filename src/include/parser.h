@@ -11,7 +11,6 @@
 #include <unistd.h>
 #include <string.h>
 
-int parser(int , unsigned char* );
 
 // Add doxygen here
 typedef struct frame
@@ -53,6 +52,15 @@ typedef struct frame
     u_char* http_request_uri;
     u_char* http_host;
 } Frame;
+
+typedef struct result
+{
+    u_char* http_method;
+    u_char* http_request_uri;
+    u_char* http_host;
+} Result;
+
+int parser(int , unsigned char* , Result* );
 
 #endif
 

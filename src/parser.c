@@ -7,7 +7,7 @@
 
 //Doesn't work with frames with options
 
-int parser (int frame_length, unsigned char *pFrame) 
+int parser (int frame_length, unsigned char *pFrame, Result* pResult) 
 {
     Frame frame;
     int i;
@@ -131,144 +131,52 @@ int parser (int frame_length, unsigned char *pFrame)
         frame.tcp_data[i] = pFrame[66+i];
 
     // HTTP
-    char* methods[] = {"GET","POST", "HEAD", "PUT","CONNECT", "DELETE", "OPTIONS", "TRACE", "COPY", "LOCK", "MKCOL", "MOVE", "PROPFIND",
+    char* HTTP_methods[] = {"GET","POST", "HEAD", "PUT","CONNECT", "DELETE", "OPTIONS", "TRACE", "COPY", "LOCK", "MKCOL", "MOVE", "PROPFIND",
         "PROPPATCH", "SEARCH", "UNLOCK", "REPORT", "MKACTIVITY", "CHECKOUT", "MERGE", "MSEARCH", "NOTIFY", "SUBSCRIBE", "UNSUBSCRIBE", "PATCH", "PURGE", "MKCALENDAR"};
 
     i = 0; // for next while loop
-    frame.http_request_uri = (u_char*) strstr((char*) frame.tcp_data," HTTP/"); //look for a valid request
+
+    frame.http_request_uri = (u_char*) strstr((char*) frame.tcp_data," HTTP/"); // looks for a valid request
     if(frame.http_request_uri == NULL) {    // This HTTP content is not valid
         // syslog
         return -3;
     }
 
-    *(frame.http_request_uri) = 0; // end the buffer at the end of the url
     frame.http_request_uri = NULL; // set ptr at NULL (shows an invalid request) 
 
     while (frame.http_request_uri == NULL && i < 27) {
-        if (strncmp((char*) frame.tcp_data, methods[i], strlen(methods[i])) == 0) { // method request
-            frame.http_method = (u_char*) methods[i];
-            frame.http_request_uri = frame.tcp_data + strlen(methods[i]) ;
+        if (strncmp((char*) frame.tcp_data, HTTP_methods[i], strlen(HTTP_methods[i])) == 0) { // method request
+            frame.http_method = (u_char*) HTTP_methods[i];
+            frame.http_request_uri = frame.tcp_data + strlen(HTTP_methods[i]) ;
         }
         else 
             ++i;
     } 
 
-    char * offset = (char *)frame.tcp_data+6;
-    void * endPkt = &(frame.ip_vers_ihl) + frame.ip_len ;
-      frame.http_host = NULL;
-    while ( (void *)offset < endPkt && (frame.http_host = (u_char *)strstr(offset, "Host")) == NULL) {
-      printf("Boucle: %p\n", offset);
-      offset = strchr(offset, '\n') + 1;
-      puts("pouet");
+    frame.http_host = (u_char*) strstr((char *) frame.tcp_data, "Host:");
+    if (frame.http_host == NULL) {
+        // syslog no host
+        return -3;
     }
+    frame.http_host += 6;
 
-    if (frame.http_host != NULL){
-      frame.http_host += 6;
+    u_char* temp = (u_char*) strchr((char *) frame.http_host, '\r');
+    if (temp == NULL) {
+        // syslog problem
+        return -3;
     }
-    else
-      return EXIT_FAILURE;
+    *temp = '\0'; // we isolated the host
 
+    temp = (u_char*) strstr((char*) frame.tcp_data, " HTTP/");
+    *temp ='\0'; // we ended request first line
 
-    u_char* temp = (u_char*) strchr((char*) frame.http_host, '\r');
-    *temp ='\0';
-
-// DEBUG 
-/*	printf("\nThe destination mac address is : ");
-    for (i = 0; i < 5 ; ++i)
-    printf("%02x:", frame.eth_mac_dst[i]);
-    printf("%02x\n",frame.eth_mac_dst[5]);
-
-
-    printf("The source mac address is : ");
-    for (i = 0; i < 5 ; ++i)
-    printf("%02x:", frame.eth_mac_src[i]);
-    printf("%02x\n",frame.eth_mac_dst[5]);
-*/
-
-    printf("The frame type is : 0x");
-    for (i = 0; i < 2 ; ++i)
-    printf("%02x", frame.eth_type[i]);
-    printf("\n");
-
-
-    if(frame.ip_vers_ihl == 0x45)
-    printf("IP version is : 4 \n");
-
-
-    printf("total length packet (without ethernet) is : %d\n", frame.ip_len);
-
-    printf("ID is: 0x");
-    for (i = 0; i < 2; ++i) {
-    printf("%02x",frame.ip_id[i]);
+    frame.http_request_uri = (u_char*) strchr((char*) frame.tcp_data, ' ');
+    if (frame.http_request_uri == NULL) {
+        // syslog weird request
+        return -3;
     }
-    printf("\n");
+    ++(frame.http_request_uri);
 
-
-    printf("Fragment offset is : 0x");
-    for (i = 0; i < 2; ++i) {
-    printf("%02x",frame.ip_flags_frag_offset[i]);
-    }
-    printf("\n");
-
-
-    printf("Time to live is : %d \n",frame.ip_ttl);
-
-
-    printf("IP Checksum is : 0x");
-    for (i = 0; i < 2; ++i){
-    printf("%02x",frame.ip_checksum[i]);
-    }
-    printf("\n");
-
-    printf("Source ip is : ");
-    for (i = 0; i < 3; ++i) {
-    printf("%d.",frame.ip_src[i]);
-    }
-    printf("%d\n",frame.ip_src[3]);
-
-    printf("Destination ip is : ");
-    for (i = 0; i < 3; ++i) {
-    printf("%d.",frame.ip_dst[i]);
-    }
-    printf("%d\n",frame.ip_dst[3]);
-
-    printf("TCP Source Port is : %d\n", frame.tcp_srcport);
-    printf("TCP Destination Port is : %d\n", frame.tcp_dstport);
-
-
-    printf("TCP Sequence Number is : 0x");
-    for (i = 0; i < 4; ++i)
-    printf("%02x",frame.tcp_seq[i]); 
-    printf("\n");
-
-    printf("TCP acknowledgement Number is : 0x");
-    for (i = 0; i < 4; ++i)
-    printf("%02x",frame.tcp_ack[i]); 
-    printf("\n");
-
-    printf("TCP flag is : 0x");
-    for (i = 0; i < 2; ++i)
-        printf("%02x", frame.tcp_flags[i]);
-    printf("\n");
-
-    printf("TCP offset is : %d bytes\n", frame.tcp_offset);
-    printf("Windows size value is : %d\n", frame.tcp_window_size_value);
-
-    printf("TCP Checksum is : 0x");
-    for (i = 0; i < 2; ++i)
-        printf("%02x", frame.tcp_checksum[i]);
-    printf("\n");
-
-    printf("TCP options are : 0x");
-    for (i = 0; i < frame.tcp_offset-20; ++i)
-        printf("%02x",frame.tcp_options[i]);
-    printf("\n");
-/*
-    printf("TCP data is : ");
-    for ( i = 0; i < tcp_data_length; ++i)
-        printf("%c", frame.tcp_data[i]);
-    printf("\n\n");
-*/
     
     if (frame.http_request_uri != NULL) {
         printf("Method is %s\n", frame.http_method);
@@ -278,6 +186,10 @@ int parser (int frame_length, unsigned char *pFrame)
     if (frame.http_host != NULL)
        printf("Host: %s\n\n", frame.http_host);
     
-return EXIT_SUCCESS;
+    pResult->http_method = frame.http_method;
+    pResult->http_request_uri = frame.http_request_uri;
+    pResult->http_host = frame.http_host;
+
+    return EXIT_SUCCESS;
 }
 
