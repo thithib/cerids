@@ -131,8 +131,8 @@ int parser (int frame_length, unsigned char *pFrame)
         frame.tcp_data[i] = pFrame[66+i];
 
     // HTTP
-    char* methods[] = {"DELETE","GET","HEAD","POST","PUT","CONNECT","OPTIONS",   "TRACE", "COPY", "LOCK", "MKCOL", "MOVE", "PROPFIND",
-        "PROPPATCH", "SEARCH", "UNLOCK", "REPORT", "MKACTIVITY", "CHECKOUT", "MERGE",  "MSEARCH", "NOTIFY", "SUBSCRIBE", "UNSUBSCRIBE", "PATCH", "PURGE", "MKCALENDAR"};
+    char* methods[] = {"GET","POST", "HEAD", "PUT","CONNECT", "DELETE", "OPTIONS", "TRACE", "COPY", "LOCK", "MKCOL", "MOVE", "PROPFIND",
+        "PROPPATCH", "SEARCH", "UNLOCK", "REPORT", "MKACTIVITY", "CHECKOUT", "MERGE", "MSEARCH", "NOTIFY", "SUBSCRIBE", "UNSUBSCRIBE", "PATCH", "PURGE", "MKCALENDAR"};
 
     i = 0; // for next while loop
     frame.http_request_uri = (u_char*) strstr((char*) frame.tcp_data," HTTP/"); //look for a valid request
@@ -156,7 +156,6 @@ int parser (int frame_length, unsigned char *pFrame)
     frame.http_host = frame.tcp_data + strlen((char*) frame.http_method) + strlen((char*) frame.http_request_uri) + 17;
     u_char* temp = (u_char*) strchr((char*) frame.http_host, '\r');
     *temp ='\0';
-    
 
 // DEBUG 
 /*	printf("\nThe destination mac address is : ");
