@@ -11,6 +11,44 @@
 #include <unistd.h>
 #include <string.h>
 
+/**
+ * \def ETH_LENGTH 
+ * \brief Ethernet Header Length
+ */
+#define ETH_LENGTH 14
+
+/**
+ * \def MAC_LENGTH 
+ * \brief Mac address length 
+ */
+#define MAC_LENGTH 6
+
+/**
+ * \def ETH_TYPE_LENGTH 
+ * \brief Length of EtherType
+ */
+#define ETH_TYPE_LENGTH 2
+
+
+/**
+ * \def IP_HEADER_LENGTH 
+ * \brief Internet Header Length (without options)
+ */
+#define IP_HEADER_LENGTH 20
+
+/**
+ * \def IP_LENGTH 
+ * \brief IPv4 Length
+ */
+
+#define IP_LENGTH 4
+
+/**
+ * \def NUMBER_METHODS 
+ * \brief Number of methods
+ */
+#define NUMBER_METHODS 27
+ 
 
 // Add doxygen here
 typedef struct frame
@@ -39,7 +77,7 @@ typedef struct frame
     int tcp_dstport;
     u_char tcp_seq[4];
     u_char tcp_ack[4];
-    int tcp_offset;
+    int tcp_offset; // size of TCP header in bytes
     u_char tcp_flags[2];
     int tcp_window_size_value;
     u_char tcp_checksum[2];
