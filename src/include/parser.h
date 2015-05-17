@@ -43,7 +43,11 @@
 #define NUMBER_METHODS 27
  
 
-// Add doxygen here
+/**
+ * \struct Frame
+ * \brief This structure holds ethernet, ip, tcp and http fields.
+ *
+ */
 typedef struct frame
 {
     //ethernet
@@ -64,15 +68,14 @@ typedef struct frame
     u_char ip_src[4];
     u_char ip_dst[4];
     u_char* ip_options;
-    //OPTIONS
-    //TO DO
+ 
 
     //tcp
     int tcp_srcport;
     int tcp_dstport;
     u_char tcp_seq[4];
     u_char tcp_ack[4];
-    int tcp_offset; // size of TCP header in bytes
+    int tcp_offset;         // size of TCP header in bytes
     u_char tcp_flags[2];
     int tcp_window_size_value;
     u_char tcp_checksum[2];
