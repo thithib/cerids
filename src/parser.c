@@ -17,19 +17,19 @@ int parser (int frame_length, unsigned char *pFrame, Result* pResult)
     
     // Ethernet
     if (ethernetParser(&frame, pFrame) != EXIT_SUCCESS)
-        return EXIT_SUCCESS;
+        return EXIT_FAILURE;
 
     // IP
     if (ipParser(&frame, pFrame) != EXIT_SUCCESS)
-        return EXIT_SUCCESS;
+        return EXIT_FAILURE;
 
     // TCP
     if (tcpParser(&frame, pFrame) != EXIT_SUCCESS)
-        return EXIT_SUCCESS;
+        return EXIT_FAILURE;
 
     // HTTP
     if (httpParser(&frame, pFrame, pResult) != EXIT_SUCCESS)
-        return EXIT_SUCCESS;
+        return EXIT_FAILURE;
 
     return EXIT_SUCCESS;
 }
