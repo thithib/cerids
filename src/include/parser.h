@@ -47,7 +47,6 @@
 /**
  * \struct frame
  * \brief This structure holds ethernet, ip, tcp and http fields.
- *
  */
 typedef struct frame
 {
@@ -90,8 +89,14 @@ typedef struct frame
     u_char* http_host;
 } Frame;
 
+/**
+ * \struct result
+ * \brief This structure holds informations about every valid HTTP request to be analyzed by the detector
+ */
 typedef struct result
 {
+    u_char* ip_src;
+    u_char* ip_dst;
     u_char* http_method;
     u_char* http_request_uri;
     u_char* http_host;

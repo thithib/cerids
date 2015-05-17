@@ -247,6 +247,8 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
     }
     ++(frame->http_request_uri);
 
+    pResult->ip_src = frame->ip_src;
+    pResult->ip_dst = frame->ip_dst;
     pResult->http_method = frame->http_method;
     pResult->http_request_uri = frame->http_request_uri;
     pResult->http_host = frame->http_host;
