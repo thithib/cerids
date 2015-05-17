@@ -15,7 +15,7 @@
 int getConf(int argc, char *argv[], Options *options)
 {
     // set defaults
-    options->port = 80;
+    options->filter = strdup("port 80");
     options->dev = NULL;
     options->filename = NULL;
     options->debug = false;
@@ -28,11 +28,6 @@ int getConf(int argc, char *argv[], Options *options)
             || (options->filename != NULL && options->dev != NULL) ) {
         syslog(LOG_ERR, "Only one of filename and interface can be used at the same time\n");
         return 2;
-    }
-
-    if ( options->port < 1 || options->port > 65535) {
-        syslog(LOG_ERR, "Invalid port number\n");
-        return 3;
     }
 
     return 0;
@@ -65,7 +60,7 @@ int getConfByArgs(int argc, char *argv[], Options *options)
                 options->dev = strdup(optarg);
                 break;
             case 'p':
-                options->port = atoi(optarg);
+                options->filter = strdup(optarg);
                 break;
             default:
                 usage(argv[0]);
@@ -107,8 +102,8 @@ int getConfByFile(Options *options)
                 options->dev = (strcmp(optValue, "NULL") == 0) ? NULL : optValue;
             else if (strcmp(optName, "filename") == 0)
                 options->filename = (strcmp(optValue, "NULL") == 0) ? NULL : optValue;
-            else if (strcmp(optName, "port") == 0)
-                options->port = (strcmp(optValue, "NULL") == 0) ? 0 : atoi(optValue);
+            else if (strcmp(optName, "filter") == 0)
+                options->filter = (strcmp(optValue, "NULL") == 0) ? NULL : strdup(optValue);
             else if (strcmp(optName, "live") == 0)
                 options->live = (strcmp(optValue, "true") == 0) ? true : false;
             else if (strcmp(optName, "debug") == 0)
@@ -189,16 +184,16 @@ int rulesCount(void)
 
 void usage(char *binname)
 {
-    fprintf(stderr, "Usage: %s [-h] [-d] [-f filename] [-i device] [-p port]\n", binname);
+    fprintf(stderr, "Usage: %s [-h] [-d] [-f filename] [-i device] [-p <pcap filter>]\n", binname);
     exit(EXIT_FAILURE);
 }
 
 void help(char *binname)
 {
-    printf("Usage: %s [-h] [-d] [-f filename] [-i device] [-p port]\n", binname);
+    printf("Usage: %s [-h] [-d] [-f filename] [-i device] [-p <pcap filter>]\n", binname);
     puts("-d\t\t\tActivate debug mode");
     puts("-f <filename>\t\tRead data from a pcap file (Cannot be used with -i)");
     puts("-i <device>\t\tRead packet from an interface (Cannot be used with -f)");
-    puts("-p <port>\t\tModify the port to filter on");
+    puts("-p <port>\t\tModify the pcap filter (pcap style, default: \"port 80\")");
     exit(EXIT_SUCCESS);
 }

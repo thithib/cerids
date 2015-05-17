@@ -15,7 +15,6 @@ int snifferInit (Options *options, pcap_t ** handle)
 {
     char errbuf[PCAP_ERRBUF_SIZE];
     struct bpf_program fp;   /*  The compiled filter expression */
-    char filter_exp[] = "port 80"; /*  The filter expression */
     bpf_u_int32 mask;    /*  The netmask of our sniffing device */
     bpf_u_int32 net;   /*  The IP of our sniffing device */
 
@@ -45,13 +44,13 @@ int snifferInit (Options *options, pcap_t ** handle)
         mask = 0;
     }
 
-    if (pcap_compile(*handle, &fp, filter_exp, 0, net) == -1) {
-        syslog(LOG_ERR, "Could not parse filter %s: %s\n", filter_exp, pcap_geterr(*handle));
+    if (pcap_compile(*handle, &fp, options->filter, 0, net) == -1) {
+        syslog(LOG_ERR, "Could not parse filter %s: %s\n", options->filter, pcap_geterr(*handle));
         return 2 ;
     }
 
     if (pcap_setfilter(*handle, &fp) == -1) {
-        syslog(LOG_ERR, "Could not install filter %s: %s\n", filter_exp, pcap_geterr(*handle));
+        syslog(LOG_ERR, "Could not install filter %s: %s\n", options->filter, pcap_geterr(*handle));
         return 3 ;
     }
 

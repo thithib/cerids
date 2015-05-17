@@ -53,7 +53,7 @@
 typedef struct Options {
     char *dev;
     char *filename;
-    int port;
+    char *filter;
     bool live;
     bool debug;
     bool foreground;
