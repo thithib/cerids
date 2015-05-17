@@ -46,13 +46,19 @@ int main(int argc, char * argv[])
   pid_t pid = 0;
   char ** whitelist;
 
+
+  setlogmask(LOG_UPTO(LOG_DEBUG));
   openlog("cerids", LOG_PID, LOG_DAEMON);
 
   if ((code = getConf(argc, argv, &options)) != 0){
     syslog(LOG_ERR, "Problem in config");
+    printf("%d\n", code);
     help(argv[0]);
     return code;
   }
+
+  // set log verbosity (previous + arg verbosity)
+  setlogmask(LOG_UPTO(LOG_WARNING + options.verbose));
 
   if (geteuid() != 0 && options.filename == NULL){
     fprintf(stderr, "ERROR: You must be root\n");

@@ -20,6 +20,7 @@ int getConf(int argc, char *argv[], Options *options)
     options->filename = NULL;
     options->debug = false;
     options->foreground = false;
+    options->verbose = 0;
 
     if (!(getConfByFile(options) == 0 && getConfByArgs(argc, argv, options) == 0))
         return 1;
@@ -43,7 +44,7 @@ int getConfByArgs(int argc, char *argv[], Options *options)
 {
     int opt;
 
-    while ((opt = getopt(argc, argv, "hdf:i:p:")) != -1){
+    while ((opt = getopt(argc, argv, "hdvf:i:p:")) != -1){
         switch (opt) {
             case 'h':
                 help(argv[0]);
@@ -61,6 +62,9 @@ int getConfByArgs(int argc, char *argv[], Options *options)
                 break;
             case 'p':
                 options->filter = strdup(optarg);
+                break;
+            case 'v':
+                options->verbose++;
                 break;
             default:
                 usage(argv[0]);
@@ -184,14 +188,15 @@ int rulesCount(void)
 
 void usage(char *binname)
 {
-    fprintf(stderr, "Usage: %s [-h] [-d] [-f filename] [-i device] [-p <pcap filter>]\n", binname);
+    fprintf(stderr, "Usage: %s [-h] [-d] [-vvv] [-f filename] [-i device] [-p <pcap filter>] \n", binname);
     exit(EXIT_FAILURE);
 }
 
 void help(char *binname)
 {
-    printf("Usage: %s [-h] [-d] [-f filename] [-i device] [-p <pcap filter>]\n", binname);
+    printf("Usage: %s [-h] [-d] [-vvv] [-f filename] [-i device] [-p <pcap filter>]\n", binname);
     puts("-d\t\t\tActivate debug mode");
+    puts("-v\t\t\tVerbosity (add more -v to be more verbose");
     puts("-f <filename>\t\tRead data from a pcap file (Cannot be used with -i)");
     puts("-i <device>\t\tRead packet from an interface (Cannot be used with -f)");
     puts("-p <port>\t\tModify the pcap filter (pcap style, default: \"port 80\")");

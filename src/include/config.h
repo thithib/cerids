@@ -57,6 +57,7 @@ typedef struct Options {
     bool live;
     bool debug;
     bool foreground;
+    int verbose;
 } Options;
 
 void usage(char *binname);
