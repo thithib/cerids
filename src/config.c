@@ -96,7 +96,7 @@ int getConfByFile(Options *options)
         if (strlen(buffer) > 1) { // current line is not empty nor only a commentary
 
             strncpy(optName, strtok(buffer, delim), OPT_NAME_LENGTH);
-            strncpy(optValue, strtok(buffer, delim), OPT_VALUE_LENGTH);
+            strncpy(optValue, strtok(NULL, delim), OPT_VALUE_LENGTH);
 
             if (strcmp(optName, "dev") == 0)
                 options->dev = (strcmp(optValue, "NULL") == 0) ? NULL : optValue;
