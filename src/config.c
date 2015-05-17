@@ -83,8 +83,8 @@ int getConfByFile(Options *options)
     char *position, delim[] = "=";
 
     if ((ceridsConf = fopen(CONF_FILE, "r")) == NULL) {
-        syslog(LOG_ERR, "Can't open conf file\n");
-        return -1;
+        syslog(LOG_NOTICE, "Can't find conf file\n");
+        return 0;
     }
 
     while (fgets(buffer, BUFFER_LENGTH, ceridsConf) != NULL) {
