@@ -79,7 +79,7 @@ void test_httpParser (void)
     u_char *pFrame3 = malloc(sizeof(u_char*) * 72);
     generateFrames(pFrame1, pFrame2, pFrame3);
     Frame frame1;
-    Result* pResult = malloc(sizeof(Result*));
+    Result *pResult = malloc(sizeof(Result));
 
     ethernetParser(&frame1, pFrame1);
     ipParser(&frame1, pFrame1);
@@ -97,14 +97,12 @@ void test_parser (void)
     u_char *pFrame1 = malloc(sizeof(u_char*) * 1235);
     u_char *pFrame2 = malloc(sizeof(u_char*) * 74);
     u_char *pFrame3 = malloc(sizeof(u_char*) * 72);
-    Result* pResult = malloc(sizeof(Result*));
-
-    if (generateFrames(pFrame1, pFrame2, pFrame3) == EXIT_FAILURE)
-        exit(EXIT_FAILURE);;
+    Result *pResult = malloc(sizeof(Result));
+    generateFrames(pFrame1, pFrame2, pFrame3);
 
     CU_ASSERT(parser(strlen((char*) pFrame1), pFrame1, pResult) == EXIT_SUCCESS && strcmp((char*) pResult->http_method, "GET") == 0 && strcmp((char*) pResult->http_request_uri, "/") == 0 && strcmp((char*) pResult->http_host, "www.google.com") == 0);
-    CU_ASSERT(parser(strlen((char*) pFrame2), pFrame2, pResult) == EXIT_SUCCESS);
-    CU_ASSERT(parser(strlen((char*) pFrame3), pFrame3, pResult) == EXIT_SUCCESS);
+    CU_ASSERT(parser(strlen((char*) pFrame2), pFrame2, pResult) == EXIT_FAILURE);
+    CU_ASSERT(parser(strlen((char*) pFrame3), pFrame3, pResult) == EXIT_FAILURE);
 
 
     free(pFrame1);
