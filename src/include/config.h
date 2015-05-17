@@ -72,6 +72,7 @@ typedef struct Options {
     int verbose;
 } Options;
 
+int cleanWhitelist(char ** whitelist);
 void usage(char *binname);
 void help(char *binname);
 int getConf(int argc, char *argv[], Options *options);

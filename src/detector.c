@@ -80,6 +80,7 @@ int detectorInit (pcre ** reCompiled, char ** whitelist, pcre_extra ** pcreExtra
 bool detectorMatch (pcre* reCompiled, pcre_extra* pcreExtra, char* string)
 {
     int pcreExecRet;
+    int subStrVec[30];
 
     pcreExecRet = pcre_exec(reCompiled,
             pcreExtra,
@@ -87,7 +88,7 @@ bool detectorMatch (pcre* reCompiled, pcre_extra* pcreExtra, char* string)
             strlen(string),   // length of string
             0,              // start looking at this point
             0,              // Options
-            NULL,           // subStrVec, in case of substrings        handling
+            subStrVec,           // subStrVec, in case of substrings        handling
             0);             // length of subStrVec
 
     return (pcreExecRet >= 0);

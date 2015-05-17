@@ -65,8 +65,8 @@ typedef struct frame
     u_char ip_ttl;
     u_char ip_proto;
     u_char ip_checksum[2];
-    u_char ip_src[4];
-    u_char ip_dst[4];
+    u_char ip_src[5];
+    u_char ip_dst[5];
     u_char* ip_options;
  
     //tcp
@@ -101,11 +101,12 @@ typedef struct result
     u_char* http_host;
 } Result;
 
-int parser (int , unsigned char* , Result* );
+int parser (unsigned char* , Result* );
+int frameCleanUp(Frame * frame);
 int ethernetParser (Frame*, unsigned char *);
 int ipParser (Frame*, unsigned char*);
 int tcpParser (Frame*, unsigned char*);
-int httpParser (Frame*, unsigned char*, Result*);
+int httpParser (Frame*, Result*);
 
 
 #endif

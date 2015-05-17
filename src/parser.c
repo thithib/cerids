@@ -6,12 +6,11 @@
 #include "parser.h"
 
 /**
- * \param frame_length {total frame length}
  * \param pFrame {pointer to frame given for parsing}
  * \param pResult {pointer to structure for giving parsed HTTP request to the detector}
  * \return 0 if parsing went ok, other integer if not
  */
-int parser (int frame_length, unsigned char *pFrame, Result* pResult) 
+int parser (unsigned char * pFrame, Result* pResult) 
 {
     Frame frame;
     
@@ -28,8 +27,10 @@ int parser (int frame_length, unsigned char *pFrame, Result* pResult)
         return EXIT_FAILURE;
 
     // HTTP
-    if (httpParser(&frame, pFrame, pResult) != EXIT_SUCCESS)
+    if (httpParser(&frame, pResult) != EXIT_SUCCESS)
         return EXIT_FAILURE;
+
+    frameCleanUp(&frame);
 
     return EXIT_SUCCESS;
 }
@@ -118,6 +119,8 @@ int ipParser (Frame *frame, unsigned char *pFrame)
         frame->ip_src[i] = pFrame[ETH_LENGTH + 12 + i];
         frame->ip_dst[i] = pFrame[ETH_LENGTH + 12 + IP_LENGTH + i]; 
     }
+    frame->ip_src[4] = '\0';
+    frame->ip_dst[4] = '\0';
 
     // Options
     if ((frame->ip_ihl - 12 - 2 * IP_LENGTH) != 0) { // if there is options
@@ -178,17 +181,17 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
         frame->tcp_urg_pointer[i] = pFrame[ETH_LENGTH + frame->ip_ihl + 18 + i];
 
     // TCP options
-    frame->tcp_options = malloc( (frame->tcp_offset - frame->ip_ihl) * sizeof(u_char) );
+    frame->tcp_options = malloc( (frame->tcp_offset - 20) * sizeof(u_char) );
     if (frame->tcp_options == NULL) {
         syslog(LOG_ERR, "Couldn't allocate memory");
         return EXIT_FAILURE;
     }
 
-    for (i = 0; i < frame->tcp_offset - frame->ip_ihl ; ++i)
+    for (i = 0; i < frame->tcp_offset - 20 ; ++i)
         frame->tcp_options[i] = pFrame[ETH_LENGTH + frame->ip_ihl + 20 + i];
 
     // TCP data
-    int tcp_data_length = frame->ip_len - frame->ip_ihl + frame->tcp_offset;
+    int tcp_data_length = frame->ip_len - frame->ip_ihl - frame->tcp_offset;
     frame->tcp_data = malloc(tcp_data_length * sizeof(u_char));
     if (frame->tcp_data == NULL) {
         syslog(LOG_ERR, "Couldn't allocate memory");
@@ -202,11 +205,10 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
 
 /**
  * \param frame {pointer to frame structure}
- * \param pFrame {pointer to frame given for parsing}
  * \param pResult {pointer to structure for giving parsed HTTP request to the detector}
  * \return 0 if parsing went ok, other integer if not
  */
-int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
+int httpParser(Frame *frame, Result* pResult)
 {
     char* HTTP_methods[] = {"GET","POST", "HEAD", "PUT","CONNECT", "DELETE", "OPTIONS", "TRACE", "COPY", "LOCK", "MKCOL", "MOVE", "PROPFIND",
         "PROPPATCH", "SEARCH", "UNLOCK", "REPORT", "MKACTIVITY", "CHECKOUT", "MERGE", "MSEARCH", "NOTIFY", "SUBSCRIBE", "UNSUBSCRIBE", "PATCH", "PURGE", "MKCALENDAR"};
@@ -255,10 +257,25 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
     }
     ++(frame->http_request_uri);
 
-    pResult->ip_src = frame->ip_src;
-    pResult->ip_dst = frame->ip_dst;
-    pResult->http_method = frame->http_method;
-    pResult->http_request_uri = frame->http_request_uri;
-    pResult->http_host = frame->http_host;
+        printf("p %d.%d.%d.%d\n", frame->ip_src[0],
+            frame->ip_src[1], frame->ip_src[2], frame->ip_src[3]);
+    pResult->ip_src = (u_char *)strdup((const char *)frame->ip_src);
+
+    pResult->ip_dst = (u_char *)strdup((const char *)frame->ip_dst);
+    pResult->http_method = (u_char *)strdup((const char *)frame->http_method);
+    pResult->http_request_uri = (u_char *)strdup((const char *)frame->http_request_uri);
+    pResult->http_host = (u_char *)strdup((const char *)frame->http_host);
     return EXIT_SUCCESS;
+}
+
+
+/**
+ * \param frame {pointer to frame structure}
+ * \return EXIT_SUCCESS
+ */
+int frameCleanUp(Frame * frame){
+  free(frame->tcp_options);
+  free(frame->tcp_data);
+
+  return EXIT_SUCCESS;
 }

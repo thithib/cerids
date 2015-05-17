@@ -15,6 +15,7 @@
 int getConf(int argc, char *argv[], Options *options)
 {
     // set defaults
+    //options->logfile = strdup("/var/log/cerids/match.log");
     options->filter = strdup("port 80");
     options->dev = NULL;
     options->filename = NULL;
@@ -44,7 +45,7 @@ int getConfByArgs(int argc, char *argv[], Options *options)
 {
     int opt;
 
-    while ((opt = getopt(argc, argv, "hdvf:i:p:")) != -1){
+    while ((opt = getopt(argc, argv, "hdvf:i:p:o:")) != -1){
         switch (opt) {
             case 'h':
                 help(argv[0]);
@@ -66,6 +67,9 @@ int getConfByArgs(int argc, char *argv[], Options *options)
             case 'v':
                 options->verbose++;
                 break;
+            /*             case 'o':
+                options->logfile = strdup(optarg);
+                break;*/
             default:
                 usage(argv[0]);
         }
@@ -158,7 +162,7 @@ char** getWhitelist(void)
 
     while (fgets(buffer, BUFFER_LENGTH, whitelist) != NULL) {
 
-        if ((*(rules+i) = malloc(strlen(buffer)*sizeof(char))) == NULL) {
+        if ((*(rules+i) = malloc((strlen(buffer)+1)*sizeof(char))) == NULL) {
             syslog(LOG_ERR, "Memory allocation error");
             return NULL;
         }
@@ -175,6 +179,23 @@ char** getWhitelist(void)
 
     return rules;
 }
+
+
+/**
+ * \param whitelist (char **)
+ * \return EXIT_SUCCESS
+ */
+int cleanWhitelist(char ** whitelist) {
+  int i = 0;
+  while (whitelist[i] != NULL){
+    free(whitelist[i]);
+    i++;
+  }
+
+  return EXIT_SUCCESS;
+}
+
+
 
 /**
  * \return Number of lines in the whitelist
