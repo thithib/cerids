@@ -80,6 +80,10 @@ int ipParser (Frame *frame, unsigned char *pFrame)
     }
     // ip header length
     frame->ip_ihl = 4 * (int) (pFrame[ETH_LENGTH] & 15); // ip_ihl is the 4 last bits of pFrame[ETH_LENGTH]  
+    if(frame->ip_ihl < 20) {
+        syslog(LOG_CRIT, "Strange IP header size detected (maybe handcrafted). POSSIBLE ATTACK");
+        return -3;
+    }
 
     // type of service
     frame->ip_tos = pFrame[ETH_LENGTH + 1];
@@ -152,10 +156,10 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
 
     // offset is the 4 first bits of flags
     frame->tcp_offset = 4 * (int)( (frame->tcp_flags[0] & 240) >> 4 ); 
-    if(frame->tcp_offset < 20)
+    if(frame->tcp_offset < 20){
         syslog(LOG_CRIT, "Strange TCP header size detected (maybe handcrafted). POSSIBLE ATTACK");
         return -3;
-
+    }
     frame->tcp_flags[0] &= 15;
 
     // windows size value
