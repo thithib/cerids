@@ -45,12 +45,6 @@ int main(int argc, char * argv[])
   pcap_t * handle;
   pid_t pid = 0;
   char ** whitelist;
-  
-  if (geteuid() != 0){
-    fprintf(stderr, "ERROR: You must be root\n");
-    return EXIT_FAILURE;
-  }
-
 
   openlog("cerids", LOG_PID, LOG_DAEMON);
 
@@ -58,6 +52,11 @@ int main(int argc, char * argv[])
     syslog(LOG_ERR, "Problem in config");
     help(argv[0]);
     return code;
+  }
+
+  if (geteuid() != 0 && options.filename == NULL){
+    fprintf(stderr, "ERROR: You must be root\n");
+    return EXIT_FAILURE;
   }
 
   if (options.debug){
