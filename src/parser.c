@@ -204,8 +204,11 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
     int i = 0; // for next while loop
 
     frame->http_request_uri = (u_char*) strstr((char*) frame->tcp_data," HTTP/"); // looks for a valid request
-    if(frame->http_request_uri == NULL) { // This HTTP content is not valid
-        syslog(LOG_NOTICE, "Invalid HTTP content");
+    if(frame->http_request_uri == NULL) { // This is not an HTTP header
+        if (strstr((char *) frame->tcp_data, "HTTP/") == (char *) frame->tcp_data)
+            syslog(LOG_INFO, "HTTP Answer");
+        else
+            syslog(LOG_DEBUG, "Non HTTP Header");
         return -3;
     }
 
