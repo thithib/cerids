@@ -121,7 +121,7 @@ void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* p
   Result * pResult = NULL;
   unsigned char *array = NULL;
   //printf("Sniffed a packet from %s with length %d\n", user, header->len);
-  if (header->len > 10000 || header->len < 5){
+  if (header->len > 10000 || header->len < 20){
     syslog(LOG_CRIT, "Strange packet size detected (maybe handcrafted). POSSIBLE ATTACK");
     return;
   }
