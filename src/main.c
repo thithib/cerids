@@ -128,6 +128,7 @@ void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* p
 
   }
 
+  free(pResult);
   free(array);  
 }
 
