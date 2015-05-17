@@ -52,7 +52,7 @@ typedef struct frame
     u_char eth_type[2]; 
 
     //ip
-    u_char ip_vers_ihl;         // 4 first bits are for ip version, 4 next bits are for Internet header length, header length = ihl*32bits
+    u_char ip_vers;         
     int ip_ihl;
     u_char ip_tos;
     int ip_len; 			// Ip total length != frame total length

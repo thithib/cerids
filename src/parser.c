@@ -52,7 +52,7 @@ int ethernetParser (Frame *frame, unsigned char *pFrame)
             type4Bool = false;
     }
     if(!type4Bool) {
-        printf("\nIt is not an ip frame\n");
+        printf("\nIt is not an ipv4 frame\n");
         return -2;
     }
     return EXIT_SUCCESS;
@@ -62,14 +62,14 @@ int ipParser (Frame *frame, unsigned char *pFrame)
 {
     int i;
     // is the version of ip 4  ?
-    frame->ip_vers_ihl = pFrame[ETH_LENGTH];
-    if(frame->ip_vers_ihl != 0x45)
+    frame->ip_vers = (pFrame[ETH_LENGTH] & 240) >> 4;
+    if(frame->ip_vers != 0x4)
     {
         printf("ip version isn't 4\n");
         return -2;
     }
     // ip header length
-    frame->ip_ihl = 4 * (int) (frame->ip_vers_ihl & 15);    
+    frame->ip_ihl = 4 * (int) (pFrame[ETH_LENGTH] & 15);    
 
     // type of service
     frame->ip_tos = pFrame[ETH_LENGTH + 1];
