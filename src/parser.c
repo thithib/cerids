@@ -241,7 +241,6 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
 
     frame->http_request_uri = (u_char*) strchr((char*) frame->tcp_data, ' ');
     if (frame->http_request_uri == NULL) {
-        syslog(LOG_DEBUG, "Invalid HTTP content (no request URI)");
         return -3;
     }
     ++(frame->http_request_uri);
@@ -251,14 +250,6 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
     pResult->http_method = frame->http_method;
     pResult->http_request_uri = frame->http_request_uri;
     pResult->http_host = frame->http_host;
-
-    if (frame->http_request_uri != NULL) {
-        printf("Method is %s\n", frame->http_method);
-        printf("Request-URI is : %s\n", frame->http_request_uri);
-    }
-
-    if (frame->http_host != NULL)
-        printf("Host: %s\n\n", frame->http_host);
 
     return EXIT_SUCCESS;
 }
