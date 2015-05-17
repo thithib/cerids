@@ -122,6 +122,11 @@ void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* p
   unsigned char *array = NULL;
   //printf("Sniffed a packet from %s with length %d\n", user, header->len);
   array = malloc(header->len * sizeof(unsigned char));
+  if (array == NULL){
+    syslog(LOG_EMERG, "Could not allocate memory in packet callback. POSSIBLE ATTACK.");
+    return;
+  }
+
   memcpy(array, packet, header->len);
 
   pResult = malloc(sizeof(Result));
