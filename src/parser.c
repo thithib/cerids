@@ -48,7 +48,7 @@ int ethernetParser (Frame *frame, unsigned char *pFrame)
         frame->eth_mac_src[i] = pFrame[MAC_LENGTH+i];
     }
 
-    // 1st test : is the frame an ip frame ?
+    // is the frame an ip frame ?
     bool type4Bool = true;
     u_char eth_type4[] = {0x08, 0x00}; // if ipv4 frame, type is 0800
     for (i = 0; i < 2; ++i) {
@@ -72,14 +72,14 @@ int ipParser (Frame *frame, unsigned char *pFrame)
 {
     int i;
     // is the version of ip 4  ?
-    frame->ip_vers = (pFrame[ETH_LENGTH] & 240) >> 4;
+    frame->ip_vers = (pFrame[ETH_LENGTH] & 240) >> 4; //ip_vers is the 4 first bits of pFrame[ETH_LENGTH]
     if(frame->ip_vers != 0x4)
     {
         syslog(LOG_NOTICE, "ip version isn't 4");
         return -2;
     }
     // ip header length
-    frame->ip_ihl = 4 * (int) (pFrame[ETH_LENGTH] & 15);    
+    frame->ip_ihl = 4 * (int) (pFrame[ETH_LENGTH] & 15); // ip_ihl is the 4 last bits of pFrame[ETH_LENGTH]  
 
     // type of service
     frame->ip_tos = pFrame[ETH_LENGTH + 1];
@@ -93,7 +93,7 @@ int ipParser (Frame *frame, unsigned char *pFrame)
 
     // flags : 3 bits and fragments offset : 13 bits
     for (i = 0; i < 2; ++i)
-        frame->ip_flags_frag_offset[i] = pFrame[ETH_LENGTH + 6 +i];
+        frame->ip_flags_frag_offset[i] = pFrame[ETH_LENGTH + 6 + i];
    
     // ttl
     frame->ip_ttl = pFrame[ETH_LENGTH + 8];
@@ -151,8 +151,7 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
         frame->tcp_flags[i] = pFrame[ETH_LENGTH + frame->ip_ihl + 12 + i];
 
     // offset is the 4 first bits of flags
-    frame->tcp_offset = 4 * (int)( (frame->tcp_flags[0] & 240) >> 4 );
-
+    frame->tcp_offset = 4 * (int)( (frame->tcp_flags[0] & 240) >> 4 ); 
     frame->tcp_flags[0] &= 15;
 
     // windows size value
@@ -204,7 +203,7 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
     int i = 0; // for next while loop
 
     frame->http_request_uri = (u_char*) strstr((char*) frame->tcp_data," HTTP/"); // looks for a valid request
-    if(frame->http_request_uri == NULL) { // This is not an HTTP header
+    if(frame->http_request_uri == NULL) { // This is not an HTTP request
         if (strstr((char *) frame->tcp_data, "HTTP/") == (char *) frame->tcp_data)
             syslog(LOG_INFO, "HTTP Answer");
         else

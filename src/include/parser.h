@@ -69,7 +69,6 @@ typedef struct frame
     u_char ip_dst[4];
     u_char* ip_options;
  
-
     //tcp
     int tcp_srcport;
     int tcp_dstport;
