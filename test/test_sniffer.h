@@ -2,6 +2,7 @@
 #define _TEST_SNIFFER_H
 
 #include "sniffer.h"
+#include "detector.h"
 #include "parser.h"
 
 int init_suite_sniffer(void);

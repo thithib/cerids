@@ -2,6 +2,8 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
 
+pcre *reCompiled;
+pcre_extra *pcreExtra;
 
 int init_suite_sniffer(void) // operations to be done before all tests
 {
@@ -70,18 +72,28 @@ void test_snifferCleanUp(void)
 
 void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* packet)
 {
-    Result * pResult = NULL;
-    unsigned char *array = NULL;
-    array = malloc(header->len * sizeof(unsigned char));
-    memcpy(array, packet, header->len);
+  Result * pResult = NULL;
+  unsigned char *array = NULL;
+  //printf("Sniffed a packet from %s with length %d\n", user, header->len);
+  array = malloc(header->len * sizeof(unsigned char));
+  memcpy(array, packet, header->len);
 
-    pResult = malloc(sizeof(Result*));
-    if (pResult == NULL) {
-        syslog(LOG_ERR, "Could not allocate memory");
-        exit(EXIT_FAILURE);
+  pResult = malloc(sizeof(Result));
+  if (pResult == NULL) {
+      syslog(LOG_ERR, "Could not allocate memory");
+      exit(EXIT_FAILURE);
+  }
+
+  if (parser(header->len, array, pResult) == EXIT_SUCCESS) {
+    // match only GET req
+    if (strcmp((char *)pResult->http_method, "GET") == 0 &&
+        detectorMatch(reCompiled, pcreExtra, (char *)pResult->http_request_uri) !=     true){
+      // log error
     }
 
-    parser(header->len, array, pResult);
-    free(array);
+  }
+
+  free(pResult);
+  free(array);
 }
 
