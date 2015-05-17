@@ -121,9 +121,13 @@ void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* p
   Result * pResult = NULL;
   unsigned char *array = NULL;
   //printf("Sniffed a packet from %s with length %d\n", user, header->len);
+  if (header->len > 10000){
+    syslog(LOG_EMERG, "Very large packet detected (maybe handcrafted). POSSIBLE ATTACK");
+    return;
+  }
   array = malloc(header->len * sizeof(unsigned char));
   if (array == NULL){
-    syslog(LOG_EMERG, "Could not allocate memory in packet callback. POSSIBLE ATTACK.");
+    syslog(LOG_ERR, "Could not allocate memory in packet callback");
     return;
   }
 
