@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <string.h>
+#include <syslog.h>
 
 /**
  * \def ETH_LENGTH 

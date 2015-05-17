@@ -52,7 +52,7 @@ int ethernetParser (Frame *frame, unsigned char *pFrame)
             type4Bool = false;
     }
     if(!type4Bool) {
-        printf("\nIt is not an ipv4 frame\n");
+        syslog(LOG_NOTICE, "It is not an ipv4 frame");
         return -2;
     }
     return EXIT_SUCCESS;
@@ -65,7 +65,7 @@ int ipParser (Frame *frame, unsigned char *pFrame)
     frame->ip_vers = (pFrame[ETH_LENGTH] & 240) >> 4;
     if(frame->ip_vers != 0x4)
     {
-        printf("ip version isn't 4\n");
+        syslog(LOG_NOTICE, "ip version isn't 4");
         return -2;
     }
     // ip header length
@@ -91,7 +91,7 @@ int ipParser (Frame *frame, unsigned char *pFrame)
     // protocol, 3rd test : if protocol is tcp, ip_proto is 06
     frame->ip_proto = pFrame[ETH_LENGTH + 9];
     if (frame->ip_proto != 0x06) {
-        printf("\nThe protocol isn't tcp\n");
+        syslog(LOG_NOTICE, "The protocol isn't tcp");
         return -2;
     }
 
@@ -105,11 +105,11 @@ int ipParser (Frame *frame, unsigned char *pFrame)
         frame->ip_dst[i] = pFrame[ETH_LENGTH + 12 + IP_LENGTH + i]; 
     }
 
-    //Options
-    if((frame->ip_ihl - 12 - 2 * IP_LENGTH) != 0) { // if there is options
+    // Options
+    if ((frame->ip_ihl - 12 - 2 * IP_LENGTH) != 0) { // if there is options
         frame->ip_options = malloc( (frame->ip_ihl - 12 - 2 * IP_LENGTH) * sizeof(u_char) );
-        if(frame->ip_options == NULL){
-            // syslog
+        if(frame->ip_options == NULL) {
+            syslog(LOG_ERR, "Couldn't allocate memory");
             return EXIT_FAILURE;
         }
         for(i = 0; i < (frame->ip_ihl - 12 - 2 * IP_LENGTH); ++i)
@@ -154,7 +154,7 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
     // TCP options
     frame->tcp_options = malloc( (frame->tcp_offset - frame->ip_ihl) * sizeof(u_char) );
     if (frame->tcp_options == NULL) {
-        // syslog
+        syslog(LOG_ERR, "Couldn't allocate memory");
         return EXIT_FAILURE;
     }
 
@@ -165,7 +165,7 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
     int tcp_data_length = frame->ip_len - frame->ip_ihl + frame->tcp_offset;
     frame->tcp_data = malloc(tcp_data_length * sizeof(u_char));
     if (frame->tcp_data == NULL) {
-        // syslog
+        syslog(LOG_ERR, "Couldn't allocate memory");
         return EXIT_FAILURE;
     }
 
@@ -184,7 +184,7 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
 
     frame->http_request_uri = (u_char*) strstr((char*) frame->tcp_data," HTTP/"); // looks for a valid request
     if(frame->http_request_uri == NULL) { // This HTTP content is not valid
-        // syslog
+        syslog(LOG_NOTICE, "Invalid HTTP content");
         return -3;
     }
 
@@ -201,14 +201,14 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
 
     frame->http_host = (u_char*) strstr((char *) frame->tcp_data, "Host:");
     if (frame->http_host == NULL) {
-        // syslog no host
+        syslog(LOG_NOTICE, "No host");
         return -3;
     }
     frame->http_host += 6;
 
     u_char* temp = (u_char*) strchr((char *) frame->http_host, '\r');
     if (temp == NULL) {
-        // syslog problem
+        syslog(LOG_NOTICE, "Invalid HTTP content");
         return -3;
     }
     *temp = '\0'; // we isolated the host
@@ -218,23 +218,23 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
 
     frame->http_request_uri = (u_char*) strchr((char*) frame->tcp_data, ' ');
     if (frame->http_request_uri == NULL) {
-        // syslog weird request
+        syslog(LOG_NOTICE, "Invalid HTTP content");
         return -3;
     }
     ++(frame->http_request_uri);
 
-    
+    pResult->http_method = frame->http_method;
+    pResult->http_request_uri = frame->http_request_uri;
+    pResult->http_host = frame->http_host;
+
     if (frame->http_request_uri != NULL) {
         printf("Method is %s\n", frame->http_method);
         printf("Request-URI is : %s\n", frame->http_request_uri);
     }
 
     if (frame->http_host != NULL)
-       printf("Host: %s\n\n", frame->http_host);
-    
-    pResult->http_method = frame->http_method;
-    pResult->http_request_uri = frame->http_request_uri;
-    pResult->http_host = frame->http_host;
+        printf("Host: %s\n\n", frame->http_host);
 
     return EXIT_SUCCESS;
 }
+
