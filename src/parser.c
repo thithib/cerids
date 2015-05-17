@@ -140,6 +140,10 @@ int ipParser (Frame *frame, unsigned char *pFrame)
  */
 int tcpParser (Frame *frame, unsigned char *pFrame)
 {
+    if( strlen( (char*) pFrame ) - ETH_LENGTH - frame->ip_ihl < 14 ) {
+        syslog(LOG_CRIT, "Strange TCP header size detected (maybe handcrafted). POSSIBLE ATTACK");
+        return -3;
+    }
     int i = 0;
     frame->tcp_srcport = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl] + (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl + 1];
     frame->tcp_dstport = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl + 2] + (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl + 3];
@@ -193,7 +197,6 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
 
     for (i = 0; i < tcp_data_length; ++i)
         frame->tcp_data[i] = pFrame[ETH_LENGTH + frame->ip_ihl + frame->tcp_offset + i];
-
     return EXIT_SUCCESS;
 }
 
@@ -220,7 +223,6 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
     }
 
     frame->http_request_uri = NULL; // set ptr at NULL (shows an invalid request) 
-
     while (frame->http_request_uri == NULL && i < NUMBER_METHODS) {
         if (strncmp((char*) frame->tcp_data, HTTP_methods[i], strlen(HTTP_methods[i])) == 0) { // method request
             frame->http_method = (u_char*) HTTP_methods[i];
@@ -258,6 +260,5 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
     pResult->http_method = frame->http_method;
     pResult->http_request_uri = frame->http_request_uri;
     pResult->http_host = frame->http_host;
-
     return EXIT_SUCCESS;
 }
