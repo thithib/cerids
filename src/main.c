@@ -113,7 +113,7 @@ void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* p
   array = malloc(header->len * sizeof(unsigned char));
   memcpy(array, packet, header->len);
 
-  pResult = malloc(sizeof(Result*));
+  pResult = malloc(sizeof(Result));
   if (pResult == NULL) {
       syslog(LOG_ERR, "Could not allocate memory");
       exit(EXIT_FAILURE);
