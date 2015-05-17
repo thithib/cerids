@@ -46,7 +46,6 @@ int main(int argc, char * argv[])
   pid_t pid = 0;
   char ** whitelist;
 
-
   setlogmask(LOG_UPTO(LOG_DEBUG));
   openlog("cerids", LOG_PID, LOG_DAEMON);
 

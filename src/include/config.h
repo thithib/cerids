@@ -15,16 +15,28 @@
 #include <string.h>
 
 /**
- * \def CONF_FILE
- * \brief Configuration file path
+ * \def LOCAL_CONF_FILE
+ * \brief Local configuration file path
  */
-#define CONF_FILE "../conf/cerids.conf"
+#define LOCAL_CONF_FILE "../conf/cerids.conf"
 
 /**
- * \def WHITELIST_FILE
- * \brief Whitelist file path
+ * \def MAIN_CONF_FILE
+ * \brief Main configuration file path
  */
-#define WHITELIST_FILE "../conf/whitelist.txt"
+#define MAIN_CONF_FILE "/etc/cerids/cerids.conf"
+
+/**
+ * \def LOCAL_WHITELIST_FILE
+ * \brief Local whitelist file path
+ */
+#define LOCAL_WHITELIST_FILE "../conf/whitelist.txt"
+
+/**
+ * \def MAIN_WHITELIST_FILE
+ * \brief Main whitelist file path
+ */
+#define MAIN_WHITELIST_FILE "/etc/cerids/whitelist.txt"
 
 /**
  * \def BUFFER_LENGTH

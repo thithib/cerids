@@ -86,10 +86,14 @@ int getConfByFile(Options *options)
     char buffer[BUFFER_LENGTH];
     char *position, delim[] = "=";
 
-    if ((ceridsConf = fopen(CONF_FILE, "r")) == NULL) {
-        syslog(LOG_NOTICE, "Can't find conf file\n");
+    if ((ceridsConf = fopen(MAIN_CONF_FILE, "r")) == NULL)
+        syslog(LOG_DEBUG, "Cannot open main conf file");
+
+    if ((ceridsConf = fopen(LOCAL_CONF_FILE, "r")) == NULL)
+        syslog(LOG_DEBUG, "Cannot open local conf file");
+
+    if (ceridsConf == NULL)
         return 0;
-    }
 
     while (fgets(buffer, BUFFER_LENGTH, ceridsConf) != NULL) {
 
@@ -136,20 +140,26 @@ char** getWhitelist(void)
     char **rules = NULL;
     int i = 0;
 
-    if ((whitelist = fopen(WHITELIST_FILE, "r")) == NULL) {
-        syslog(LOG_ERR, "Can't open whitelist file\n");
+    if ((whitelist = fopen(MAIN_WHITELIST_FILE, "r")) == NULL)
+        syslog(LOG_DEBUG, "Cannot open main whitelist file");
+
+    if ((whitelist = fopen(LOCAL_WHITELIST_FILE, "r")) == NULL)
+        syslog(LOG_DEBUG, "Cannot open local whitelist file");
+
+    if (whitelist == NULL) {
+        syslog(LOG_ERR, "No whitelist found");
         return NULL;
     }
 
     if ((rules = malloc((1+rulesCount())*sizeof(char*))) == NULL) {
-        syslog(LOG_ERR, "Memory allocation error\n");
+        syslog(LOG_ERR, "Memory allocation error");
         return NULL;
     }
 
     while (fgets(buffer, BUFFER_LENGTH, whitelist) != NULL) {
 
         if ((*(rules+i) = malloc(strlen(buffer)*sizeof(char))) == NULL) {
-            syslog(LOG_ERR, "Memory allocation error\n");
+            syslog(LOG_ERR, "Memory allocation error");
             return NULL;
         }
 
@@ -171,17 +181,23 @@ char** getWhitelist(void)
  */
 int rulesCount(void)
 {
-    FILE *f = fopen(WHITELIST_FILE, "r");
+    FILE *whitelist = NULL;
     int c, lines = 0;
+    
+    if ((whitelist = fopen(MAIN_WHITELIST_FILE, "r")) == NULL)
+        syslog(LOG_DEBUG, "Cannot open main whitelist file");
 
-    if (f == NULL)
+    if ((whitelist = fopen(LOCAL_WHITELIST_FILE, "r")) == NULL)
+        syslog(LOG_DEBUG, "Cannot open local whitelist file");
+
+    if (whitelist == NULL)
         return 0;
 
-    while ((c = fgetc(f)) != EOF)
+    while ((c = fgetc(whitelist)) != EOF)
         if (c == '\n')
             ++lines;
 
-    fclose(f);
+    fclose(whitelist);
 
     return lines;
 }
