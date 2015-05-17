@@ -72,11 +72,11 @@ int detectorInit (pcre ** reCompiled, char ** whitelist, pcre_extra ** pcreExtra
 }
 
 /**
- *  * \param reCompiled { pointer to precompiled regex string }
- *   * \param pcreExtra { pointer to result of regex optimization }
- *    * \param string { pointer to a string to match }
- *     * \return true if matches found, false if not
- *      */
+ ** \param reCompiled { pointer to precompiled regex string }
+ ** \param pcreExtra { pointer to result of regex optimization }
+ ** \param string { pointer to a string to match }
+ ** \return true if matches found, false if not
+ **/
 bool detectorMatch (pcre* reCompiled, pcre_extra* pcreExtra, char* string)
 {
     int pcreExecRet;
@@ -94,10 +94,10 @@ bool detectorMatch (pcre* reCompiled, pcre_extra* pcreExtra, char* string)
 }
 
 /**
- *  * \param reCompiled { pointer to precompiled regex string }
- *   * \param pcreExtra { pointer to result of regex optimization }
- *    * \return 0 if ok
- *     */
+ ** \param reCompiled { pointer to precompiled regex string }
+ ** \param pcreExtra { pointer to result of regex optimization }
+ ** \return 0 if ok
+ **/
 int detectorCleanUp (pcre* reCompiled, pcre_extra* pcreExtra)
 {
     pcre_free(reCompiled);
@@ -107,3 +107,4 @@ int detectorCleanUp (pcre* reCompiled, pcre_extra* pcreExtra)
 
     return 0;
 }
+
