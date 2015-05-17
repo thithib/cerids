@@ -225,14 +225,14 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
 
     frame->http_host = (u_char*) strstr((char *) frame->tcp_data, "Host:");
     if (frame->http_host == NULL) {
-        syslog(LOG_NOTICE, "No host");
+        syslog(LOG_DEBUG, "No host in request");
         return -3;
     }
     frame->http_host += 6;
 
     u_char* temp = (u_char*) strchr((char *) frame->http_host, '\r');
     if (temp == NULL) {
-        syslog(LOG_NOTICE, "Invalid HTTP content");
+        syslog(LOG_DEBUG, "Invalid HTTP content (wrong format/newlines)");
         return -3;
     }
     *temp = '\0'; // we isolated the host
@@ -242,7 +242,7 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
 
     frame->http_request_uri = (u_char*) strchr((char*) frame->tcp_data, ' ');
     if (frame->http_request_uri == NULL) {
-        syslog(LOG_NOTICE, "Invalid HTTP content");
+        syslog(LOG_DEBUG, "Invalid HTTP content (no request URI)");
         return -3;
     }
     ++(frame->http_request_uri);
