@@ -45,7 +45,7 @@
  
 
 /**
- * \struct Frame
+ * \struct frame
  * \brief This structure holds ethernet, ip, tcp and http fields.
  *
  */

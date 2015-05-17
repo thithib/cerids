@@ -34,6 +34,11 @@ int parser (int frame_length, unsigned char *pFrame, Result* pResult)
     return EXIT_SUCCESS;
 }
 
+/**
+ * \param frame {pointer to frame structure}
+ * \param pFrame {pointer to frame given for parsing}
+ * \return 0 if parsing went ok, other integer if not
+ */
 int ethernetParser (Frame *frame, unsigned char *pFrame)
 {
     int i;
@@ -58,6 +63,11 @@ int ethernetParser (Frame *frame, unsigned char *pFrame)
     return EXIT_SUCCESS;
 }
 
+/**
+ * \param frame {pointer to frame structure}
+ * \param pFrame {pointer to frame given for parsing}
+ * \return 0 if parsing went ok, other integer if not
+ */
 int ipParser (Frame *frame, unsigned char *pFrame)
 {
     int i;
@@ -119,6 +129,11 @@ int ipParser (Frame *frame, unsigned char *pFrame)
     return EXIT_SUCCESS;
 }
 
+/**
+ * \param frame {pointer to frame structure}
+ * \param pFrame {pointer to frame given for parsing}
+ * \return 0 if parsing went ok, other integer if not
+ */
 int tcpParser (Frame *frame, unsigned char *pFrame)
 {
     int i = 0;
@@ -175,6 +190,12 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
     return EXIT_SUCCESS;
 }
 
+/**
+ * \param frame {pointer to frame structure}
+ * \param pFrame {pointer to frame given for parsing}
+ * \param pResult {pointer to structure for giving parsed HTTP request to the detector}
+ * \return 0 if parsing went ok, other integer if not
+ */
 int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
 {
     char* HTTP_methods[] = {"GET","POST", "HEAD", "PUT","CONNECT", "DELETE", "OPTIONS", "TRACE", "COPY", "LOCK", "MKCOL", "MOVE", "PROPFIND",
@@ -237,4 +258,3 @@ int httpParser(Frame *frame, unsigned char *pFrame, Result* pResult)
 
     return EXIT_SUCCESS;
 }
-
