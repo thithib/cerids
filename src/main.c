@@ -28,6 +28,13 @@
 #include "detector.h"
 
 
+
+// var that will be used in pktcallback by the detection engine
+pcre * reCompiled;
+pcre_extra * pcreExtra;
+
+
+
 void pktcallback(u_char *user,const struct pcap_pkthdr* header,const u_char* packet);
 
 int main(int argc, char * argv[])
@@ -37,6 +44,7 @@ int main(int argc, char * argv[])
   Options options;
   pcap_t * handle;
   pid_t pid = 0;
+  char ** whitelist;
   
   if (geteuid() != 0){
     fprintf(stderr, "ERROR: You must be root\n");
@@ -70,16 +78,25 @@ int main(int argc, char * argv[])
     return EXIT_SUCCESS;
   }
 
+
   // debug or child process
- 
-  syslog(LOG_INFO, "Sniffer initialisation");
+  // getting whitelist
+  whitelist = getWhitelist();
+
+  syslog(LOG_DEBUG, "Detection engine startup");
+  detectorInit(&reCompiled, whitelist, &pcreExtra);
+
+
+  syslog(LOG_DEBUG, "Sniffer initialisation");
   snifferInit (&options, &handle);
 
+  syslog(LOG_INFO, "Initialisation complete. Running up.");
   snifferRun (&handle, -1, &pktcallback);
 
   syslog(LOG_INFO, "Exiting");
 
   snifferCleanUp(&handle);
+  detectorCleanUp(reCompiled, pcreExtra);
 
   closelog();
 
@@ -102,7 +119,15 @@ void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* p
       exit(EXIT_FAILURE);
   }
  
-  parser(header->len, array, pResult);
+  if (parser(header->len, array, pResult) == EXIT_SUCCESS) {
+    // match only GET req
+    if (strcmp((char *)pResult->http_method, "GET") == 0 &&
+        detectorMatch(reCompiled, pcreExtra, (char *)pResult->http_request_uri) != true){
+      // log error
+    }
+
+  }
+
   free(array);  
 }
 
