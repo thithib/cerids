@@ -84,14 +84,20 @@ int main(int argc, char * argv[])
   whitelist = getWhitelist();
 
   syslog(LOG_DEBUG, "Detection engine startup");
-  detectorInit(&reCompiled, whitelist, &pcreExtra);
+  if (detectorInit(&reCompiled, whitelist, &pcreExtra) != 0){
+    syslog(LOG_ERR, "Could not start detection engine");
+    return EXIT_FAILURE;
+  }
 
 
   syslog(LOG_DEBUG, "Sniffer initialisation");
-  snifferInit (&options, &handle);
+  if (snifferInit(&options, &handle) != 0){
+    syslog(LOG_ERR, "Could not initialise sniffer engine");
+    return EXIT_FAILURE;
+  }
 
   syslog(LOG_INFO, "Initialisation complete. Running up.");
-  snifferRun (&handle, -1, &pktcallback);
+  snifferRun(&handle, -1, &pktcallback);
 
   syslog(LOG_INFO, "Exiting");
 
