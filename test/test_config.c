@@ -13,31 +13,6 @@ int clean_suite_config(void) // operations to be done after all tests
     return 0;
 }
 
-void test_getConf(void)
-{
-    int argc;
-    char *argv1[3] = {"cerids", "-i", "eth0"};
-    char *argv2[2] = {"cerids", "-d"};
-    char *argv3[5] = {"cerids", "-i", "eth0", "-p", "port 0"};
-
-    Options *options = malloc(sizeof(Options));
-    argc = 3;
-    CU_ASSERT(getConf(argc, argv1, options) == 0);
-    free(options);
-   
-    options = malloc(sizeof(Options));
-    argc = 2;
-    optind = 0;
-    CU_ASSERT(getConf(argc, argv2, options) == 2);
-    free(options);
-
-    options = malloc(sizeof(Options));
-    argc = 5;
-    optind = 0;
-    CU_ASSERT(getConf(argc, argv3, options) == 0);
-    free(options);
-}
-
 void test_getConfByArgs(void)
 {
     int argc = 8;
@@ -58,6 +33,32 @@ void test_getConfByFile(void)
     CU_ASSERT(getConfByFile(options) == 0);
     CU_ASSERT(!options->debug);
 
+    free(options);
+}
+
+void test_getConf(void)
+{
+    int argc;
+    char *argv1[3] = {"cerids", "-i", "eth0"};
+    char *argv2[2] = {"cerids", "-d"};
+    char *argv3[5] = {"cerids", "-i", "eth0", "-p", "port 0"};
+
+    Options *options = malloc(sizeof(Options));
+    argc = 3;
+    optind = 0;
+    CU_ASSERT(getConf(argc, argv1, options) == 0);
+    free(options);
+   
+    options = malloc(sizeof(Options));
+    argc = 2;
+    optind = 0;
+    CU_ASSERT(getConf(argc, argv2, options) == 2);
+    free(options);
+
+    options = malloc(sizeof(Options));
+    argc = 5;
+    optind = 0;
+    CU_ASSERT(getConf(argc, argv3, options) == 0);
     free(options);
 }
 

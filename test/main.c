@@ -25,10 +25,10 @@ int main(void)
         return CU_get_error();
     }
 
-    if ((NULL == CU_add_test(pSuite_config, "test of getConf", test_getConf)) ||
-        (NULL == CU_add_test(pSuite_config, "test of getConfByArgs", test_getConfByArgs)) ||
+    if ((NULL == CU_add_test(pSuite_config, "test of getConfByArgs", test_getConfByArgs)) ||
         (NULL == CU_add_test(pSuite_config, "test of getConfByFile", test_getConfByFile)) ||
         (NULL == CU_add_test(pSuite_config, "test of getWhitelist", test_getWhitelist)) ||
+        (NULL == CU_add_test(pSuite_config, "test of getConf", test_getConf)) ||
         (NULL == CU_add_test(pSuite_config, "test of rulesCount", test_rulesCount)) ||
         (NULL == CU_add_test(pSuite_sniffer, "test of snifferInit", test_snifferInit)) ||
         (NULL == CU_add_test(pSuite_sniffer, "test of snifferRun", test_snifferRun)) ||
