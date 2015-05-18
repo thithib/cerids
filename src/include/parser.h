@@ -65,8 +65,8 @@ typedef struct frame
     u_char ip_ttl;
     u_char ip_proto;
     u_char ip_checksum[2];
-    u_char ip_src[5];
-    u_char ip_dst[5];
+    u_char ip_src[4];
+    u_char ip_dst[4];
     u_char* ip_options;
  
     //tcp
@@ -94,8 +94,8 @@ typedef struct frame
  */
 typedef struct result
 {
-    u_char* ip_src;
-    u_char* ip_dst;
+    u_char ip_src[4];
+    u_char ip_dst[4];
     u_char* http_method;
     u_char* http_request_uri;
     u_char* http_host;

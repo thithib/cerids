@@ -257,11 +257,10 @@ int httpParser(Frame *frame, Result* pResult)
     }
     ++(frame->http_request_uri);
 
-        printf("p %d.%d.%d.%d\n", frame->ip_src[0],
-            frame->ip_src[1], frame->ip_src[2], frame->ip_src[3]);
-    pResult->ip_src = (u_char *)strdup((const char *)frame->ip_src);
-
-    pResult->ip_dst = (u_char *)strdup((const char *)frame->ip_dst);
+    for(int i = 0; i < 4; i++){
+        pResult->ip_src[i] = frame->ip_src[i];
+        pResult->ip_dst[i] = frame->ip_dst[i];
+    }
     pResult->http_method = (u_char *)strdup((const char *)frame->http_method);
     pResult->http_request_uri = (u_char *)strdup((const char *)frame->http_request_uri);
     pResult->http_host = (u_char *)strdup((const char *)frame->http_host);
