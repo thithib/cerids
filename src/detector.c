@@ -87,7 +87,7 @@ bool detectorMatch (pcre* reCompiled, pcre_extra* pcreExtra, char* string)
             string,
             strlen(string),   // length of string
             0,              // start looking at this point
-            0,              // Options
+            PCRE_NOTEMPTY,              // Options
             subStrVec,           // subStrVec, in case of substrings        handling
             0);             // length of subStrVec
 
