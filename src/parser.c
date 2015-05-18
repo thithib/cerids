@@ -119,8 +119,6 @@ int ipParser (Frame *frame, unsigned char *pFrame)
         frame->ip_src[i] = pFrame[ETH_LENGTH + 12 + i];
         frame->ip_dst[i] = pFrame[ETH_LENGTH + 12 + IP_LENGTH + i]; 
     }
-    frame->ip_src[4] = '\0';
-    frame->ip_dst[4] = '\0';
 
     // Options
     if ((frame->ip_ihl - 12 - 2 * IP_LENGTH) != 0) { // if there is options
