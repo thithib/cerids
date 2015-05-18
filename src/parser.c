@@ -170,8 +170,8 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
     frame->tcp_flags[0] &= 15;
 
     // windows size value
-    frame->tcp_window_size_value = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl + 14] + (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl + 15];
-
+    frame->tcp_window_size_value = 16 * 16 * (int) pFrame[ETH_LENGTH + frame->ip_ihl + 14] + (int) pFrame[ETH_LENGTH + frame->ip_ihl + 15];
+    
     // checksum
     for (i = 0; i < 2; ++i)
         frame->tcp_checksum[i] = pFrame[ETH_LENGTH + frame->ip_ihl + 16 + i]; 
