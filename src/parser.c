@@ -148,8 +148,8 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
         return -3;
     }
     int i = 0;
-    frame->tcp_srcport = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl] + (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl + 1];
-    frame->tcp_dstport = 16 * 16 * (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl + 2] + (int)(u_char) pFrame[ETH_LENGTH + frame->ip_ihl + 3];
+    frame->tcp_srcport = 16 * 16 * (int) pFrame[ETH_LENGTH + frame->ip_ihl] + (int) pFrame[ETH_LENGTH + frame->ip_ihl + 1];
+    frame->tcp_dstport = 16 * 16 * (int) pFrame[ETH_LENGTH + frame->ip_ihl + 2] + (int) pFrame[ETH_LENGTH + frame->ip_ihl + 3];
 
     // sequence number and acknowledgement numbers
     for (i = 0; i < 4; ++i) {
