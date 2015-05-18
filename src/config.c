@@ -120,6 +120,8 @@ int getConfByFile(Options *options)
                 options->live = (strcmp(optValue, "true") == 0) ? true : false;
             else if (strcmp(optName, "debug") == 0)
                 options->debug = (strcmp(optValue, "true") == 0) ? true : false;
+            else if (strcmp(optName, "verbose") == 0)
+                options->verbose = atoi(optValue);
             else {
                 syslog(LOG_ERR, "Error in conf file: bad option name\n");
                 return -1;
