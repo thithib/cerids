@@ -35,10 +35,10 @@
 // var that will be used in pktcallback by the detection engine
 pcre * reCompiled;
 pcre_extra * pcreExtra;
-FILE * fh;
+FILE * logfile;
 
 void getDate(char * date);
-void logMatch(FILE * fh, Result * pResult);
+void logMatch(Result * pResult);
 void pktcallback(u_char *user,const struct pcap_pkthdr* header,const u_char* packet);
 
 int main(int argc, char * argv[])
@@ -80,6 +80,7 @@ int main(int argc, char * argv[])
   }
 
   syslog(LOG_INFO, "Starting up");
+  // fork if not in foreground
   if (!options.foreground)
     pid = fork();
 
@@ -90,12 +91,6 @@ int main(int argc, char * argv[])
   else if (pid > 0) {
     // parent process and not debug
     return EXIT_SUCCESS;
-  }
-
-  fh = fopen("/var/log/cerids/match.log", "a");
-  if (fh == NULL){
-    syslog(LOG_ERR, "Could not write into logfile %s. Check directory or rights.", "/var/log/cerids/match.log");
-    return EXIT_FAILURE;
   }
 
 
@@ -117,10 +112,17 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
+  // open logfile
+  logfile = fopen("/var/log/cerids/match.log", "a");
+  if (logfile == NULL){
+    syslog(LOG_ERR, "Could not write into logfile %s. Check directory existence or rights.", "/var/log/cerids/match.log");
+    return EXIT_FAILURE;
+  }
+
   syslog(LOG_INFO, "Initialisation complete. Running up.");
   snifferRun(&handle, -1, &pktcallback);
 
-  fclose(fh);
+  fclose(logfile);
 
   syslog(LOG_INFO, "Exiting");
 
@@ -148,9 +150,7 @@ void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* p
     // match only GET req
     if (strcmp((char *)pResult.http_method, "GET") == 0){
       if(detectorMatch(reCompiled, pcreExtra, (char *)pResult.http_request_uri) == false){
-        printf("%d.%d.%d.%d\n", pResult.ip_src[0],
-            pResult.ip_src[1], pResult.ip_src[2], pResult.ip_src[3]);
-        logMatch(fh, &pResult);
+        logMatch(&pResult);
       }
     }
 
@@ -158,24 +158,17 @@ void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* p
 }
 
 
-void logMatch(FILE * fh, Result * pResult)
+void logMatch(Result * pResult)
 {
-  char * logline = malloc(256*sizeof(char));
-        printf("%d.%d.%d.%d\n", pResult->ip_src[0],
-            pResult->ip_src[1], pResult->ip_src[2], pResult->ip_src[3]);
-  char * src_ip = malloc(16*sizeof(char));
-  char * date = malloc(26*sizeof(char));
+  char src_ip[16];
+  char date[26];
   getDate(date);
 
   snprintf(src_ip, 16, "%d.%d.%d.%d", pResult->ip_src[0],
       pResult->ip_src[1], pResult->ip_src[2], pResult->ip_src[3]);
-  snprintf(logline, 256, "%s %s (%s) GET %s\n", date, src_ip, 
+  fprintf(logfile, "%s %s (%s) GET %s\n", date, src_ip, 
                 pResult->http_host, pResult->http_request_uri);
-  puts(logline);
-  fputs(logline, fh);
-  free(logline);
-  free(src_ip);
-  free(date);
+  fflush(logfile);
 }
 
 void getDate(char * date)
