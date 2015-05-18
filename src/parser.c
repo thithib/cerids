@@ -222,6 +222,7 @@ int httpParser(Frame *frame, Result* pResult)
             syslog(LOG_INFO, "HTTP Answer");
         else
             syslog(LOG_DEBUG, "Non HTTP Header");
+        frameCleanUp(frame);
         return -3;
     }
 
@@ -238,6 +239,7 @@ int httpParser(Frame *frame, Result* pResult)
     frame->http_host = (u_char*) strstr((char *) frame->tcp_data, "Host:");
     if (frame->http_host == NULL) {
         syslog(LOG_DEBUG, "No host in request");
+        frameCleanUp(frame);
         return -3;
     }
     frame->http_host += 6;
@@ -245,6 +247,7 @@ int httpParser(Frame *frame, Result* pResult)
     u_char* temp = (u_char*) strchr((char *) frame->http_host, '\r');
     if (temp == NULL) {
         syslog(LOG_DEBUG, "Invalid HTTP content (wrong format/newlines)");
+        frameCleanUp(frame);
         return -3;
     }
     *temp = '\0'; // we isolated the host
@@ -254,6 +257,7 @@ int httpParser(Frame *frame, Result* pResult)
 
     frame->http_request_uri = (u_char*) strchr((char*) frame->tcp_data, ' ');
     if (frame->http_request_uri == NULL) {
+        frameCleanUp(frame);
         return -3;
     }
     ++(frame->http_request_uri);
@@ -274,6 +278,7 @@ int httpParser(Frame *frame, Result* pResult)
  * \return EXIT_SUCCESS
  */
 int frameCleanUp(Frame * frame){
+  
   free(frame->tcp_options);
   free(frame->tcp_data);
 
