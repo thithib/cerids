@@ -85,7 +85,7 @@ void test_httpParser (void)
     ipParser(&frame1, pFrame1);
     tcpParser(&frame1, pFrame1);
 
-    CU_ASSERT(httpParser(&frame1, pFrame1, pResult) == EXIT_SUCCESS && strcmp((char*) pResult->http_method, "GET") == 0 && strcmp((char*) pResult->http_request_uri, "/") == 0 && strcmp((char*) pResult->http_host, "www.google.com") == 0);
+    CU_ASSERT(httpParser(&frame1, pResult) == EXIT_SUCCESS && strcmp((char*) pResult->http_method, "GET") == 0 && strcmp((char*) pResult->http_request_uri, "/") == 0 && strcmp((char*) pResult->http_host, "www.google.com") == 0);
 
     free(pFrame1);
     free(pFrame2);
@@ -100,9 +100,9 @@ void test_parser (void)
     Result *pResult = malloc(sizeof(Result));
     generateFrames(pFrame1, pFrame2, pFrame3);
 
-    CU_ASSERT(parser(strlen((char*) pFrame1), pFrame1, pResult) == EXIT_SUCCESS && strcmp((char*) pResult->http_method, "GET") == 0 && strcmp((char*) pResult->http_request_uri, "/") == 0 && strcmp((char*) pResult->http_host, "www.google.com") == 0);
-    CU_ASSERT(parser(strlen((char*) pFrame2), pFrame2, pResult) == EXIT_FAILURE);
-    CU_ASSERT(parser(strlen((char*) pFrame3), pFrame3, pResult) == EXIT_FAILURE);
+    CU_ASSERT(parser(pFrame1, pResult) == EXIT_SUCCESS && strcmp((char*) pResult->http_method, "GET") == 0 && strcmp((char*) pResult->http_request_uri, "/") == 0 && strcmp((char*) pResult->http_host, "www.google.com") == 0);
+    CU_ASSERT(parser(pFrame2, pResult) == EXIT_FAILURE);
+    CU_ASSERT(parser(pFrame3, pResult) == EXIT_FAILURE);
 
 
     free(pFrame1);
