@@ -136,35 +136,25 @@ int main(int argc, char * argv[])
 
 void pktcallback(u_char *user, const struct pcap_pkthdr* header, const u_char* packet)
 {
-  Result * pResult = NULL;
-  unsigned char *array = NULL;
+  Result pResult;
   //printf("Sniffed a packet from %s with length %d\n", user, header->len);
   if (header->len > 10000 || header->len < 20){
     syslog(LOG_CRIT, "Strange packet size detected (maybe handcrafted). POSSIBLE ATTACK");
     return;
   }
 
-  pResult = malloc(sizeof(Result));
-  if (pResult == NULL) {
-      syslog(LOG_ERR, "Could not allocate memory in packet callback");
-      exit(EXIT_FAILURE);
-  }
- 
-  if (parser((unsigned char *)packet, pResult) == EXIT_SUCCESS) {
+  if (parser((unsigned char *)packet, &pResult) == EXIT_SUCCESS) {
 
     // match only GET req
-    if (strcmp((char *)pResult->http_method, "GET") == 0){
-      if(detectorMatch(reCompiled, pcreExtra, (char *)pResult->http_request_uri) == false){
-        printf("%d.%d.%d.%d\n", pResult->ip_src[0],
-            pResult->ip_src[1], pResult->ip_src[2], pResult->ip_src[3]);
-        logMatch(fh, pResult);
+    if (strcmp((char *)pResult.http_method, "GET") == 0){
+      if(detectorMatch(reCompiled, pcreExtra, (char *)pResult.http_request_uri) == false){
+        printf("%d.%d.%d.%d\n", pResult.ip_src[0],
+            pResult.ip_src[1], pResult.ip_src[2], pResult.ip_src[3]);
+        logMatch(fh, &pResult);
       }
     }
 
   }
-
-  free(pResult);
-  free(array);  
 }
 
 
