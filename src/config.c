@@ -143,6 +143,7 @@ char** getWhitelist(void)
     char buffer[BUFFER_LENGTH];
     char **rules = NULL;
     int i = 0;
+    char * position;
 
     if ((whitelist = fopen(MAIN_WHITELIST_FILE, "r")) == NULL)
         syslog(LOG_DEBUG, "Cannot open main whitelist file");
@@ -161,6 +162,9 @@ char** getWhitelist(void)
     }
 
     while (fgets(buffer, BUFFER_LENGTH, whitelist) != NULL) {
+        position = strchr(buffer, '\n');
+        if (position != NULL)
+          *position = '\0';
 
         if ((*(rules+i) = malloc((strlen(buffer)+1)*sizeof(char))) == NULL) {
             syslog(LOG_ERR, "Memory allocation error");
