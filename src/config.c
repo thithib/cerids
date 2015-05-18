@@ -15,7 +15,7 @@
 int getConf(int argc, char *argv[], Options *options)
 {
     // set defaults
-    //options->logfile = strdup("/var/log/cerids/match.log");
+    options->logfile = strdup("/var/log/cerids/match.log");
     options->filter = strdup("port 80");
     options->dev = NULL;
     options->filename = NULL;
@@ -67,9 +67,9 @@ int getConfByArgs(int argc, char *argv[], Options *options)
             case 'v':
                 options->verbose++;
                 break;
-            /*             case 'o':
+            case 'o':
                 options->logfile = strdup(optarg);
-                break;*/
+                break;
             default:
                 usage(argv[0]);
         }
@@ -231,17 +231,18 @@ int rulesCount(void)
 
 void usage(char *binname)
 {
-    fprintf(stderr, "Usage: %s [-h] [-d] [-vvv] [-f filename] [-i device] [-p <pcap filter>] \n", binname);
+    fprintf(stderr, "Usage: %s [-h] [-d] [-vvv] [-f filename] [-i device] [-o filename] [-p <pcap filter>] \n", binname);
     exit(EXIT_FAILURE);
 }
 
 void help(char *binname)
 {
-    printf("Usage: %s [-h] [-d] [-vvv] [-f filename] [-i device] [-p <pcap filter>]\n", binname);
+    printf("Usage: %s [-h] [-d] [-vvv] [-f filename] [-i device] [-o filename] [-p <pcap filter>]\n", binname);
     puts("-d\t\t\tActivate debug mode");
     puts("-v\t\t\tVerbosity (add more -v to be more verbose");
     puts("-f <filename>\t\tRead data from a pcap file (Cannot be used with -i)");
     puts("-i <device>\t\tRead packet from an interface (Cannot be used with -f)");
+    puts("-o <filename>\t\tLogging file for strange requests");
     puts("-p <port>\t\tModify the pcap filter (pcap style, default: \"port 80\")");
     exit(EXIT_SUCCESS);
 }

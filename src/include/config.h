@@ -66,6 +66,7 @@ typedef struct Options {
     char *dev;
     char *filename;
     char *filter;
+    char *logfile;
     bool live;
     bool debug;
     bool foreground;

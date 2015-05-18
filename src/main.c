@@ -20,8 +20,6 @@
 #include <stdbool.h>
 #include <syslog.h>
 #include <sys/types.h>
-#include <sys/stat.h>
-#include <libgen.h>
 #include <time.h>
 
 
@@ -62,14 +60,6 @@ int main(int argc, char * argv[])
   // set log verbosity (previous + arg verbosity)
   setlogmask(LOG_UPTO(LOG_WARNING + options.verbose));
 
-//  struct stat s;
-//  char * logfilecopy = strdup(options.logfile);
-/* 
-  if (stat(dirname(logfilecopy), &s) != -1 && !S_ISDIR(s.st_mode)){
-    syslog(LOG_ERR, "Logdir %s does not exist. Please create it.", logfilecopy);
-    return EXIT_FAILURE;
-  }
-*/
   if (geteuid() != 0 && options.filename == NULL){
     fprintf(stderr, "ERROR: You must be root\n");
     return EXIT_FAILURE;
@@ -113,9 +103,9 @@ int main(int argc, char * argv[])
   }
 
   // open logfile
-  logfile = fopen("/var/log/cerids/match.log", "a");
+  logfile = fopen(options.logfile, "a");
   if (logfile == NULL){
-    syslog(LOG_ERR, "Could not write into logfile %s. Check directory existence or rights.", "/var/log/cerids/match.log");
+    syslog(LOG_ERR, "Could not write into logfile %s. Check directory existence or rights.", options.logfile);
     return EXIT_FAILURE;
   }
 

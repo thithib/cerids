@@ -24,8 +24,8 @@
 #########################################################################################
 
 CC=gcc
-LDFLAG=-lpcap -lpcre
-CFLAG=-Wall -std=gnu99 -Iinclude
+LDFLAG=-lpcap -lpcre -Os
+CFLAG=-Wall -std=gnu99 -Iinclude -Os
 EXEC=cerids
 
 all: $(EXEC) 
