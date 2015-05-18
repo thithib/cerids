@@ -181,14 +181,15 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
         frame->tcp_urg_pointer[i] = pFrame[ETH_LENGTH + frame->ip_ihl + 18 + i];
 
     // TCP options
-    frame->tcp_options = malloc( (frame->tcp_offset - 20) * sizeof(u_char) );
-    if (frame->tcp_options == NULL) {
-        syslog(LOG_ERR, "Couldn't allocate memory");
-        return EXIT_FAILURE;
+    if(frame->tcp_offset - 20 != 0) { //if there are tcp options
+        frame->tcp_options = malloc( (frame->tcp_offset - 20) * sizeof(u_char) );
+        if (frame->tcp_options == NULL) {
+            syslog(LOG_ERR, "Couldn't allocate memory");
+            return EXIT_FAILURE;
+        }
+        for (i = 0; i < frame->tcp_offset - 20 ; ++i)
+            frame->tcp_options[i] = pFrame[ETH_LENGTH + frame->ip_ihl + 20 + i];
     }
-
-    for (i = 0; i < frame->tcp_offset - 20 ; ++i)
-        frame->tcp_options[i] = pFrame[ETH_LENGTH + frame->ip_ihl + 20 + i];
 
     // TCP data
     int tcp_data_length = frame->ip_len - frame->ip_ihl - frame->tcp_offset;
@@ -197,7 +198,7 @@ int tcpParser (Frame *frame, unsigned char *pFrame)
         syslog(LOG_ERR, "Couldn't allocate memory");
         return EXIT_FAILURE;
     }
-
+    
     for (i = 0; i < tcp_data_length; ++i)
         frame->tcp_data[i] = pFrame[ETH_LENGTH + frame->ip_ihl + frame->tcp_offset + i];
     return EXIT_SUCCESS;
