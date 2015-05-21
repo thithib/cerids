@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['sniffer_2ec',['sniffer.c',['../sniffer_8c.html',1,'']]],
-  ['sniffer_2eh',['sniffer.h',['../sniffer_8h.html',1,'']]],
-  ['sniffercleanup',['snifferCleanUp',['../sniffer_8h.html#a50ecf233589050b379551ab3cb37d25a',1,'snifferCleanUp(pcap_t **handle):&#160;sniffer.c'],['../sniffer_8c.html#a50ecf233589050b379551ab3cb37d25a',1,'snifferCleanUp(pcap_t **handle):&#160;sniffer.c']]],
-  ['snifferinit',['snifferInit',['../sniffer_8h.html#ae1ccc7d47e49b1185c07e4e721787d37',1,'snifferInit(Options *options, pcap_t **handle):&#160;sniffer.c'],['../sniffer_8c.html#ae1ccc7d47e49b1185c07e4e721787d37',1,'snifferInit(Options *options, pcap_t **handle):&#160;sniffer.c']]],
-  ['snifferrun',['snifferRun',['../sniffer_8h.html#a9fff7e7193e295ade078ce6ef6a3b79a',1,'snifferRun(pcap_t **handle, int cnt, pcap_handler callback):&#160;sniffer.c'],['../sniffer_8c.html#a9fff7e7193e295ade078ce6ef6a3b79a',1,'snifferRun(pcap_t **handle, int cnt, pcap_handler callback):&#160;sniffer.c']]]
+  ['local_5fconf_5ffile',['LOCAL_CONF_FILE',['../config_8h.html#a48857ebd61bceace1a89c60e4712ce0b',1,'config.h']]],
+  ['local_5fwhitelist_5ffile',['LOCAL_WHITELIST_FILE',['../config_8h.html#a070e146d41589e90639e6cfa81c3f343',1,'config.h']]]
 ];

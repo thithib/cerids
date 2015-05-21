@@ -118,48 +118,56 @@ $(document).ready(function(){initNavTree('config_8h_source.html','');});
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;unistd.h&gt;</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;string.h&gt;</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="config_8h.html#a2b53ff59ad6fe7d737de442d3dfe0634">   21</a></span>&#160;<span class="preprocessor">#define CONF_FILE &quot;../conf/cerids.conf&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="config_8h.html#a48857ebd61bceace1a89c60e4712ce0b">   21</a></span>&#160;<span class="preprocessor">#define LOCAL_CONF_FILE &quot;../conf/cerids.conf&quot;</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="config_8h.html#a20385395776edd2bd2c492160105bae8">   27</a></span>&#160;<span class="preprocessor">#define WHITELIST_FILE &quot;../conf/whitelist.txt&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="config_8h.html#ad4746423de94ee816b57ff9b5ec35ad0">   27</a></span>&#160;<span class="preprocessor">#define MAIN_CONF_FILE &quot;/etc/cerids/cerids.conf&quot;</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="config_8h.html#af7b7dc9a200cb1404c280bd500fd1551">   33</a></span>&#160;<span class="preprocessor">#define BUFFER_LENGTH 1000</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="config_8h.html#a070e146d41589e90639e6cfa81c3f343">   33</a></span>&#160;<span class="preprocessor">#define LOCAL_WHITELIST_FILE &quot;../conf/whitelist.txt&quot;</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="config_8h.html#ad7bb86d2e41fb580002c59ff867f027d">   39</a></span>&#160;<span class="preprocessor">#define OPT_NAME_LENGTH 20</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="config_8h.html#a1cf027e8a20bbd0c04a56b272e87e42d">   39</a></span>&#160;<span class="preprocessor">#define MAIN_WHITELIST_FILE &quot;/etc/cerids/whitelist.txt&quot;</span></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="config_8h.html#ac86aabee0a3633860ad30f1043a09d34">   45</a></span>&#160;<span class="preprocessor">#define OPT_VALUE_LENGTH 100</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="config_8h.html#af7b7dc9a200cb1404c280bd500fd1551">   45</a></span>&#160;<span class="preprocessor">#define BUFFER_LENGTH 1000</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="structOptions.html">   53</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structOptions.html">Options</a> {</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">char</span> *dev;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">char</span> *filename;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">int</span> port;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordtype">bool</span> live;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">bool</span> debug;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">bool</span> foreground;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;} <a class="code" href="structOptions.html">Options</a>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keywordtype">void</span> usage(<span class="keywordtype">char</span> *binname);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keywordtype">void</span> help(<span class="keywordtype">char</span> *binname);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keywordtype">int</span> <a class="code" href="config_8h.html#a5e793e400545e35329f45f16dc673610">getConf</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *argv[], <a class="code" href="structOptions.html">Options</a> *options);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keywordtype">int</span> <a class="code" href="config_8h.html#a45d679aa74ecc16cc8d2f91a70a465ae">getConfByArgs</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *argv[], <a class="code" href="structOptions.html">Options</a> *options);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keywordtype">int</span> <a class="code" href="config_8h.html#a9235134bf5001d1a7123be817db63d98">getConfByFile</a>(<a class="code" href="structOptions.html">Options</a> *options);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keywordtype">char</span>** <a class="code" href="config_8h.html#a227507f13d8370d93b8db535f668e4c3">getWhitelist</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keywordtype">int</span> <a class="code" href="config_8h.html#aaec77834a8e5275e28b53110713ab339">rulesCount</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="config_8h.html#ad7bb86d2e41fb580002c59ff867f027d">   51</a></span>&#160;<span class="preprocessor">#define OPT_NAME_LENGTH 20</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="config_8h.html#ac86aabee0a3633860ad30f1043a09d34">   57</a></span>&#160;<span class="preprocessor">#define OPT_VALUE_LENGTH 100</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="structOptions.html">   65</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structOptions.html">Options</a> {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">char</span> *dev;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">char</span> *filename;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">char</span> *filter;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">char</span> *logfile;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">bool</span> live;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">bool</span> debug;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">bool</span> foreground;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">int</span> verbose;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;} <a class="code" href="structOptions.html">Options</a>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="keywordtype">int</span> <a class="code" href="config_8h.html#a8fabf843ed3b4ac21ddeb6ab8d0594ee">cleanWhitelist</a>(<span class="keywordtype">char</span> ** whitelist);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="keywordtype">void</span> usage(<span class="keywordtype">char</span> *binname);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="keywordtype">void</span> help(<span class="keywordtype">char</span> *binname);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="keywordtype">int</span> <a class="code" href="config_8h.html#a5e793e400545e35329f45f16dc673610">getConf</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *argv[], <a class="code" href="structOptions.html">Options</a> *options);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="keywordtype">int</span> <a class="code" href="config_8h.html#a45d679aa74ecc16cc8d2f91a70a465ae">getConfByArgs</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *argv[], <a class="code" href="structOptions.html">Options</a> *options);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="keywordtype">int</span> <a class="code" href="config_8h.html#a9235134bf5001d1a7123be817db63d98">getConfByFile</a>(<a class="code" href="structOptions.html">Options</a> *options);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="keywordtype">char</span>** <a class="code" href="config_8h.html#a227507f13d8370d93b8db535f668e4c3">getWhitelist</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="keywordtype">int</span> <a class="code" href="config_8h.html#aaec77834a8e5275e28b53110713ab339">rulesCount</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
 <div class="ttc" id="config_8h_html_a5e793e400545e35329f45f16dc673610"><div class="ttname"><a href="config_8h.html#a5e793e400545e35329f45f16dc673610">getConf</a></div><div class="ttdeci">int getConf(int argc, char *argv[], Options *options)</div><div class="ttdef"><b>Definition:</b> config.c:15</div></div>
-<div class="ttc" id="config_8h_html_aaec77834a8e5275e28b53110713ab339"><div class="ttname"><a href="config_8h.html#aaec77834a8e5275e28b53110713ab339">rulesCount</a></div><div class="ttdeci">int rulesCount(void)</div><div class="ttdef"><b>Definition:</b> config.c:173</div></div>
-<div class="ttc" id="config_8h_html_a45d679aa74ecc16cc8d2f91a70a465ae"><div class="ttname"><a href="config_8h.html#a45d679aa74ecc16cc8d2f91a70a465ae">getConfByArgs</a></div><div class="ttdeci">int getConfByArgs(int argc, char *argv[], Options *options)</div><div class="ttdef"><b>Definition:</b> config.c:47</div></div>
-<div class="ttc" id="config_8h_html_a9235134bf5001d1a7123be817db63d98"><div class="ttname"><a href="config_8h.html#a9235134bf5001d1a7123be817db63d98">getConfByFile</a></div><div class="ttdeci">int getConfByFile(Options *options)</div><div class="ttdef"><b>Definition:</b> config.c:83</div></div>
-<div class="ttc" id="config_8h_html_a227507f13d8370d93b8db535f668e4c3"><div class="ttname"><a href="config_8h.html#a227507f13d8370d93b8db535f668e4c3">getWhitelist</a></div><div class="ttdeci">char ** getWhitelist(void)</div><div class="ttdef"><b>Definition:</b> config.c:133</div></div>
-<div class="ttc" id="structOptions_html"><div class="ttname"><a href="structOptions.html">Options</a></div><div class="ttdoc">Configuration options. </div><div class="ttdef"><b>Definition:</b> config.h:53</div></div>
+<div class="ttc" id="config_8h_html_a8fabf843ed3b4ac21ddeb6ab8d0594ee"><div class="ttname"><a href="config_8h.html#a8fabf843ed3b4ac21ddeb6ab8d0594ee">cleanWhitelist</a></div><div class="ttdeci">int cleanWhitelist(char **whitelist)</div><div class="ttdef"><b>Definition:</b> config.c:194</div></div>
+<div class="ttc" id="config_8h_html_aaec77834a8e5275e28b53110713ab339"><div class="ttname"><a href="config_8h.html#aaec77834a8e5275e28b53110713ab339">rulesCount</a></div><div class="ttdeci">int rulesCount(void)</div><div class="ttdef"><b>Definition:</b> config.c:209</div></div>
+<div class="ttc" id="config_8h_html_a45d679aa74ecc16cc8d2f91a70a465ae"><div class="ttname"><a href="config_8h.html#a45d679aa74ecc16cc8d2f91a70a465ae">getConfByArgs</a></div><div class="ttdeci">int getConfByArgs(int argc, char *argv[], Options *options)</div><div class="ttdef"><b>Definition:</b> config.c:44</div></div>
+<div class="ttc" id="config_8h_html_a9235134bf5001d1a7123be817db63d98"><div class="ttname"><a href="config_8h.html#a9235134bf5001d1a7123be817db63d98">getConfByFile</a></div><div class="ttdeci">int getConfByFile(Options *options)</div><div class="ttdef"><b>Definition:</b> config.c:86</div></div>
+<div class="ttc" id="config_8h_html_a227507f13d8370d93b8db535f668e4c3"><div class="ttname"><a href="config_8h.html#a227507f13d8370d93b8db535f668e4c3">getWhitelist</a></div><div class="ttdeci">char ** getWhitelist(void)</div><div class="ttdef"><b>Definition:</b> config.c:142</div></div>
+<div class="ttc" id="structOptions_html"><div class="ttname"><a href="structOptions.html">Options</a></div><div class="ttdoc">Configuration options. </div><div class="ttdef"><b>Definition:</b> config.h:65</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_b0856f6b0d80ccb263b2f415c91f9e17.html">include</a></li><li class="navelem"><a class="el" href="config_8h.html">config.h</a></li>
-    <li class="footer">Generated on Sat May 16 2015 04:43:39 for CerIDS by
+    <li class="footer">Generated on Fri May 22 2015 00:13:18 for CerIDS by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.9.1 </li>
   </ul>

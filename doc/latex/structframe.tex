@@ -1,5 +1,14 @@
 \hypertarget{structframe}{}\section{frame Struct Reference}
 \label{structframe}\index{frame@{frame}}
+
+
+This structure holds ethernet, ip, tcp and http fields.  
+
+
+
+
+{\ttfamily \#include $<$parser.\+h$>$}
+
 \subsection*{Data Fields}
 \begin{DoxyCompactItemize}
 \item 
@@ -12,7 +21,10 @@
 \hypertarget{structframe_a0a930cfc929ad3cf439f8900e7bae943}{}u\+\_\+char {\bfseries eth\+\_\+type} \mbox{[}2\mbox{]}\label{structframe_a0a930cfc929ad3cf439f8900e7bae943}
 
 \item 
-\hypertarget{structframe_ac1a26e2d381d0956605213148be7b897}{}u\+\_\+char {\bfseries ip\+\_\+vers\+\_\+ihl}\label{structframe_ac1a26e2d381d0956605213148be7b897}
+\hypertarget{structframe_a5418735b35cbad1c9b178e0d2b8280d7}{}u\+\_\+char {\bfseries ip\+\_\+vers}\label{structframe_a5418735b35cbad1c9b178e0d2b8280d7}
+
+\item 
+\hypertarget{structframe_ae5704f88df87e7e9bb89505317e5c638}{}int {\bfseries ip\+\_\+ihl}\label{structframe_ae5704f88df87e7e9bb89505317e5c638}
 
 \item 
 \hypertarget{structframe_a6097ab4474472b66fbbb546ab0322a84}{}u\+\_\+char {\bfseries ip\+\_\+tos}\label{structframe_a6097ab4474472b66fbbb546ab0322a84}
@@ -40,6 +52,9 @@
 
 \item 
 \hypertarget{structframe_af8227daba6353a92bd9a14104aeae6c4}{}u\+\_\+char {\bfseries ip\+\_\+dst} \mbox{[}4\mbox{]}\label{structframe_af8227daba6353a92bd9a14104aeae6c4}
+
+\item 
+\hypertarget{structframe_a1a4b5bba5c1985b7ee2b11bae3aa81d5}{}u\+\_\+char $\ast$ {\bfseries ip\+\_\+options}\label{structframe_a1a4b5bba5c1985b7ee2b11bae3aa81d5}
 
 \item 
 \hypertarget{structframe_ae1ec29e43066fdc83e8e9b7e2d0b8db0}{}int {\bfseries tcp\+\_\+srcport}\label{structframe_ae1ec29e43066fdc83e8e9b7e2d0b8db0}
@@ -85,6 +100,9 @@
 
 \end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+This structure holds ethernet, ip, tcp and http fields. 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

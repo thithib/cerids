@@ -10,13 +10,32 @@ Header file for parser module.
 {\ttfamily \#include $<$stdbool.\+h$>$}\\*
 {\ttfamily \#include $<$unistd.\+h$>$}\\*
 {\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$syslog.\+h$>$}\\*
 \subsection*{Data Structures}
 \begin{DoxyCompactItemize}
 \item 
 struct \hyperlink{structframe}{frame}
-\item 
+\begin{DoxyCompactList}\small\item\em This structure holds ethernet, ip, tcp and http fields. \end{DoxyCompactList}\item 
 struct \hyperlink{structresult}{result}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em This structure holds informations about every valid H\+T\+T\+P request to be analyzed by the detector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{parser_8h_a343b0e70d7ab7e4659f57d5283738c8a}{}\#define \hyperlink{parser_8h_a343b0e70d7ab7e4659f57d5283738c8a}{E\+T\+H\+\_\+\+L\+E\+N\+G\+T\+H}~14\label{parser_8h_a343b0e70d7ab7e4659f57d5283738c8a}
+
+\begin{DoxyCompactList}\small\item\em Ethernet Header Length. \end{DoxyCompactList}\item 
+\hypertarget{parser_8h_ac941b6796b26d46622ba39ad70667ed3}{}\#define \hyperlink{parser_8h_ac941b6796b26d46622ba39ad70667ed3}{M\+A\+C\+\_\+\+L\+E\+N\+G\+T\+H}~6\label{parser_8h_ac941b6796b26d46622ba39ad70667ed3}
+
+\begin{DoxyCompactList}\small\item\em Mac address length. \end{DoxyCompactList}\item 
+\hypertarget{parser_8h_aa0190d843ddfce077839f36a8517c945}{}\#define \hyperlink{parser_8h_aa0190d843ddfce077839f36a8517c945}{E\+T\+H\+\_\+\+T\+Y\+P\+E\+\_\+\+L\+E\+N\+G\+T\+H}~2\label{parser_8h_aa0190d843ddfce077839f36a8517c945}
+
+\begin{DoxyCompactList}\small\item\em Length of Ether\+Type. \end{DoxyCompactList}\item 
+\hypertarget{parser_8h_a26af4e86634a5afbbe4ae1326886c9b2}{}\#define \hyperlink{parser_8h_a26af4e86634a5afbbe4ae1326886c9b2}{I\+P\+\_\+\+L\+E\+N\+G\+T\+H}~4\label{parser_8h_a26af4e86634a5afbbe4ae1326886c9b2}
+
+\begin{DoxyCompactList}\small\item\em I\+Pv4 Length. \end{DoxyCompactList}\item 
+\hypertarget{parser_8h_a9540bf28ccee42679bf20ce11a4011e9}{}\#define \hyperlink{parser_8h_a9540bf28ccee42679bf20ce11a4011e9}{N\+U\+M\+B\+E\+R\+\_\+\+M\+E\+T\+H\+O\+D\+S}~27\label{parser_8h_a9540bf28ccee42679bf20ce11a4011e9}
+
+\begin{DoxyCompactList}\small\item\em Number of methods. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
@@ -29,11 +48,128 @@ struct \hyperlink{structresult}{result}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{parser_8h_a4e0f6f6b1157dbe1cedafd92bec72cad}{}int {\bfseries parser} (int, unsigned char $\ast$, \hyperlink{structresult}{Result} $\ast$)\label{parser_8h_a4e0f6f6b1157dbe1cedafd92bec72cad}
-
+int \hyperlink{parser_8h_a4891262bb707e733e26984829b1987e4}{parser} (unsigned char $\ast$, \hyperlink{structresult}{Result} $\ast$)
+\item 
+int \hyperlink{parser_8h_ad2c758bbf3f0fdd6c4924abdfa70ed61}{frame\+Clean\+Up} (\hyperlink{structframe}{Frame} $\ast$\hyperlink{structframe}{frame})
+\item 
+int \hyperlink{parser_8h_ac1dfaaf6108d48b8d37bfe8c6ded0bb0}{ethernet\+Parser} (\hyperlink{structframe}{Frame} $\ast$, unsigned char $\ast$)
+\item 
+int \hyperlink{parser_8h_adae34dd97008a6a2f76f3ab65b411e96}{ip\+Parser} (\hyperlink{structframe}{Frame} $\ast$, unsigned char $\ast$)
+\item 
+int \hyperlink{parser_8h_a8ce9312c2839327c1a83a53bf0b751e6}{tcp\+Parser} (\hyperlink{structframe}{Frame} $\ast$, unsigned char $\ast$)
+\item 
+int \hyperlink{parser_8h_a9b30017e306bfbb76f21e5d4b2e310f4}{http\+Parser} (\hyperlink{structframe}{Frame} $\ast$, \hyperlink{structresult}{Result} $\ast$)
 \end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
 Header file for parser module. 
 
+
+
+\subsection{Function Documentation}
+\hypertarget{parser_8h_ac1dfaaf6108d48b8d37bfe8c6ded0bb0}{}\index{parser.\+h@{parser.\+h}!ethernet\+Parser@{ethernet\+Parser}}
+\index{ethernet\+Parser@{ethernet\+Parser}!parser.\+h@{parser.\+h}}
+\subsubsection[{ethernet\+Parser}]{\setlength{\rightskip}{0pt plus 5cm}int ethernet\+Parser (
+\begin{DoxyParamCaption}
+\item[{{\bf Frame} $\ast$}]{frame, }
+\item[{unsigned char $\ast$}]{p\+Frame}
+\end{DoxyParamCaption}
+)}\label{parser_8h_ac1dfaaf6108d48b8d37bfe8c6ded0bb0}
+
+\begin{DoxyParams}{Parameters}
+{\em frame} & \{pointer to frame structure\} \\
+\hline
+{\em p\+Frame} & \{pointer to frame given for parsing\} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if parsing went ok, other integer if not 
+\end{DoxyReturn}
+\hypertarget{parser_8h_ad2c758bbf3f0fdd6c4924abdfa70ed61}{}\index{parser.\+h@{parser.\+h}!frame\+Clean\+Up@{frame\+Clean\+Up}}
+\index{frame\+Clean\+Up@{frame\+Clean\+Up}!parser.\+h@{parser.\+h}}
+\subsubsection[{frame\+Clean\+Up}]{\setlength{\rightskip}{0pt plus 5cm}int frame\+Clean\+Up (
+\begin{DoxyParamCaption}
+\item[{{\bf Frame} $\ast$}]{frame}
+\end{DoxyParamCaption}
+)}\label{parser_8h_ad2c758bbf3f0fdd6c4924abdfa70ed61}
+
+\begin{DoxyParams}{Parameters}
+{\em frame} & \{pointer to frame structure\} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+E\+X\+I\+T\+\_\+\+S\+U\+C\+C\+E\+S\+S 
+\end{DoxyReturn}
+\hypertarget{parser_8h_a9b30017e306bfbb76f21e5d4b2e310f4}{}\index{parser.\+h@{parser.\+h}!http\+Parser@{http\+Parser}}
+\index{http\+Parser@{http\+Parser}!parser.\+h@{parser.\+h}}
+\subsubsection[{http\+Parser}]{\setlength{\rightskip}{0pt plus 5cm}int http\+Parser (
+\begin{DoxyParamCaption}
+\item[{{\bf Frame} $\ast$}]{frame, }
+\item[{{\bf Result} $\ast$}]{p\+Result}
+\end{DoxyParamCaption}
+)}\label{parser_8h_a9b30017e306bfbb76f21e5d4b2e310f4}
+
+\begin{DoxyParams}{Parameters}
+{\em frame} & \{pointer to frame structure\} \\
+\hline
+{\em p\+Result} & \{pointer to structure for giving parsed H\+T\+T\+P request to the detector\} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if parsing went ok, other integer if not 
+\end{DoxyReturn}
+\hypertarget{parser_8h_adae34dd97008a6a2f76f3ab65b411e96}{}\index{parser.\+h@{parser.\+h}!ip\+Parser@{ip\+Parser}}
+\index{ip\+Parser@{ip\+Parser}!parser.\+h@{parser.\+h}}
+\subsubsection[{ip\+Parser}]{\setlength{\rightskip}{0pt plus 5cm}int ip\+Parser (
+\begin{DoxyParamCaption}
+\item[{{\bf Frame} $\ast$}]{frame, }
+\item[{unsigned char $\ast$}]{p\+Frame}
+\end{DoxyParamCaption}
+)}\label{parser_8h_adae34dd97008a6a2f76f3ab65b411e96}
+
+\begin{DoxyParams}{Parameters}
+{\em frame} & \{pointer to frame structure\} \\
+\hline
+{\em p\+Frame} & \{pointer to frame given for parsing\} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if parsing went ok, other integer if not 
+\end{DoxyReturn}
+\hypertarget{parser_8h_a4891262bb707e733e26984829b1987e4}{}\index{parser.\+h@{parser.\+h}!parser@{parser}}
+\index{parser@{parser}!parser.\+h@{parser.\+h}}
+\subsubsection[{parser}]{\setlength{\rightskip}{0pt plus 5cm}int parser (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{p\+Frame, }
+\item[{{\bf Result} $\ast$}]{p\+Result}
+\end{DoxyParamCaption}
+)}\label{parser_8h_a4891262bb707e733e26984829b1987e4}
+
+\begin{DoxyParams}{Parameters}
+{\em p\+Frame} & \{pointer to frame given for parsing\} \\
+\hline
+{\em p\+Result} & \{pointer to structure for giving parsed H\+T\+T\+P request to the detector\} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if parsing went ok, other integer if not 
+\end{DoxyReturn}
+\hypertarget{parser_8h_a8ce9312c2839327c1a83a53bf0b751e6}{}\index{parser.\+h@{parser.\+h}!tcp\+Parser@{tcp\+Parser}}
+\index{tcp\+Parser@{tcp\+Parser}!parser.\+h@{parser.\+h}}
+\subsubsection[{tcp\+Parser}]{\setlength{\rightskip}{0pt plus 5cm}int tcp\+Parser (
+\begin{DoxyParamCaption}
+\item[{{\bf Frame} $\ast$}]{frame, }
+\item[{unsigned char $\ast$}]{p\+Frame}
+\end{DoxyParamCaption}
+)}\label{parser_8h_a8ce9312c2839327c1a83a53bf0b751e6}
+
+\begin{DoxyParams}{Parameters}
+{\em frame} & \{pointer to frame structure\} \\
+\hline
+{\em p\+Frame} & \{pointer to frame given for parsing\} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if parsing went ok, other integer if not 
+\end{DoxyReturn}

@@ -18,12 +18,18 @@ struct \hyperlink{structOptions}{Options}
 \subsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{config_8h_a2b53ff59ad6fe7d737de442d3dfe0634}{}\#define \hyperlink{config_8h_a2b53ff59ad6fe7d737de442d3dfe0634}{C\+O\+N\+F\+\_\+\+F\+I\+L\+E}~\char`\"{}../conf/cerids.\+conf\char`\"{}\label{config_8h_a2b53ff59ad6fe7d737de442d3dfe0634}
+\hypertarget{config_8h_a48857ebd61bceace1a89c60e4712ce0b}{}\#define \hyperlink{config_8h_a48857ebd61bceace1a89c60e4712ce0b}{L\+O\+C\+A\+L\+\_\+\+C\+O\+N\+F\+\_\+\+F\+I\+L\+E}~\char`\"{}../conf/cerids.\+conf\char`\"{}\label{config_8h_a48857ebd61bceace1a89c60e4712ce0b}
 
-\begin{DoxyCompactList}\small\item\em Configuration file path. \end{DoxyCompactList}\item 
-\hypertarget{config_8h_a20385395776edd2bd2c492160105bae8}{}\#define \hyperlink{config_8h_a20385395776edd2bd2c492160105bae8}{W\+H\+I\+T\+E\+L\+I\+S\+T\+\_\+\+F\+I\+L\+E}~\char`\"{}../conf/whitelist.\+txt\char`\"{}\label{config_8h_a20385395776edd2bd2c492160105bae8}
+\begin{DoxyCompactList}\small\item\em Local configuration file path. \end{DoxyCompactList}\item 
+\hypertarget{config_8h_ad4746423de94ee816b57ff9b5ec35ad0}{}\#define \hyperlink{config_8h_ad4746423de94ee816b57ff9b5ec35ad0}{M\+A\+I\+N\+\_\+\+C\+O\+N\+F\+\_\+\+F\+I\+L\+E}~\char`\"{}/etc/cerids/cerids.\+conf\char`\"{}\label{config_8h_ad4746423de94ee816b57ff9b5ec35ad0}
 
-\begin{DoxyCompactList}\small\item\em Whitelist file path. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Main configuration file path. \end{DoxyCompactList}\item 
+\hypertarget{config_8h_a070e146d41589e90639e6cfa81c3f343}{}\#define \hyperlink{config_8h_a070e146d41589e90639e6cfa81c3f343}{L\+O\+C\+A\+L\+\_\+\+W\+H\+I\+T\+E\+L\+I\+S\+T\+\_\+\+F\+I\+L\+E}~\char`\"{}../conf/whitelist.\+txt\char`\"{}\label{config_8h_a070e146d41589e90639e6cfa81c3f343}
+
+\begin{DoxyCompactList}\small\item\em Local whitelist file path. \end{DoxyCompactList}\item 
+\hypertarget{config_8h_a1cf027e8a20bbd0c04a56b272e87e42d}{}\#define \hyperlink{config_8h_a1cf027e8a20bbd0c04a56b272e87e42d}{M\+A\+I\+N\+\_\+\+W\+H\+I\+T\+E\+L\+I\+S\+T\+\_\+\+F\+I\+L\+E}~\char`\"{}/etc/cerids/whitelist.\+txt\char`\"{}\label{config_8h_a1cf027e8a20bbd0c04a56b272e87e42d}
+
+\begin{DoxyCompactList}\small\item\em Main whitelist file path. \end{DoxyCompactList}\item 
 \hypertarget{config_8h_af7b7dc9a200cb1404c280bd500fd1551}{}\#define \hyperlink{config_8h_af7b7dc9a200cb1404c280bd500fd1551}{B\+U\+F\+F\+E\+R\+\_\+\+L\+E\+N\+G\+T\+H}~1000\label{config_8h_af7b7dc9a200cb1404c280bd500fd1551}
 
 \begin{DoxyCompactList}\small\item\em Buffer max length. \end{DoxyCompactList}\item 
@@ -41,6 +47,8 @@ struct \hyperlink{structOptions}{Options}
 \end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
+\item 
+int \hyperlink{config_8h_a8fabf843ed3b4ac21ddeb6ab8d0594ee}{clean\+Whitelist} (char $\ast$$\ast$whitelist)
 \item 
 \hypertarget{config_8h_a8d97d5f205535a9bd63f33ba31fd3282}{}void {\bfseries usage} (char $\ast$binname)\label{config_8h_a8d97d5f205535a9bd63f33ba31fd3282}
 
@@ -69,6 +77,21 @@ Header file for configuration module.
 
 
 \subsection{Function Documentation}
+\hypertarget{config_8h_a8fabf843ed3b4ac21ddeb6ab8d0594ee}{}\index{config.\+h@{config.\+h}!clean\+Whitelist@{clean\+Whitelist}}
+\index{clean\+Whitelist@{clean\+Whitelist}!config.\+h@{config.\+h}}
+\subsubsection[{clean\+Whitelist}]{\setlength{\rightskip}{0pt plus 5cm}int clean\+Whitelist (
+\begin{DoxyParamCaption}
+\item[{char $\ast$$\ast$}]{whitelist}
+\end{DoxyParamCaption}
+)}\label{config_8h_a8fabf843ed3b4ac21ddeb6ab8d0594ee}
+
+\begin{DoxyParams}{Parameters}
+{\em whitelist} & (char $\ast$$\ast$) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+E\+X\+I\+T\+\_\+\+S\+U\+C\+C\+E\+S\+S 
+\end{DoxyReturn}
 \hypertarget{config_8h_a5e793e400545e35329f45f16dc673610}{}\index{config.\+h@{config.\+h}!get\+Conf@{get\+Conf}}
 \index{get\+Conf@{get\+Conf}!config.\+h@{config.\+h}}
 \subsubsection[{get\+Conf}]{\setlength{\rightskip}{0pt plus 5cm}int get\+Conf (

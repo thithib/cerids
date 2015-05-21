@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['opt_5fname_5flength',['OPT_NAME_LENGTH',['../config_8h.html#ad7bb86d2e41fb580002c59ff867f027d',1,'config.h']]],
-  ['opt_5fvalue_5flength',['OPT_VALUE_LENGTH',['../config_8h.html#ac86aabee0a3633860ad30f1043a09d34',1,'config.h']]]
+  ['ip_5flength',['IP_LENGTH',['../parser_8h.html#a26af4e86634a5afbbe4ae1326886c9b2',1,'parser.h']]]
 ];

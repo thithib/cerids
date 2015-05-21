@@ -109,6 +109,11 @@ $(document).ready(function(){initNavTree('structframe.html','');});
 <div class="title">frame Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This structure holds ethernet, ip, tcp and http fields.  
+ <a href="structframe.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="parser_8h_source.html">parser.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
@@ -121,9 +126,12 @@ u_char&#160;</td><td class="memItemRight" valign="bottom"><b>eth_mac_src</b> [6]
 <tr class="memitem:a0a930cfc929ad3cf439f8900e7bae943"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a930cfc929ad3cf439f8900e7bae943"></a>
 u_char&#160;</td><td class="memItemRight" valign="bottom"><b>eth_type</b> [2]</td></tr>
 <tr class="separator:a0a930cfc929ad3cf439f8900e7bae943"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1a26e2d381d0956605213148be7b897"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1a26e2d381d0956605213148be7b897"></a>
-u_char&#160;</td><td class="memItemRight" valign="bottom"><b>ip_vers_ihl</b></td></tr>
-<tr class="separator:ac1a26e2d381d0956605213148be7b897"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5418735b35cbad1c9b178e0d2b8280d7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5418735b35cbad1c9b178e0d2b8280d7"></a>
+u_char&#160;</td><td class="memItemRight" valign="bottom"><b>ip_vers</b></td></tr>
+<tr class="separator:a5418735b35cbad1c9b178e0d2b8280d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5704f88df87e7e9bb89505317e5c638"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae5704f88df87e7e9bb89505317e5c638"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>ip_ihl</b></td></tr>
+<tr class="separator:ae5704f88df87e7e9bb89505317e5c638"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6097ab4474472b66fbbb546ab0322a84"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6097ab4474472b66fbbb546ab0322a84"></a>
 u_char&#160;</td><td class="memItemRight" valign="bottom"><b>ip_tos</b></td></tr>
 <tr class="separator:a6097ab4474472b66fbbb546ab0322a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -151,6 +159,9 @@ u_char&#160;</td><td class="memItemRight" valign="bottom"><b>ip_src</b> [4]</td>
 <tr class="memitem:af8227daba6353a92bd9a14104aeae6c4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af8227daba6353a92bd9a14104aeae6c4"></a>
 u_char&#160;</td><td class="memItemRight" valign="bottom"><b>ip_dst</b> [4]</td></tr>
 <tr class="separator:af8227daba6353a92bd9a14104aeae6c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a4b5bba5c1985b7ee2b11bae3aa81d5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1a4b5bba5c1985b7ee2b11bae3aa81d5"></a>
+u_char *&#160;</td><td class="memItemRight" valign="bottom"><b>ip_options</b></td></tr>
+<tr class="separator:a1a4b5bba5c1985b7ee2b11bae3aa81d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1ec29e43066fdc83e8e9b7e2d0b8db0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae1ec29e43066fdc83e8e9b7e2d0b8db0"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>tcp_srcport</b></td></tr>
 <tr class="separator:ae1ec29e43066fdc83e8e9b7e2d0b8db0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -194,7 +205,9 @@ u_char *&#160;</td><td class="memItemRight" valign="bottom"><b>http_request_uri<
 u_char *&#160;</td><td class="memItemRight" valign="bottom"><b>http_host</b></td></tr>
 <tr class="separator:a24c72cc7e124455fa485328cd43f7139"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this struct was generated from the following file:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This structure holds ethernet, ip, tcp and http fields. </p>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/include/<a class="el" href="parser_8h_source.html">parser.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -203,7 +216,7 @@ u_char *&#160;</td><td class="memItemRight" valign="bottom"><b>http_host</b></td
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="structframe.html">frame</a></li>
-    <li class="footer">Generated on Sat May 16 2015 04:43:39 for CerIDS by
+    <li class="footer">Generated on Fri May 22 2015 00:13:18 for CerIDS by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.9.1 </li>
   </ul>

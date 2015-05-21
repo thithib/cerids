@@ -116,19 +116,222 @@ $(document).ready(function(){initNavTree('parser_8c.html','');});
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ab43a161b09765226e0f36ad8376a6d02"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab43a161b09765226e0f36ad8376a6d02"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>parser</b> (int frame_length, unsigned char *pFrame, <a class="el" href="structresult.html">Result</a> *pResult)</td></tr>
-<tr class="separator:ab43a161b09765226e0f36ad8376a6d02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04f0aad101ec5da6830a183944218952"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parser_8c.html#a04f0aad101ec5da6830a183944218952">parser</a> (unsigned char *pFrame, <a class="el" href="structresult.html">Result</a> *pResult)</td></tr>
+<tr class="separator:a04f0aad101ec5da6830a183944218952"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8856973ec4b2d1c40110b3293c76bfe0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parser_8c.html#a8856973ec4b2d1c40110b3293c76bfe0">ethernetParser</a> (<a class="el" href="structframe.html">Frame</a> *<a class="el" href="structframe.html">frame</a>, unsigned char *pFrame)</td></tr>
+<tr class="separator:a8856973ec4b2d1c40110b3293c76bfe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ab597694a3ccff896235ef2cbd49720"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parser_8c.html#a6ab597694a3ccff896235ef2cbd49720">ipParser</a> (<a class="el" href="structframe.html">Frame</a> *<a class="el" href="structframe.html">frame</a>, unsigned char *pFrame)</td></tr>
+<tr class="separator:a6ab597694a3ccff896235ef2cbd49720"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0904fb6f5a0757ee68f32b3de26fd4a9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parser_8c.html#a0904fb6f5a0757ee68f32b3de26fd4a9">tcpParser</a> (<a class="el" href="structframe.html">Frame</a> *<a class="el" href="structframe.html">frame</a>, unsigned char *pFrame)</td></tr>
+<tr class="separator:a0904fb6f5a0757ee68f32b3de26fd4a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d4453251c2129b5e55b44e30bb2b649"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parser_8c.html#a4d4453251c2129b5e55b44e30bb2b649">httpParser</a> (<a class="el" href="structframe.html">Frame</a> *<a class="el" href="structframe.html">frame</a>, <a class="el" href="structresult.html">Result</a> *pResult)</td></tr>
+<tr class="separator:a4d4453251c2129b5e55b44e30bb2b649"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2c758bbf3f0fdd6c4924abdfa70ed61"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parser_8c.html#ad2c758bbf3f0fdd6c4924abdfa70ed61">frameCleanUp</a> (<a class="el" href="structframe.html">Frame</a> *<a class="el" href="structframe.html">frame</a>)</td></tr>
+<tr class="separator:ad2c758bbf3f0fdd6c4924abdfa70ed61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>HTTP Parser. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a8856973ec4b2d1c40110b3293c76bfe0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ethernetParser </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structframe.html">Frame</a> *&#160;</td>
+          <td class="paramname"><em>frame</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>pFrame</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">frame</td><td>{pointer to frame structure} </td></tr>
+    <tr><td class="paramname">pFrame</td><td>{pointer to frame given for parsing} </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 if parsing went ok, other integer if not </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad2c758bbf3f0fdd6c4924abdfa70ed61"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int frameCleanUp </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structframe.html">Frame</a> *&#160;</td>
+          <td class="paramname"><em>frame</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">frame</td><td>{pointer to frame structure} </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>EXIT_SUCCESS </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4d4453251c2129b5e55b44e30bb2b649"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int httpParser </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structframe.html">Frame</a> *&#160;</td>
+          <td class="paramname"><em>frame</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structresult.html">Result</a> *&#160;</td>
+          <td class="paramname"><em>pResult</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">frame</td><td>{pointer to frame structure} </td></tr>
+    <tr><td class="paramname">pResult</td><td>{pointer to structure for giving parsed HTTP request to the detector} </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 if parsing went ok, other integer if not </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6ab597694a3ccff896235ef2cbd49720"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ipParser </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structframe.html">Frame</a> *&#160;</td>
+          <td class="paramname"><em>frame</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>pFrame</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">frame</td><td>{pointer to frame structure} </td></tr>
+    <tr><td class="paramname">pFrame</td><td>{pointer to frame given for parsing} </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 if parsing went ok, other integer if not </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a04f0aad101ec5da6830a183944218952"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int parser </td>
+          <td>(</td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>pFrame</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structresult.html">Result</a> *&#160;</td>
+          <td class="paramname"><em>pResult</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pFrame</td><td>{pointer to frame given for parsing} </td></tr>
+    <tr><td class="paramname">pResult</td><td>{pointer to structure for giving parsed HTTP request to the detector} </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 if parsing went ok, other integer if not </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0904fb6f5a0757ee68f32b3de26fd4a9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tcpParser </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structframe.html">Frame</a> *&#160;</td>
+          <td class="paramname"><em>frame</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramname"><em>pFrame</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">frame</td><td>{pointer to frame structure} </td></tr>
+    <tr><td class="paramname">pFrame</td><td>{pointer to frame given for parsing} </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 if parsing went ok, other integer if not </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="parser_8c.html">parser.c</a></li>
-    <li class="footer">Generated on Sat May 16 2015 04:43:39 for CerIDS by
+    <li class="footer">Generated on Fri May 22 2015 00:13:18 for CerIDS by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.9.1 </li>
   </ul>

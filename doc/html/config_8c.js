@@ -1,5 +1,6 @@
 var config_8c =
 [
+    [ "cleanWhitelist", "config_8c.html#a8fabf843ed3b4ac21ddeb6ab8d0594ee", null ],
     [ "getConf", "config_8c.html#a5e793e400545e35329f45f16dc673610", null ],
     [ "getConfByArgs", "config_8c.html#a45d679aa74ecc16cc8d2f91a70a465ae", null ],
     [ "getConfByFile", "config_8c.html#a9235134bf5001d1a7123be817db63d98", null ],
